@@ -86,6 +86,53 @@ export default function App() {
     }
   ];
 
+  const education = [
+    {
+      degree: "Post Graduate Program in Data Science & Business Analytics",
+      institution: "The University of Texas at Austin",
+      period: "2025 - 2026",
+      highlights: [
+        "Focus Areas: Business Analytics, Data Science, and AI."
+      ]
+    },
+    {
+      degree: "Bachelor of Engineering (BE), Information Science and Engineering",
+      institution: "BMS Institute of Technology and Management",
+      period: "2018 - 2022",
+      highlights: [
+        "Grade: 8.50 CGPA",
+        "Notable Roles: Student Placement Coordinator, Student Volunteer."
+      ]
+    }
+  ];
+
+  const certifications = [
+    {
+      title: "Advanced Learning Algorithms",
+      issuer: "Coursera",
+    },
+    {
+      title: "Machine Learning Specialization",
+      issuer: "Coursera",
+    },
+    {
+      title: "Supervised Machine Learning: Regression and Classification",
+      issuer: "Coursera",
+    },
+    {
+      title: "Fundamentals of Java Programming",
+      issuer: "Coursera",
+    },
+    {
+      title: "Linear Algebra for Machine Learning and Data Science",
+      issuer: "Coursera",
+    },
+    {
+      title: "SQL Essential Training",
+      issuer: "LinkedIn Learning",
+    }
+  ];
+
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden">
       {/* Animated background */}
@@ -105,6 +152,8 @@ export default function App() {
             <a href="#projects" className="text-sm text-gray-300 hover:text-white transition">Projects</a>
             <a href="#skills" className="text-sm text-gray-300 hover:text-white transition">Skills</a>
             <a href="#experience" className="text-sm text-gray-300 hover:text-white transition">Experience</a>
+            <a href="#education" className="text-sm text-gray-300 hover:text-white transition">Education</a>
+            <a href="#certifications" className="text-sm text-gray-300 hover:text-white transition">Certifications</a>
             <a href="#contact" className="text-sm text-gray-300 hover:text-white transition">Contact</a>
           </div>
         </div>
@@ -119,14 +168,6 @@ export default function App() {
           <p className="text-xl text-gray-400 mb-8 leading-relaxed max-w-2xl mx-auto">
             Building intelligent systems with Machine Learning and Generative AI. Specialized in RAG systems, LLM fine-tuning, AI agents, and production ML APIs.
           </p>
-          <div className="flex gap-4 justify-center">
-            <button className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-blue-500/50 transition transform hover:scale-105">
-              View Projects
-            </button>
-            <button className="px-8 py-4 border border-white/30 text-white font-semibold rounded-lg hover:bg-white/5 transition">
-              Contact Me
-            </button>
-          </div>
         </div>
 
         {/* Scroll indicator */}
@@ -223,6 +264,51 @@ export default function App() {
                       ))}
                     </div>
                   )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Education Section */}
+      <section id="education" className="py-24 px-6 bg-gradient-to-b from-transparent to-white/5 relative">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-5xl font-black mb-16">Education</h2>
+          <div className="space-y-12">
+            {education.map((edu, idx) => (
+              <div key={idx} className="flex flex-col lg:flex-row gap-8 bg-white/5 border border-white/10 rounded-2xl p-8 hover:border-cyan-500/50 hover:bg-white/10 transition duration-300">
+                <div className="lg:w-1/4 flex-shrink-0">
+                  <h3 className="text-3xl font-bold text-white mb-2">{edu.institution}</h3>
+                  <p className="text-cyan-400 font-semibold text-lg">{edu.degree}</p>
+                  <p className="text-gray-500 text-sm mt-2 font-medium bg-black/50 inline-block px-3 py-1 rounded-full">{edu.period}</p>
+                </div>
+                <div className="lg:w-3/4 flex flex-col justify-center">
+                  <ul className="space-y-4">
+                    {edu.highlights.map((item, i) => (
+                      <li key={i} className="text-gray-300 flex items-start gap-4">
+                        <div className="w-2 h-2 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full mt-2.5 flex-shrink-0 shadow-[0_0_8px_rgba(34,211,238,0.8)]"></div>
+                        <span className="leading-relaxed text-md">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Certifications Section */}
+      <section id="certifications" className="py-24 px-6 bg-gradient-to-t from-transparent to-white/5 relative">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-5xl font-black mb-16">Certifications</h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {certifications.map((cert, idx) => (
+              <div key={idx} className="p-6 bg-white/5 border border-white/10 rounded-2xl hover:border-cyan-500/50 hover:bg-white/10 transition duration-300 flex flex-col justify-between group">
+                <div>
+                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-cyan-400 transition">{cert.title}</h3>
+                  <p className="text-gray-400 text-sm font-medium">{cert.issuer}</p>
                 </div>
               </div>
             ))}
