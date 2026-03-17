@@ -16,47 +16,80 @@ export default function App() {
   const projects = [
     {
       id: 1,
-      title: "Credit Risk Prediction",
-      description: "XGBoost-powered risk assessment with production Flask API and real-time predictions",
-      stars: "100+",
-      tech: ["XGBoost", "scikit-learn", "Flask", "PostgreSQL"],
-      image: "bg-gradient-to-br from-cyan-500 to-blue-600",
+      title: "Fraud Detection & Survival Analysis Engine",
+      description: "A comprehensive supervised learning suite predicting not just who will default, but when and why.",
+      highlights: [
+        "Algorithms from Scratch: Implemented Logistic Regression, Decision Trees, and Gradient Boosting to deeply understand bias-variance and hyperparameter sensitivity.",
+        "Survival Analysis: Utilized Kaplan-Meier curves and Cox Proportional Hazards model.",
+        "Production API: FastAPI real-time/batch endpoints, MLflow tracking, and Dockerized deployment."
+      ],
+      tech: ["XGBoost", "CatBoost", "Survival Analysis", "SHAP", "FastAPI", "MLflow"],
+      image: "bg-gradient-to-br from-red-500 to-orange-600",
       link: "#"
     },
     {
       id: 2,
-      title: "Sentiment Analysis Dashboard",
-      description: "Real-time sentiment analysis using BERT with interactive Streamlit dashboard",
-      stars: "120+",
-      tech: ["BERT", "Transformers", "Streamlit", "PyTorch"],
-      image: "bg-gradient-to-br from-purple-500 to-pink-600",
+      title: "Deep Learning for Tabular & Time Series",
+      description: "When neural nets beat gradient boosting—and when they don't. Deep learning fundamentals in PyTorch.",
+      highlights: [
+        "PyTorch Fundamentals: Built feedforward NN & implemented backpropagation manually.",
+        "Time Series Deep Dive: Benchmarked ARIMA/Prophet against LSTM and Temporal Fusion Transformer (TFT).",
+        "Dashboarding: Streamlit forecast vs actual tracking with MLflow experiment logging."
+      ],
+      tech: ["PyTorch", "LSTM", "TFT", "ARIMA/Prophet", "Streamlit"],
+      image: "bg-gradient-to-br from-blue-500 to-teal-600",
       link: "#"
     },
     {
       id: 3,
-      title: "RAG System - Q&A Engine",
-      description: "LangChain-based Retrieval-Augmented Generation with vector database and semantic search",
-      stars: "130+",
-      tech: ["LangChain", "Vector DB", "OpenAI API", "Streamlit"],
-      image: "bg-gradient-to-br from-orange-500 to-red-600",
-      link: "#"
-    },
-    {
-      id: 4,
-      title: "Multi-Tool AI Agent",
-      description: "Autonomous agent orchestrating multiple tools with memory and reasoning capabilities",
-      stars: "150+",
-      tech: ["LangChain", "Tool Integration", "Streamlit", "GPT-4"],
+      title: "NLP Pipeline: From TF-IDF to Transformers",
+      description: "The complete NLP engineer's toolkit addressing sub-problems from text extraction to zero-shot classification.",
+      highlights: [
+        "Classical NLP: Engineered TF-IDF vectorization by hand, alongside Naive Bayes & SVM.",
+        "Transformer Deep Dive: Coded scaled dot-product attention from scratch in PyTorch.",
+        "Fine-tuning & Serving: Fine-tuned BERT for sentiment & RoBERTa for NER, served via FastAPI batched inference."
+      ],
+      tech: ["BERT/RoBERTa", "Attention Mechanism", "FastAPI", "spaCy", "BART"],
       image: "bg-gradient-to-br from-green-500 to-emerald-600",
       link: "#"
     },
     {
+      id: 4,
+      title: "Production RAG System & Evaluation",
+      description: "Enterprise Q&A over SEC 10-K Filings that can be actually measured, evaluated, and improved.",
+      highlights: [
+        "Hybrid Retrieval: Combined dense (FAISS) and sparse (BM25) with Reciprocal Rank Fusion & cross-encoder reranking.",
+        "Generation & Citation: Enforced strict chunk citations and chain-of-thought prompt engineering.",
+        "RAG Evaluation: Implemented RAGAS metrics from scratch (faithfulness, relevancy) tied to CI/CD gates."
+      ],
+      tech: ["FAISS/BM25", "LangChain", "RAGAS", "LangSmith", "Cross-encoders"],
+      image: "bg-gradient-to-br from-purple-500 to-pink-600",
+      link: "#"
+    },
+    {
       id: 5,
-      title: "Fine-Tuned Domain LLM",
-      description: "Custom language model fine-tuned with LoRA/PEFT for specialized domain knowledge",
-      stars: "100+",
-      tech: ["LoRA", "PEFT", "HuggingFace", "Fine-tuning"],
-      image: "bg-gradient-to-br from-indigo-500 to-cyan-600",
+      title: "Multi-Agent System & Orchestration",
+      description: "Autonomous Financial Research Agent executing real tasks with memory & ReAct loop orchestration.",
+      highlights: [
+        "Agent Fundamentals: ReAct loop from scratch with OpenAI function calling & error handling.",
+        "Memory Systems: Integrated short-term, long-term vector, entity, and episodic memory.",
+        "LangGraph Orchestration: Stateful workflows with supervisor/specialist agents and parallel tool execution."
+      ],
+      tech: ["LangGraph", "Multi-Agent Systems", "ReAct", "OpenAI API", "Vector DB"],
+      image: "bg-gradient-to-br from-cyan-500 to-blue-600",
+      link: "#"
+    },
+    {
+      id: 6,
+      title: "LLM Fine-Tuning: LoRA & DPO",
+      description: "General model domain adaptation to extract structured JSON from messy financial SEC text.",
+      highlights: [
+        "SFT & QLoRA: Built instruction datasets and trained Mistral/Llama using 4-bit quantization.",
+        "DPO Preference Training: Preference dataset optimization utilizing Hugging Face TRL & DPO loss function math.",
+        "Model Serving: Benchmarked and deployed with vLLM for high-throughput inference."
+      ],
+      tech: ["LoRA/QLoRA", "DPO", "vLLM", "HuggingFace TRL", "Mistral/Llama"],
+      image: "bg-gradient-to-br from-yellow-500 to-orange-600",
       link: "#"
     }
   ];
@@ -183,25 +216,35 @@ export default function App() {
           <p className="text-gray-400 mb-16 text-lg">Production-grade ML and GenAI projects built with cutting-edge technologies</p>
 
           {/* Project carousel */}
-          <div className="grid md:grid-cols-2 gap-8" onMouseLeave={() => setActiveProject(null)}>
+          <div className="grid lg:grid-cols-2 gap-8" onMouseLeave={() => setActiveProject(null)}>
             {projects.map((project, idx) => (
               <div
                 key={project.id}
-                className={`group cursor-pointer transition-all duration-500 ${activeProject !== null && activeProject !== idx ? 'opacity-40 scale-[0.98] blur-[1px]' : 'opacity-100'}`}
+                className={`group cursor-pointer transition-all duration-500 flex flex-col h-full bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-cyan-500/50 hover:bg-white/10 ${activeProject !== null && activeProject !== idx ? 'opacity-40 scale-[0.98] blur-[1px]' : 'opacity-100'}`}
                 onMouseEnter={() => setActiveProject(idx)}
               >
-                <div className={`${project.image} rounded-2xl h-64 mb-6 relative overflow-hidden transition duration-500 transform group-hover:scale-105`}>
-                  <div className="absolute inset-0 bg-black/40 group-hover:bg-black/30 transition duration-300"></div>
-                  <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300">
-                    <ExternalLink size={48} className="text-white mb-2" />
-                    <span className="text-lg font-bold">{project.stars}</span>
+                <div className={`${project.image} rounded-xl h-48 mb-6 relative overflow-hidden transition duration-500 transform group-hover:scale-[1.02]`}>
+                  <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition duration-300"></div>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 bg-black/40">
+                    <ExternalLink size={40} className="text-white mb-2" />
+                    <span className="text-sm font-bold tracking-wider uppercase">View Project</span>
                   </div>
                 </div>
                 <h3 className="text-2xl font-bold mb-3 group-hover:text-cyan-400 transition">{project.title}</h3>
-                <p className="text-gray-400 mb-4">{project.description}</p>
-                <div className="flex flex-wrap gap-2">
+                <p className="text-gray-300 font-medium mb-4">{project.description}</p>
+                {project.highlights && (
+                  <ul className="mb-6 space-y-2 flex-grow">
+                    {project.highlights.map((highlight, i) => (
+                      <li key={i} className="text-gray-400 text-sm flex items-start gap-2">
+                        <div className="w-1.5 h-1.5 bg-cyan-500 rounded-full mt-1.5 flex-shrink-0"></div>
+                        <span className="leading-relaxed">{highlight}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                <div className="flex flex-wrap gap-2 mt-auto">
                   {project.tech.map((tech, i) => (
-                    <span key={i} className="px-3 py-1 bg-white/10 text-sm rounded-full text-gray-300">
+                    <span key={i} className="px-3 py-1 bg-black/30 border border-white/10 text-xs font-semibold rounded-full text-cyan-300">
                       {tech}
                     </span>
                   ))}
