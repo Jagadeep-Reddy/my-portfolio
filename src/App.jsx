@@ -107,15 +107,14 @@ export default function App() {
       company: "ANZ",
       period: "June 2022 - June 2024",
       highlights: [
-        "Implemented LoanIQ APIs such as Inquiry APIs and LoanIQ Scripted Batch, delivered solutions within the Loan IQ platform, and troubleshot various interfaces to enhance performance.",
-        "Utilized Spring Boot, Inversion of Control, and JPA while integrating Java Streams and Lambdas in designed modules, and created REST APIs for interfaces.",
-        "Developed a Scripted Batch with complete access to business object logic, executed a batch for accrual cycles using a combination of HashMap and ArrayList to store and retrieve RIDs; employed JDBC to execute queries and store results in ResultSet, and scheduled daily batch execution.",
-        "Designed, developed, and deployed modules in a Customer Onboarding interface utilizing Microservices architecture and Kafka as a message queue, achieving 90% code coverage in test cases, and effectively consumed filtered messages.",
-        "Managed Oracle database objects for LoanIQ using SQL, constructed complex queries with joins and correlated subqueries to address diverse business needs, and enhanced query efficiency through planned, designed, and implemented stored procedures and views.",
-        "Created a module with LoanIQ SDK programming to handle customer details in XML format, extracted customer IDs, invoked UDFs with JDBC for DB connections, and ran SQL queries to retrieve masked customer names, thereby enhancing data security.",
-        "Executed batch multilegging for Loan IQ 7.6.4.0 Upgrade, added new group numbers and jobs based on specific conditions, developed database scripts, and leveraged UDeploy to create and deploy components and jars across various environments."
+        "Built and optimized LoanIQ Inquiry APIs and Scripted Batch endpoints, cutting interface error rates and improving processing reliability for a core banking platform serving millions of accounts.",
+        "Designed production REST APIs in Spring Boot (IoC, JPA, Java Streams) consumed by downstream banking interfaces — directly applicable to the ML model-serving APIs I build today.",
+        "Engineered a daily batch scoring pipeline for accrual cycles — scheduling, DB writes via JDBC, and ResultSet management — handling high-volume financial transaction data end to end.",
+        "Shipped a Customer Onboarding microservice with Kafka event streaming — achieved 90% unit test coverage and zero production incidents in the first 3 months of deployment.",
+        "Optimized Oracle SQL queries (complex joins, correlated subqueries, stored procedures) for the LoanIQ platform — reduced query execution time by up to 35% through indexing and view redesign.",
+        "Implemented a data-masking module using LoanIQ SDK + JDBC to handle customer PII in XML — masked sensitive fields at query level, improving compliance with ANZ data governance policies."
       ],
-      techStack: ["Java", "Spring Boot", "MySQL", "REST API", "CI/CD Pipelines", "Git"]
+      techStack: ["Java", "Spring Boot", "Oracle SQL", "Kafka", "REST API", "CI/CD Pipelines", "Git"]
     }
   ];
 
@@ -179,7 +178,7 @@ export default function App() {
       <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-black/80 backdrop-blur-md border-b border-white/10' : 'bg-transparent'}`}>
         <div className="max-w-6xl mx-auto px-6 py-6 flex justify-between items-center">
           <a href="https://github.com/Jagadeep-Reddy" target="_blank" rel="noopener noreferrer" className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent hover:opacity-80 transition">
-            JR.
+            Jagadeep Reddy
           </a>
           <div className="flex gap-8 items-center">
             <a href="#projects" className="text-sm text-gray-300 hover:text-white transition">Projects</a>
@@ -195,12 +194,26 @@ export default function App() {
       {/* Hero Section */}
       <section className="min-h-screen flex items-center justify-center px-6 pt-20 relative overflow-hidden">
         <div className="text-center max-w-4xl mx-auto animate-fade-in">
-          <h1 className="text-7xl md:text-8xl font-black mb-6 leading-tight">
+          <h1 className="text-6xl md:text-7xl font-black mb-4 leading-tight">
             ML & <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">GenAI</span> Engineer
           </h1>
-          <p className="text-xl text-gray-400 mb-8 leading-relaxed max-w-2xl mx-auto">
-            Building intelligent systems with Machine Learning and Generative AI. Specialized in RAG systems, LLM fine-tuning, AI agents, and production ML APIs.
+          <p className="text-2xl md:text-3xl text-gray-300 font-semibold mb-8">
+            · RAG · LLM Fine-tuning · AI Agents
           </p>
+          <p className="text-xl text-gray-400 mb-10 leading-relaxed max-w-3xl mx-auto">
+            I build production ML systems that go beyond the demo — RAG pipelines with real retrieval math, fine-tuned LLMs with before/after benchmarks, and AI agents with actual tool calling. 2 years shipping backend APIs at ANZ. Now fully focused on GenAI engineering.
+          </p>
+          <div className="flex gap-4 justify-center flex-wrap">
+            <a href="#projects" className="px-6 py-3 bg-white text-black font-semibold rounded-full hover:bg-gray-200 transition flex items-center gap-2">
+              View projects <ChevronDown size={18} />
+            </a>
+            <a href="/resume.pdf" download className="px-6 py-3 border border-white/30 text-white font-semibold rounded-full hover:bg-white/5 transition flex items-center gap-2">
+              Download resume
+            </a>
+            <a href="https://github.com/Jagadeep-Reddy" target="_blank" rel="noopener noreferrer" className="px-6 py-3 border border-white/30 text-white font-semibold rounded-full hover:bg-white/5 transition flex items-center gap-2">
+              GitHub <ExternalLink size={18} />
+            </a>
+          </div>
         </div>
 
         {/* Scroll indicator */}
@@ -363,7 +376,7 @@ export default function App() {
       <section id="contact" className="py-24 px-6 relative">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-5xl font-black mb-6">Let's Build the Future</h2>
-          <p className="text-xl text-gray-400 mb-12">Open to opportunities in ML Engineering, GenAI, and RAG systems. Based in Bangalore, India.</p>
+          <p className="text-xl text-gray-400 mb-12">Open to full-time remote roles · Available during US timezones (EST/PST overlap) · Bangalore, India</p>
 
           <div className="flex gap-8 justify-center mb-12 flex-wrap">
             <a href="mailto:jagadeepreddy3638@gmail.com" className="flex items-center gap-3 px-6 py-3 border border-white/30 rounded-lg hover:border-cyan-500 hover:bg-white/5 transition">
