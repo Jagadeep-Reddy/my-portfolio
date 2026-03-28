@@ -25,7 +25,7 @@ export default function App() {
       ],
       tech: ["XGBoost", "CatBoost", "Survival Analysis", "SHAP", "FastAPI", "MLflow"],
       image: "bg-gradient-to-br from-red-500 to-orange-600",
-      link: "#"
+      link: "https://github.com/Jagadeep-Reddy/fraud-detection-survival"
     },
     {
       id: 2,
@@ -231,7 +231,10 @@ export default function App() {
           {/* Project carousel */}
           <div className="grid lg:grid-cols-2 gap-8" onMouseLeave={() => setActiveProject(null)}>
             {projects.map((project, idx) => (
-              <div
+              <a
+                href={project.link}
+                target="_blank"
+                rel="noopener noreferrer"
                 key={project.id}
                 className={`group cursor-pointer transition-all duration-500 flex flex-col h-full bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-cyan-500/50 hover:bg-white/10 ${activeProject !== null && activeProject !== idx ? 'opacity-40 scale-[0.98] blur-[1px]' : 'opacity-100'}`}
                 onMouseEnter={() => setActiveProject(idx)}
@@ -262,7 +265,7 @@ export default function App() {
                     </span>
                   ))}
                 </div>
-              </div>
+              </a>
             ))}
           </div>
         </div>
