@@ -64,7 +64,7 @@ export default function App() {
       ],
       tech: ["FAISS/BM25", "LangChain", "RAGAS", "LangSmith", "Cross-encoders"],
       image: "bg-gradient-to-br from-purple-500 to-pink-600",
-      link: "#"
+      link: "https://rag-system-with-evaluation-framewor.vercel.app/"
     },
     {
       id: 5,
