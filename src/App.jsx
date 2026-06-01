@@ -16,6 +16,20 @@ export default function App() {
   const projects = [
     {
       id: 1,
+      title: "IPL AI Intelligence Platform",
+      description: "Production-grade multi-agent AI analytics over 18 seasons / 1.2M ball-by-ball IPL deliveries with real-time ML inference under a 300ms budget.",
+      highlights: [
+        "Built 5-agent LangGraph orchestration (StatsQA, NarrativeQA, Prediction, Matchup, TeamVsTeam) with intent-based routing — each agent uses the right backend (SQL, RAG, or XGBoost+SHAP) rather than forcing all queries through a single LLM call.",
+        "Hybrid retrieval: BGE-M3 dense (Qdrant HNSW) + BM25 sparse -> RRF fusion -> cross-encoder rerank (top-8) — RAGAS faithfulness 0.71 -> 0.88 on 200-question golden eval set; CI gate blocks deploy if score drops below threshold.",
+        "XGBoost win-probability model (AUC 0.72, Optuna-tuned) with SHAP explanations in natural language; intent classifier (71% acc, 4-class) routes live ball events in ~20ms.",
+        "WebSocket real-time path: BallEvent -> XGBoost intent (~20ms) + RAG context (~50ms) -> GPT-4o-mini commentary — <300ms end-to-end, load-tested to 200 concurrent users (Locust, 60s sustained)."
+      ],
+      tech: ["LangGraph", "Hybrid RAG", "XGBoost", "FastAPI", "Qdrant", "PostgreSQL", "Redis", "RAGAS", "WebSocket"],
+      image: "bg-gradient-to-br from-blue-500 to-indigo-600",
+      link: "https://github.com/Jagadeep-Reddy/ipl-ai-platform"
+    },
+    {
+      id: 2,
       title: "Fraud Detection & Survival Analysis Engine",
       description: "A comprehensive supervised learning suite predicting not just who will default, but when and why.",
       highlights: [
@@ -28,68 +42,27 @@ export default function App() {
       link: "https://github.com/Jagadeep-Reddy/fraud-detection-survival"
     },
     {
-      id: 2,
-      title: "Deep Learning for Tabular & Time Series",
-      description: "When neural nets beat gradient boosting—and when they don't. Deep learning fundamentals in PyTorch.",
-      highlights: [
-        "PyTorch Fundamentals: Built feedforward NN & implemented backpropagation manually.",
-        "Time Series Deep Dive: Benchmarked ARIMA/Prophet against LSTM and Temporal Fusion Transformer (TFT).",
-        "Dashboarding: Streamlit forecast vs actual tracking with MLflow experiment logging."
-      ],
-      tech: ["PyTorch", "LSTM", "TFT", "ARIMA/Prophet", "Streamlit"],
-      image: "bg-gradient-to-br from-blue-500 to-teal-600",
-      link: "#"
-    },
-    {
       id: 3,
-      title: "NLP Pipeline: From TF-IDF to Transformers",
-      description: "The complete NLP engineer's toolkit addressing sub-problems from text extraction to zero-shot classification.",
+      title: "Production RAG System & Evaluation",
+      description: "Enterprise Q&A over SEC 10-K filings with a full retrieval evaluation framework.",
       highlights: [
-        "Classical NLP: Engineered TF-IDF vectorization by hand, alongside Naive Bayes & SVM.",
-        "Transformer Deep Dive: Coded scaled dot-product attention from scratch in PyTorch.",
-        "Fine-tuning & Serving: Fine-tuned BERT for sentiment & RoBERTa for NER, served via FastAPI batched inference."
+        "Built hybrid dense (FAISS) + sparse (BM25) retrieval with RRF and cross-encoder reranking; enforced chain-of-thought prompt engineering to reduce hallucinations.",
+        "RAGAS evaluation metrics tied to CI/CD gates to block retrieval regressions; 40% improvement in answer faithfulness vs naive baseline on 500-question SEC Q&A eval set."
       ],
-      tech: ["BERT/RoBERTa", "Attention Mechanism", "FastAPI", "spaCy", "BART"],
-      image: "bg-gradient-to-br from-green-500 to-emerald-600",
+      tech: ["FAISS", "BM25", "LangChain", "RAGAS", "LangSmith", "Cross-encoders", "CI/CD"],
+      image: "bg-gradient-to-br from-purple-500 to-pink-600",
       link: "#"
     },
     {
       id: 4,
-      title: "Production RAG System & Evaluation",
-      description: "Enterprise Q&A over SEC 10-K Filings that can be actually measured, evaluated, and improved.",
+      title: "Multi-Agent Financial Research System",
+      description: "Autonomous financial research agent with stateful multi-agent orchestration.",
       highlights: [
-        "Hybrid Retrieval: Combined dense (FAISS) and sparse (BM25) with Reciprocal Rank Fusion & cross-encoder reranking.",
-        "Generation & Citation: Enforced strict chunk citations and chain-of-thought prompt engineering.",
-        "RAG Evaluation: Implemented RAGAS metrics from scratch (faithfulness, relevancy) tied to CI/CD gates."
+        "Built ReAct loop from scratch with OpenAI function calling and robust error handling; designed layered memory (short-term, long-term vector, entity, episodic).",
+        "LangGraph supervisor/specialist orchestration with parallel tool execution and conditional branching; 60% reduction in task completion time vs single-agent baseline via parallelised tool calls."
       ],
-      tech: ["FAISS/BM25", "LangChain", "RAGAS", "LangSmith", "Cross-encoders"],
-      image: "bg-gradient-to-br from-purple-500 to-pink-600",
-      link: "https://rag-system-with-evaluation-framewor.vercel.app/"
-    },
-    {
-      id: 5,
-      title: "Multi-Agent System & Orchestration",
-      description: "Autonomous Financial Research Agent executing real tasks with memory & ReAct loop orchestration.",
-      highlights: [
-        "Agent Fundamentals: ReAct loop from scratch with OpenAI function calling & error handling.",
-        "Memory Systems: Integrated short-term, long-term vector, entity, and episodic memory.",
-        "LangGraph Orchestration: Stateful workflows with supervisor/specialist agents and parallel tool execution."
-      ],
-      tech: ["LangGraph", "Multi-Agent Systems", "ReAct", "OpenAI API", "Vector DB"],
+      tech: ["LangGraph", "ReAct", "OpenAI API", "Vector DB"],
       image: "bg-gradient-to-br from-cyan-500 to-blue-600",
-      link: "#"
-    },
-    {
-      id: 6,
-      title: "LLM Fine-Tuning: LoRA & DPO",
-      description: "General model domain adaptation to extract structured JSON from messy financial SEC text.",
-      highlights: [
-        "SFT & QLoRA: Built instruction datasets and trained Mistral/Llama using 4-bit quantization.",
-        "DPO Preference Training: Preference dataset optimization utilizing Hugging Face TRL & DPO loss function math.",
-        "Model Serving: Benchmarked and deployed with vLLM for high-throughput inference."
-      ],
-      tech: ["LoRA/QLoRA", "DPO", "vLLM", "HuggingFace TRL", "Mistral/Llama"],
-      image: "bg-gradient-to-br from-yellow-500 to-orange-600",
       link: "#"
     }
   ];
