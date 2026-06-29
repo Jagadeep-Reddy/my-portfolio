@@ -274,46 +274,87 @@ export default function App() {
     { title: "Linear Algebra for ML", issuer: "Coursera", badge: null, status: null, primary: false }
   ];
 
-  // Contact Form Mock Submission
-  const handleFormSubmit = (e) => {
+  // ── FORMSPREE CONTACT FORM ──────────────────────────────────────────────────
+  // 1. Go to https://formspree.io → create free account → New Form
+  // 2. Replace YOUR_FORMSPREE_ID below with your form ID (e.g. "xpwzgkjr")
+  const FORMSPREE_ID = 'xwvdqlwd';
+
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     if (!formEmail || !formSubject || !formMessage) return;
     setFormStatus('sending');
-    setTimeout(() => {
-      setFormStatus('success');
-      setFormEmail('');
-      setFormSubject('');
-      setFormMessage('');
+    try {
+      const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ email: formEmail, subject: formSubject, message: formMessage })
+      });
+      if (res.ok) {
+        setFormStatus('success');
+        setFormEmail('');
+        setFormSubject('');
+        setFormMessage('');
+        setTimeout(() => setFormStatus(''), 5000);
+      } else {
+        setFormStatus('error');
+        setTimeout(() => setFormStatus(''), 4000);
+      }
+    } catch {
+      setFormStatus('error');
       setTimeout(() => setFormStatus(''), 4000);
-    }, 1200);
+    }
   };
 
-  // AI Agent responding simulation
-  const simulateAgentResponse = (userQuery) => {
+  // ── REAL CLAUDE API CHATBOT ──────────────────────────────────────────────────
+  const AGENT_SYSTEM_PROMPT = `You are Jagadeep Reddy's personal AI portfolio agent. Answer recruiter and hiring manager questions concisely and professionally. Here is his complete profile:
+
+IDENTITY: Jagadeep Reddy — AI Engineer transitioning from 2 years of production backend engineering at ANZ (Spring Boot, Kafka, Oracle SQL) into full-time AI/GenAI engineering. Based in Bengaluru, India. Targeting 20-25 LPA in India and Riyadh, Saudi Arabia.
+
+KEY PROJECTS:
+1. IPL AI Intelligence Platform — 5-agent LangGraph system (StatsQA, NarrativeQA, Prediction, Matchup, TeamVsTeam), hybrid RAG (BGE-M3 dense + BM25 sparse + RRF fusion + cross-encoder reranking top-8), XGBoost win-probability (AUC 0.72, Optuna-tuned), SHAP explanations, WebSocket real-time <300ms end-to-end, 200 concurrent users (Locust), RAGAS faithfulness 0.71→0.88 on 200-question golden eval set, CI gate blocks deploy below 0.75. Stack: LangGraph, FastAPI, Qdrant HNSW, PostgreSQL, Redis. GitHub: github.com/Jagadeep-Reddy/ipl-ai-platform
+2. Production RAG System — Enterprise financial document Q&A, three chunking strategies (fixed-size, semantic, hierarchical parent-child), hybrid FAISS + BM25 retrieval, RRF + cross-encoder reranking (ms-marco-MiniLM-L-6-v2), self-consistency hallucination detection (3 parallel LLM responses at temp 0.4), RAGAS CI/CD gate (faithfulness <0.75 blocks deploy), 40% improvement over naive baseline on 500-question eval set. Demo: rag-system-with-evaluation-framewor.vercel.app
+3. Microsoft AI Skills Fest Hackathon (June 2026) — Integrated Azure AI Foundry (GPT-4.1-mini via AzureChatOpenAI) into IPL platform, RAGAS faithfulness 0.981 on 51 golden QA pairs.
+
+ANZ EXPERIENCE (June 2022 – June 2024): LoanIQ Inquiry APIs & Scripted Batch endpoints, Spring Boot REST APIs (IoC, JPA, Java Streams), Kafka Customer Onboarding microservice (90% test coverage, zero production incidents first 3 months), Oracle SQL optimization (35% query time reduction via indexing and view redesign), data-masking module for PII compliance.
+
+EDUCATION: PGP Data Science & Business Analytics, UT Austin × Great Learning (2025-2026). BE Information Science, BMS Institute of Technology (8.50 CGPA, 2018-2022).
+
+CERTIFICATIONS (In Progress): AWS Solutions Architect Associate (SAA-C03), Azure AI Engineer Associate (AI-102).
+
+SKILLS: Python, Java, SQL, LangGraph, LangChain, RAG Systems, XGBoost, FAISS, Qdrant, BM25, BGE-M3, BERT, HuggingFace Transformers, FastAPI, WebSocket, Docker, AWS (EC2/S3/Lambda/SQS), Azure AI Foundry, RAGAS, LangSmith, Locust, CI/CD, Spring Boot, Kafka, Oracle SQL.
+
+AVAILABILITY: Available from July 14, 2026. Open to full-time roles in India (Bengaluru) and Saudi Arabia (Riyadh). Also open to remote.
+
+CONTACT: jagadeepreddy3638@gmail.com | github.com/Jagadeep-Reddy | linkedin.com/in/buthuru-jagadeep-reddy
+
+Keep answers concise (2-4 sentences). Be professional. Do not make up anything not in this profile. If asked about salary say he targets 20-25 LPA for India roles.`;
+
+  // Keep full conversation history for context
+  const chatHistoryRef = useRef([]);
+
+  const sendToClaudeAPI = async (userText) => {
+    chatHistoryRef.current = [...chatHistoryRef.current, { role: 'user', content: userText }];
     setIsTyping(true);
-    let reply = "";
-    const q = userQuery.toLowerCase();
-
-    if (q.includes("expertise") || q.includes("skills") || q.includes("background") || q.includes("what does")) {
-      reply = "Jagadeep is an AI Engineer specializing in production GenAI architectures. He builds multi-agent systems with LangGraph, highly calibrated RAG pipelines (achieving 0.88 RAGAS faithfulness), and optimized ML pipelines. He spent 2 years at ANZ engineering robust backend APIs and streaming systems.";
-    } else if (q.includes("ipl") || q.includes("platform") || q.includes("project")) {
-      reply = "His flagship project is the IPL AI Platform: a production-grade 5-agent LangGraph platform running ball-by-ball ML win probability and LLM commentary over 18 seasons (<300ms budget) using FastAPI, XGBoost, and Qdrant.";
-    } else if (q.includes("rag") || q.includes("retrieval") || q.includes("eval")) {
-      reply = "Jagadeep has advanced expertise in RAG. He designed an SEC 10-K Q&A engine with hybrid dense/sparse search, reranking, and continuous RAGAS evaluation tied to CI/CD pipelines to guard against regression.";
-    } else if (q.includes("hire") || q.includes("open") || q.includes("job") || q.includes("role") || q.includes("opportunity")) {
-      reply = "Yes! Jagadeep is actively seeking full-time AI / GenAI Engineer roles, freelance consulting contracts, and technical advisory roles. He overlaps heavily with US EST/PST timezones and is located in Bangalore, India.";
-    } else if (q.includes("contact") || q.includes("reach") || q.includes("email") || q.includes("talk")) {
-      reply = "You can reach Jagadeep directly at jagadeepreddy3638@gmail.com, connect via his LinkedIn, or use the form at the bottom of this page. He will reply shortly!";
-    } else if (q.includes("resume") || q.includes("cv") || q.includes("download")) {
-      reply = "You can download his resume by clicking the 'Download Resume' button at the top of the page. Or email him at jagadeepreddy3638@gmail.com to get his latest CV!";
-    } else {
-      reply = "That's an interesting question! I am Jagadeep's simulated AI Assistant. You can read his detailed experience and projects right here on the portfolio, or drop him an email to set up a chat.";
-    }
-
-    setTimeout(() => {
+    try {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-6',
+          max_tokens: 1000,
+          system: AGENT_SYSTEM_PROMPT,
+          messages: chatHistoryRef.current
+        })
+      });
+      const data = await res.json();
+      const reply = data.content?.[0]?.text || "Sorry, I couldn't process that. Please email jagadeepreddy3638@gmail.com directly.";
+      chatHistoryRef.current = [...chatHistoryRef.current, { role: 'assistant', content: reply }];
       setIsTyping(false);
       setMessages(prev => [...prev, { sender: 'agent', text: reply, timestamp: new Date() }]);
-    }, 1000);
+    } catch {
+      setIsTyping(false);
+      setMessages(prev => [...prev, { sender: 'agent', text: "Connection issue. Please email jagadeepreddy3638@gmail.com directly.", timestamp: new Date() }]);
+    }
   };
 
   const handleSendMessage = () => {
@@ -321,12 +362,12 @@ export default function App() {
     const text = inputText.trim();
     setMessages(prev => [...prev, { sender: 'user', text, timestamp: new Date() }]);
     setInputText('');
-    simulateAgentResponse(text);
+    sendToClaudeAPI(text);
   };
 
   const handleQuickAction = (text) => {
     setMessages(prev => [...prev, { sender: 'user', text, timestamp: new Date() }]);
-    simulateAgentResponse(text);
+    sendToClaudeAPI(text);
   };
 
   const scrollToSection = (id) => {
@@ -860,7 +901,12 @@ export default function App() {
               {/* Form Submission status alert */}
               {formStatus === 'success' && (
                 <div className="p-3 text-xs bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 rounded-lg">
-                  ✓ Message sent successfully! Jagadeep will contact you soon.
+                  ✓ Message sent! Jagadeep will reply shortly.
+                </div>
+              )}
+              {formStatus === 'error' && (
+                <div className="p-3 text-xs bg-red-500/10 border border-red-500/20 text-red-400 rounded-lg">
+                  ✗ Something went wrong. Please email jagadeepreddy3638@gmail.com directly.
                 </div>
               )}
 
