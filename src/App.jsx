@@ -197,9 +197,9 @@ export default function App() {
         "RAGAS metrics (faithfulness, answer relevancy, context precision/recall) tied to GitHub Actions CI/CD gate — fails if faithfulness < 0.75; 40% improvement vs naive baseline on 500-question eval set."
       ],
       tech: ["FAISS", "BM25", "LangChain", "RAGAS", "LangSmith", "Cross-encoders", "CI/CD"],
-      link: "https://rag-system-with-evaluation-framewor.vercel.app",
+      link: "https://huggingface.co/spaces/Jagadeep24/RAG-System-with-Evaluation-Framework",
       githubLink: "https://github.com/Jagadeep-Reddy",
-      demoLink: "https://rag-system-with-evaluation-framewor.vercel.app"
+      demoLink: "https://huggingface.co/spaces/Jagadeep24/RAG-System-with-Evaluation-Framework"
     }
   ];
 
@@ -312,7 +312,7 @@ IDENTITY: Jagadeep Reddy — AI Engineer transitioning from 2 years of productio
 
 KEY PROJECTS:
 1. IPL AI Intelligence Platform — 5-agent LangGraph system (StatsQA, NarrativeQA, Prediction, Matchup, TeamVsTeam), hybrid RAG (BGE-M3 dense + BM25 sparse + RRF fusion + cross-encoder reranking top-8), XGBoost win-probability (AUC 0.72, Optuna-tuned), SHAP explanations, WebSocket real-time <300ms end-to-end, 200 concurrent users (Locust), RAGAS faithfulness 0.71→0.88 on 200-question golden eval set, CI gate blocks deploy below 0.75. Stack: LangGraph, FastAPI, Qdrant HNSW, PostgreSQL, Redis. GitHub: github.com/Jagadeep-Reddy/ipl-ai-platform
-2. Production RAG System — Enterprise financial document Q&A, three chunking strategies (fixed-size, semantic, hierarchical parent-child), hybrid FAISS + BM25 retrieval, RRF + cross-encoder reranking (ms-marco-MiniLM-L-6-v2), self-consistency hallucination detection (3 parallel LLM responses at temp 0.4), RAGAS CI/CD gate (faithfulness <0.75 blocks deploy), 40% improvement over naive baseline on 500-question eval set. Demo: rag-system-with-evaluation-framewor.vercel.app
+2. Production RAG System — Enterprise financial document Q&A, three chunking strategies (fixed-size, semantic, hierarchical parent-child), hybrid FAISS + BM25 retrieval, RRF + cross-encoder reranking (ms-marco-MiniLM-L-6-v2), self-consistency hallucination detection (3 parallel LLM responses at temp 0.4), RAGAS CI/CD gate (faithfulness <0.75 blocks deploy), 40% improvement over naive baseline on 500-question eval set. Demo: huggingface.co/spaces/Jagadeep24/RAG-System-with-Evaluation-Framework
 3. Microsoft AI Skills Fest Hackathon (June 2026) — Integrated Azure AI Foundry (GPT-4.1-mini via AzureChatOpenAI) into IPL platform, RAGAS faithfulness 0.981 on 51 golden QA pairs.
 
 ANZ EXPERIENCE (June 2022 – June 2024): LoanIQ Inquiry APIs & Scripted Batch endpoints, Spring Boot REST APIs (IoC, JPA, Java Streams), Kafka Customer Onboarding microservice (90% test coverage, zero production incidents first 3 months), Oracle SQL optimization (35% query time reduction via indexing and view redesign), data-masking module for PII compliance.
