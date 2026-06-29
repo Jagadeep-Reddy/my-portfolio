@@ -181,33 +181,37 @@ export default function App() {
         "WebSocket real-time path: BallEvent → XGBoost intent (~20ms) + RAG context (~50ms) → GPT-4o-mini commentary — <300ms end-to-end, load-tested to 200 concurrent users (Locust, 60s sustained)."
       ],
       tech: ["LangGraph", "Hybrid RAG", "XGBoost", "FastAPI", "Qdrant", "PostgreSQL", "Redis", "RAGAS", "WebSocket"],
-      link: "https://github.com/Jagadeep-Reddy/ipl-ai-platform"
+      link: "https://github.com/Jagadeep-Reddy/ipl-ai-platform",
+      githubLink: "https://github.com/Jagadeep-Reddy/ipl-ai-platform",
+      demoLink: "https://my-portfolio-six-smoky-75.vercel.app/"
     },
     {
       id: 2,
       title: "Production RAG System & Evaluation",
-      description: "Enterprise Q&A over SEC 10-K filings with a full retrieval evaluation framework covering dense, sparse, and hybrid retrieval strategies.",
+      description: "Enterprise financial document Q&A with a full retrieval evaluation framework covering dense, sparse, and hybrid retrieval strategies — architecture applicable to annual reports, regulatory filings, and compliance documents.",
       highlights: [
-        "Enterprise Q&A over SEC 10-K filings with a full retrieval evaluation framework covering dense, sparse, and hybrid retrieval strategies.",
+        "Enterprise financial document Q&A with a full retrieval evaluation framework covering dense, sparse, and hybrid retrieval strategies.",
         "Implemented three chunking strategies (fixed-size, semantic, hierarchical parent-child) to benchmark retrieval quality; hierarchical chunking improved context precision by retaining full parent context during generation.",
         "Built hybrid dense (FAISS IVF) + sparse (BM25/Rank-BM25) retrieval with RRF fusion and cross-encoder reranking (ms-marco-MiniLM-L-6-v2); enforced chain-of-thought prompting with strict citation injection to reduce hallucinations.",
         "Self-consistency hallucination detection: 3 parallel LLM responses at temperature 0.4 with automated flag on factual deviation; agentic multi-hop query decomposition with parallel sub-query retrieval and synthesis.",
-        "RAGAS metrics (faithfulness, answer relevancy, context precision/recall) tied to GitHub Actions CI/CD gate — fails if faithfulness < 0.75; 40% improvement vs naive baseline on 500-question SEC eval set."
+        "RAGAS metrics (faithfulness, answer relevancy, context precision/recall) tied to GitHub Actions CI/CD gate — fails if faithfulness < 0.75; 40% improvement vs naive baseline on 500-question eval set."
       ],
       tech: ["FAISS", "BM25", "LangChain", "RAGAS", "LangSmith", "Cross-encoders", "CI/CD"],
-      link: "https://rag-system-with-evaluation-framewor.vercel.app"
+      link: "https://rag-system-with-evaluation-framewor.vercel.app",
+      githubLink: "https://github.com/Jagadeep-Reddy",
+      demoLink: "https://rag-system-with-evaluation-framewor.vercel.app"
     }
   ];
 
   const skillCategories = [
     { category: "Languages", items: ["Python", "Java", "SQL"] },
-    { category: "GenAI & LLMs", items: ["RAG Systems", "LangChain", "LangGraph", "Fine-tuning (LoRA/QLoRA/DPO)", "Prompt Engineering", "OpenAI API"] },
-    { category: "Models", items: ["Mistral & Llama", "BERT & RoBERTa", "HuggingFace TRL", "vLLM", "BGE-M3"] },
+    { category: "GenAI & LLMs", items: ["RAG Systems", "LangChain", "LangGraph", "Prompt Engineering", "OpenAI API", "Azure AI Foundry"] },
+    { category: "Models & Embeddings", items: ["BERT & RoBERTa", "HuggingFace Transformers", "BGE-M3"] },
     { category: "Retrieval", items: ["FAISS & Qdrant", "BM25", "Reciprocal Rank Fusion", "Cross-encoder Reranking", "pgvector"] },
-    { category: "Deep Learning", items: ["PyTorch", "TensorFlow", "Transformers"] },
-    { category: "Cloud & Infra", items: ["AWS (EC2, S3, Lambda, SQS)", "Docker & Kubernetes", "CI/CD Pipelines", "FastAPI & Flask", "Redis & Kafka"] },
-    { category: "Data & ML", items: ["pandas & NumPy", "XGBoost", "SHAP & Optuna", "Feature Engineering", "matplotlib & seaborn"] },
-    { category: "Monitoring & Evals", items: ["Datadog", "LangSmith", "RAGAS"] }
+    { category: "ML & Data", items: ["XGBoost", "SHAP & Optuna", "scikit-learn", "pandas & NumPy", "Feature Engineering"] },
+    { category: "Cloud & Infra", items: ["AWS (EC2, S3, Lambda, SQS)", "Azure AI Foundry", "Docker & Kubernetes", "CI/CD Pipelines", "FastAPI", "WebSocket"] },
+    { category: "Backend (ANZ)", items: ["Spring Boot", "Kafka", "Oracle SQL", "REST APIs", "JDBC"] },
+    { category: "Monitoring & Evals", items: ["RAGAS", "LangSmith", "Locust (Load Testing)", "GitHub Actions"] }
   ];
 
   const experiences = [
@@ -215,9 +219,10 @@ export default function App() {
       role: "Independent AI Engineer",
       company: "Self-Directed",
       period: "July 2024 – Present",
+      context: "Full-time career transition: completed PGP in Data Science (UT Austin × Great Learning) and built production AI systems to bridge from backend engineering into GenAI roles.",
       highlights: [
         "Architected and deployed a production-grade 5-agent LangGraph platform (IPL AI Intelligence Platform) with hybrid RAG retrieval (BGE-M3 + BM25 + RRF fusion), XGBoost win-probability modeling (AUC 0.72), and WebSocket real-time inference under 300ms — load-tested to 200 concurrent users via Locust.",
-        "Built an enterprise SEC 10-K Q&A RAG system with FAISS dense + BM25 sparse hybrid retrieval, cross-encoder reranking, and RAGAS evaluation gates in GitHub Actions CI/CD — achieved 40% retrieval improvement over naive baseline on a 500-question eval set.",
+        "Built an enterprise financial document Q&A RAG system with FAISS dense + BM25 sparse hybrid retrieval, cross-encoder reranking, and RAGAS evaluation gates in GitHub Actions CI/CD — achieved 40% retrieval improvement over naive baseline on a 500-question eval set.",
         "Submitted to Microsoft AI Skills Fest Agents League Hackathon (June 2026) — integrated Azure AI Foundry (GPT-4.1-mini) into the IPL platform, completing RAGAS evaluation on 51 golden QA pairs (faithfulness 0.981).",
         "Completed PGP in Data Science & Business Analytics (UT Austin × Great Learning); currently pursuing AWS Solutions Architect Associate and Azure AI Engineer Associate certifications."
       ],
@@ -227,6 +232,7 @@ export default function App() {
       role: "Software Engineer",
       company: "ANZ",
       period: "June 2022 - June 2024",
+      context: null,
       highlights: [
         "Built and optimized LoanIQ Inquiry APIs and Scripted Batch endpoints, cutting interface error rates and improving processing reliability for a core banking platform serving millions of accounts.",
         "Designed production REST APIs in Spring Boot (IoC, JPA, Java Streams) consumed by downstream banking interfaces — directly applicable to the ML model-serving APIs I build today.",
@@ -260,12 +266,12 @@ export default function App() {
   ];
 
   const certifications = [
-    "Advanced Learning Algorithms (Coursera)",
-    "Machine Learning Specialization (Coursera)",
-    "Supervised Machine Learning: Regression and Classification (Coursera)",
-    "Fundamentals of Java Programming (Coursera)",
-    "Linear Algebra for Machine Learning and Data Science (Coursera)",
-    "SQL Essential Training (LinkedIn Learning)"
+    { title: "AWS Solutions Architect Associate", issuer: "Amazon Web Services", badge: "SAA-C03", status: "In Progress", primary: true },
+    { title: "Azure AI Engineer Associate", issuer: "Microsoft Azure", badge: "AI-102", status: "In Progress", primary: true },
+    { title: "Machine Learning Specialization", issuer: "Coursera", badge: null, status: null, primary: false },
+    { title: "Advanced Learning Algorithms", issuer: "Coursera", badge: null, status: null, primary: false },
+    { title: "Supervised Machine Learning", issuer: "Coursera", badge: null, status: null, primary: false },
+    { title: "Linear Algebra for ML", issuer: "Coursera", badge: null, status: null, primary: false }
   ];
 
   // Contact Form Mock Submission
@@ -454,8 +460,8 @@ export default function App() {
           <p className="text-lg md:text-2xl opacity-80 leading-relaxed font-light mb-12 max-w-3xl">
             I am an AI Engineer transitioning from 2 years of production backend engineering at ANZ. 
             I bring hands-on experience building production-grade GenAI systems—from hybrid RAG pipelines with 
-            measurable RAGAS evals and autonomous multi-agent systems with LangGraph, to fine-tuned LLMs 
-            (LoRA/QLoRA/DPO) and real-time ML inference under strict latency budgets.
+            measurable RAGAS evals and autonomous multi-agent systems with LangGraph, to real-time ML inference 
+            under strict latency budgets and RAGAS-gated CI/CD pipelines.
           </p>
 
           <div className="flex gap-4 flex-wrap">
@@ -526,7 +532,7 @@ export default function App() {
                 )}
               </div>
 
-              <div className="flex flex-wrap gap-1.5 mt-auto pt-4 border-t border-dashed border-current/10">
+              <div className="flex flex-wrap gap-1.5 mt-auto pt-4 border-t border-dashed border-current/10 mb-4">
                 {project.tech.map((tech, idx) => (
                   <span 
                     key={idx} 
@@ -535,6 +541,28 @@ export default function App() {
                     {tech}
                   </span>
                 ))}
+              </div>
+
+              {/* Fix 5: GitHub + Demo CTAs directly on card */}
+              <div className="flex gap-3 pt-3 border-t border-dashed border-current/10" onClick={e => e.preventDefault()}>
+                <a
+                  href={project.githubLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={e => e.stopPropagation()}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 border border-current/15 rounded text-[10px] uppercase tracking-widest font-bold hover:border-current/40 hover:bg-current/5 transition`}
+                >
+                  <Github size={12} /> GitHub
+                </a>
+                <a
+                  href={project.demoLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={e => e.stopPropagation()}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 ${t.accentBg} text-[10px] uppercase tracking-widest font-bold rounded hover:opacity-90 transition ${theme === 'midnight' ? 'text-[#0A0F1D]' : theme === 'obsidian' ? 'text-[#0B0D0F]' : 'text-white'}`}
+                >
+                  <ExternalLink size={12} /> Live Demo
+                </a>
               </div>
             </a>
           ))}
@@ -592,6 +620,10 @@ export default function App() {
                   {exp.period}
                 </span>
               </div>
+
+              {exp.context && (
+                <p className={`text-sm italic mb-6 pl-3 border-l-2 ${t.accentBorder} opacity-70`}>{exp.context}</p>
+              )}
 
               <ul className="space-y-3.5 mb-8 max-w-4xl">
                 {exp.highlights.map((bullet, i) => (
@@ -663,18 +695,35 @@ export default function App() {
               <h2 className="text-4xl md:text-5xl font-serif">Certifications</h2>
             </div>
 
-            <div className="grid sm:grid-cols-2 gap-4">
-              {certifications.map((cert, idx) => {
-                const parts = cert.split(' (');
-                const title = parts[0];
-                const issuer = parts[1] ? parts[1].replace(')', '') : '';
-                return (
-                  <div key={idx} className="p-5 border border-current/5 bg-current/2 rounded-xl hover:border-current/20 transition">
-                    <h3 className="text-sm md:text-base font-serif font-bold leading-tight mb-1">{title}</h3>
-                    {issuer && <p className={`text-[10px] uppercase tracking-wider font-extrabold ${t.accent}`}>{issuer}</p>}
+            {/* Primary: Industry Certifications */}
+            <div className="space-y-4 mb-8">
+              {certifications.filter(c => c.primary).map((cert, idx) => (
+                <div key={idx} className={`p-5 border ${t.accentBorder} bg-current/2 rounded-xl flex items-center gap-4`}>
+                  <div className={`w-12 h-12 border ${t.accentBorder} rounded-xl flex items-center justify-center flex-shrink-0 bg-current/5`}>
+                    <span className={`text-[10px] font-extrabold ${t.accent}`}>{cert.badge}</span>
                   </div>
-                );
-              })}
+                  <div className="flex-grow">
+                    <h3 className="text-sm md:text-base font-serif font-bold leading-tight">{cert.title}</h3>
+                    <p className={`text-[10px] uppercase tracking-wider font-extrabold ${t.accent} mt-0.5`}>{cert.issuer}</p>
+                  </div>
+                  <span className="text-[9px] uppercase tracking-wider font-bold px-2 py-1 border border-amber-500/30 text-amber-400 bg-amber-400/10 rounded flex-shrink-0">
+                    {cert.status}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            {/* Secondary: Foundational Courses */}
+            <div>
+              <p className={`text-[9px] uppercase tracking-widest font-extrabold opacity-40 mb-3`}>Foundational Courses</p>
+              <div className="grid sm:grid-cols-2 gap-3">
+                {certifications.filter(c => !c.primary).map((cert, idx) => (
+                  <div key={idx} className="p-4 border border-current/5 bg-current/2 rounded-xl hover:border-current/15 transition">
+                    <h3 className="text-xs font-serif font-bold leading-tight mb-1 opacity-70">{cert.title}</h3>
+                    <p className={`text-[9px] uppercase tracking-wider font-extrabold ${t.accent} opacity-60`}>{cert.issuer}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
