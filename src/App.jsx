@@ -267,7 +267,7 @@ export default function App() {
 
   const certifications = [
     { title: "AWS Solutions Architect Associate", issuer: "Amazon Web Services", badge: "SAA-C03", status: "In Progress", primary: true },
-    { title: "Azure AI Engineer Associate", issuer: "Microsoft Azure", badge: "AI-102", status: "In Progress", primary: true },
+    { title: "Azure AI Engineer Associate", issuer: "Microsoft Azure", badge: "AI-103", status: "In Progress", primary: true },
     { title: "Machine Learning Specialization", issuer: "Coursera", badge: null, status: null, primary: false },
     { title: "Advanced Learning Algorithms", issuer: "Coursera", badge: null, status: null, primary: false },
     { title: "Supervised Machine Learning", issuer: "Coursera", badge: null, status: null, primary: false },
@@ -319,7 +319,7 @@ ANZ EXPERIENCE (June 2022 – June 2024): LoanIQ Inquiry APIs & Scripted Batch e
 
 EDUCATION: PGP Data Science & Business Analytics, UT Austin × Great Learning (2025-2026). BE Information Science, BMS Institute of Technology (8.50 CGPA, 2018-2022).
 
-CERTIFICATIONS (In Progress): AWS Solutions Architect Associate (SAA-C03), Azure AI Engineer Associate (AI-102).
+CERTIFICATIONS (In Progress): AWS Solutions Architect Associate (SAA-C03), Azure AI Engineer Associate (AI-103).
 
 SKILLS: Python, Java, SQL, LangGraph, LangChain, RAG Systems, XGBoost, FAISS, Qdrant, BM25, BGE-M3, BERT, HuggingFace Transformers, FastAPI, WebSocket, Docker, AWS (EC2/S3/Lambda/SQS), Azure AI Foundry, RAGAS, LangSmith, Locust, CI/CD, Spring Boot, Kafka, Oracle SQL.
 
@@ -360,8 +360,8 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
         reply: "Jagadeep completed a Post Graduate Program (PGP) in Data Science & Business Analytics from UT Austin × Great Learning (2025-2026) and holds a Bachelor of Engineering in Information Science from BMSIT (8.50 CGPA, 2018-2022)."
       },
       {
-        keywords: ['certification', 'certifications', 'aws', 'saa-c03', 'associate', 'azure ai', 'ai-102'],
-        reply: "He is currently pursuing two key industry certifications: AWS Solutions Architect Associate (SAA-C03) and Microsoft Azure AI Engineer Associate (AI-102)."
+        keywords: ['certification', 'certifications', 'aws', 'saa-c03', 'associate', 'azure ai', 'ai-103'],
+        reply: "He is currently pursuing two key industry certifications: AWS Solutions Architect Associate (SAA-C03) and Microsoft Azure AI Engineer Associate (AI-103)."
       },
       {
         keywords: ['skills', 'stack', 'languages', 'databases', 'frameworks', 'tools'],
