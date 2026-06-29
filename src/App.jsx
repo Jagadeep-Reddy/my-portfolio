@@ -332,6 +332,82 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
   // Keep full conversation history for context
   const chatHistoryRef = useRef([]);
 
+  const getSimulatedResponse = (query) => {
+    const q = query.toLowerCase().trim();
+    const intents = [
+      {
+        keywords: ['expertise', 'summary', 'about', 'who is', 'background', 'profile', 'bio'],
+        reply: "Jagadeep is an AI Engineer transitioning from 2 years of production backend engineering at ANZ. He specializes in designing LangGraph multi-agent systems, fine-tuning hybrid RAG pipelines (evaluating via RAGAS), and deploying real-time ML inference models."
+      },
+      {
+        keywords: ['ipl', 'platform', 'cricket', 'deliveries', 'win probability', 'commentary'],
+        reply: "His flagship project is the IPL AI Intelligence Platform: a 5-agent LangGraph platform orchestrating stats, matchups, and real-time win probability (XGBoost) over 18 seasons (<300ms latency). It uses BGE-M3 and Qdrant for hybrid RAG, achieving 0.88 RAGAS faithfulness."
+      },
+      {
+        keywords: ['rag', 'retrieval', 'chunking', 'faiss', 'bm25', 'rerank', 'hybrid search', 'hallucination'],
+        reply: "Jagadeep built an Enterprise Financial RAG System utilizing FAISS dense + BM25 sparse hybrid retrieval, hierarchical parent-child chunking, and cross-encoder rerankers. It includes self-consistency hallucination detection and RAGAS CI/CD evaluation gates."
+      },
+      {
+        keywords: ['microsoft', 'hackathon', 'azure', 'skills fest', 'foundry'],
+        reply: "At the Microsoft AI Skills Fest Agents League Hackathon in June 2026, Jagadeep integrated Azure AI Foundry (GPT-4.1-mini) into his IPL platform, verifying performance via RAGAS with a faithfulness score of 0.981."
+      },
+      {
+        keywords: ['anz', 'software engineer', 'backend', 'spring boot', 'java', 'kafka', 'oracle', 'loaniq'],
+        reply: "At ANZ (June 2022 - June 2024), Jagadeep built Spring Boot REST APIs and optimized Oracle SQL queries for LoanIQ core banking platforms. He also engineered event-driven microservices with Kafka, achieving 90% unit test coverage."
+      },
+      {
+        keywords: ['education', 'university', 'college', 'degree', 'bmsit', 'ut austin', 'texas', 'pgp'],
+        reply: "Jagadeep completed a Post Graduate Program (PGP) in Data Science & Business Analytics from UT Austin × Great Learning (2025-2026) and holds a Bachelor of Engineering in Information Science from BMSIT (8.50 CGPA, 2018-2022)."
+      },
+      {
+        keywords: ['certification', 'certifications', 'aws', 'saa-c03', 'associate', 'azure ai', 'ai-102'],
+        reply: "He is currently pursuing two key industry certifications: AWS Solutions Architect Associate (SAA-C03) and Microsoft Azure AI Engineer Associate (AI-102)."
+      },
+      {
+        keywords: ['skills', 'stack', 'languages', 'databases', 'frameworks', 'tools'],
+        reply: "His core stack includes Python, Java, SQL, LangGraph, LangChain, Qdrant, FAISS, hybrid RAG, XGBoost, Spring Boot, Kafka, AWS, Azure AI Foundry, FastAPI, and RAGAS evaluation."
+      },
+      {
+        keywords: ['salary', 'ctc', 'package', 'compensation', 'expectation', 'lpa'],
+        reply: "Jagadeep is targeting a compensation package of 20-25 LPA (INR) for roles based in India or Riyadh, Saudi Arabia."
+      },
+      {
+        keywords: ['availability', 'start date', 'notice period', 'when can he start'],
+        reply: "Jagadeep is available to start new opportunities beginning July 14, 2026. He is open to full-time roles, hybrid, and remote contracts."
+      },
+      {
+        keywords: ['location', 'relocate', 'bangalore', 'bengaluru', 'riyadh', 'saudi arabia'],
+        reply: "Jagadeep is based in Bengaluru, India, and is open to local roles. He is also open to relocating to Riyadh, Saudi Arabia, or working remotely."
+      },
+      {
+        keywords: ['contact', 'email', 'phone', 'reach', 'linkedin', 'github', 'social'],
+        reply: "You can reach Jagadeep directly at jagadeepreddy3638@gmail.com. His profiles are: LinkedIn (linkedin.com/in/buthuru-jagadeep-reddy) and GitHub (github.com/Jagadeep-Reddy)."
+      }
+    ];
+
+    let bestIntent = null;
+    let maxScore = 0;
+
+    for (const intent of intents) {
+      let score = 0;
+      for (const keyword of intent.keywords) {
+        if (q.includes(keyword)) {
+          score += 1;
+        }
+      }
+      if (score > maxScore) {
+        maxScore = score;
+        bestIntent = intent;
+      }
+    }
+
+    if (maxScore > 0 && bestIntent) {
+      return bestIntent.reply;
+    }
+
+    return "I can answer questions about Jagadeep's portfolio projects (IPL platform, RAG system), work history at ANZ, education (UT Austin, BMSIT), certifications (AWS, Azure), skills, salary targets, availability, or contact details. What would you like to know?";
+  };
+
   const sendToClaudeAPI = async (userText) => {
     chatHistoryRef.current = [...chatHistoryRef.current, { role: 'user', content: userText }];
     setIsTyping(true);
@@ -352,8 +428,13 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
       setIsTyping(false);
       setMessages(prev => [...prev, { sender: 'agent', text: reply, timestamp: new Date() }]);
     } catch {
-      setIsTyping(false);
-      setMessages(prev => [...prev, { sender: 'agent', text: "Connection issue. Please email jagadeepreddy3638@gmail.com directly.", timestamp: new Date() }]);
+      // Fallback to high-fidelity simulated response on connection issue (e.g. CORS/No API key in browser)
+      setTimeout(() => {
+        setIsTyping(false);
+        const reply = getSimulatedResponse(userText);
+        chatHistoryRef.current = [...chatHistoryRef.current, { role: 'assistant', content: reply }];
+        setMessages(prev => [...prev, { sender: 'agent', text: reply, timestamp: new Date() }]);
+      }, 800 + Math.random() * 600);
     }
   };
 
