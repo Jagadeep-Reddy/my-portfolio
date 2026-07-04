@@ -25,118 +25,126 @@ import {
 // Design Theme Definitions - Technical Architect Canvas Style
 const themes = {
   midnight: {
-    name: "Midnight Gold",
-    bg: "bg-[#0C122C] text-[#F8FAFC]",
-    bgRaw: "#0C122C",
+    name: "Slate Bronze",
+    bg: "bg-[#080C14] text-[#F8FAFC]",
+    bgRaw: "#080C14",
     text: "text-[#F8FAFC]",
-    textMuted: "text-[#94A3B8]",
-    accent: "text-[#E6C65A]", // Architect Gold
-    accentBg: "bg-[#E6C65A]",
-    accentBorder: "border-[#E6C65A]/20",
-    accentBorderActive: "border-[#E6C65A]/60",
-    accentHover: "hover:border-[#E6C65A]/80",
-    accentText: "text-[#E6C65A]",
-    accentBgLight: "bg-[#E6C65A]/5",
-    footerBg: "bg-[#080C20]",
-    divider: "border-[#1C254A]",
-    cardBg: "bg-[#131A3C]/40 backdrop-blur-md",
-    cardBorder: "border-[#242F5E]",
-    cardBorderHover: "hover:border-[#E6C65A]/50",
-    inputBg: "bg-[#131A3C]/60",
-    inputBorder: "border-[#242F5E]",
-    inputFocus: "focus:border-[#E6C65A]/60",
-    chatBtn: "bg-[#E6C65A] text-[#0C122C] shadow-[0_4px_20px_rgba(230,198,90,0.15)]",
-    buttonBg: "bg-[#E6C65A] text-[#0C122C] border border-[#E6C65A]",
-    dotColor: "bg-[#E6C65A]",
-    blob1: "bg-[#3B82F6]/15",
-    blob2: "bg-[#6366F1]/15",
-    blob3: "bg-[#E6C65A]/10"
+    textMuted: "text-[#7E8B9B]",
+    accent: "text-[#C5A880]", // Champagne Bronze
+    accentBg: "bg-[#C5A880]",
+    accentBorder: "border-[#C5A880]/20",
+    accentBorderActive: "border-[#C5A880]/60",
+    accentHover: "hover:border-[#C5A880]/80",
+    accentText: "text-[#C5A880]",
+    accentBgLight: "bg-[#C5A880]/5",
+    footerBg: "bg-[#04060A]",
+    divider: "border-[#1A2333]",
+    cardBg: "bg-[#0F1524]/50 backdrop-blur-md",
+    cardBorder: "border-[#1C2538]",
+    cardBorderHover: "hover:border-[#C5A880]/40",
+    inputBg: "bg-[#0F1524]/70",
+    inputBorder: "border-[#1C2538]",
+    inputFocus: "focus:border-[#C5A880]/60",
+    chatBtn: "bg-[#C5A880] text-[#080C14] shadow-[0_4px_20px_rgba(197,168,128,0.2)]",
+    buttonBg: "bg-[#C5A880] text-[#080C14] border border-[#C5A880]",
+    dotColor: "bg-[#C5A880]",
+    blob1: "bg-[#4F46E5]/10",
+    blob2: "bg-[#C5A880]/8",
+    blob3: "bg-[#7C3AED]/10",
+    buttonText: "text-[#080C14]",
+    userChatBg: "bg-[#C5A880]/10"
   },
   obsidian: {
-    name: "Obsidian Teal",
-    bg: "bg-[#0A1828] text-[#F1F5F9]",
-    bgRaw: "#0A1828",
+    name: "Obsidian Mint",
+    bg: "bg-[#070A13] text-[#F1F5F9]",
+    bgRaw: "#070A13",
     text: "text-[#F1F5F9]",
-    textMuted: "text-[#8A99AD]",
-    accent: "text-[#00F5E6]", // Electric Teal
-    accentBg: "bg-[#00F5E6]",
-    accentBorder: "border-[#00F5E6]/20",
-    accentBorderActive: "border-[#00F5E6]/60",
-    accentHover: "hover:border-[#00F5E6]/80",
-    accentText: "text-[#00F5E6]",
-    accentBgLight: "bg-[#00F5E6]/5",
-    footerBg: "bg-[#07111E]",
-    divider: "border-[#152C4D]",
-    cardBg: "bg-[#10243C]/40 backdrop-blur-md",
-    cardBorder: "border-[#1B365D]",
-    cardBorderHover: "hover:border-[#00F5E6]/50",
-    inputBg: "bg-[#10243C]/60",
-    inputBorder: "border-[#1B365D]",
-    inputFocus: "focus:border-[#00F5E6]/60",
-    chatBtn: "bg-[#00F5E6] text-[#0A1828] shadow-[0_4px_20px_rgba(0,245,230,0.15)]",
-    buttonBg: "bg-[#00F5E6] text-[#0A1828] border border-[#00F5E6]",
-    dotColor: "bg-[#00F5E6]",
-    blob1: "bg-[#06B6D4]/15",
-    blob2: "bg-[#0D9488]/15",
-    blob3: "bg-[#00F5E6]/10"
-  },
-  forest: {
-    name: "Forest Emerald",
-    bg: "bg-[#071B12] text-[#F1F5F9]",
-    bgRaw: "#071B12",
-    text: "text-[#F1F5F9]",
-    textMuted: "text-[#8BA396]",
-    accent: "text-[#10B981]", // Emerald Green
+    textMuted: "text-[#718096]",
+    accent: "text-[#10B981]", // Vibrant Mint
     accentBg: "bg-[#10B981]",
     accentBorder: "border-[#10B981]/25",
     accentBorderActive: "border-[#10B981]/60",
     accentHover: "hover:border-[#10B981]/80",
     accentText: "text-[#10B981]",
     accentBgLight: "bg-[#10B981]/5",
-    footerBg: "bg-[#05130D]",
-    divider: "border-[#113828]",
-    cardBg: "bg-[#0D2A1E]/40 backdrop-blur-md",
-    cardBorder: "border-[#164934]",
-    cardBorderHover: "hover:border-[#10B981]/50",
-    inputBg: "bg-[#0D2A1E]/60",
-    inputBorder: "border-[#164934]",
+    footerBg: "bg-[#04060B]",
+    divider: "border-[#1B2336]",
+    cardBg: "bg-[#0F1322]/50 backdrop-blur-md",
+    cardBorder: "border-[#1C263F]",
+    cardBorderHover: "hover:border-[#10B981]/40",
+    inputBg: "bg-[#0F1322]/70",
+    inputBorder: "border-[#1C263F]",
     inputFocus: "focus:border-[#10B981]/60",
-    chatBtn: "bg-[#10B981] text-[#071B12] shadow-[0_4px_20px_rgba(16,185,129,0.15)]",
-    buttonBg: "bg-[#10B981] text-[#071B12] border border-[#10B981]",
+    chatBtn: "bg-[#10B981] text-[#070A13] shadow-[0_4px_20px_rgba(16,185,129,0.2)]",
+    buttonBg: "bg-[#10B981] text-[#070A13] border border-[#10B981]",
     dotColor: "bg-[#10B981]",
-    blob1: "bg-[#10B981]/15",
-    blob2: "bg-[#059669]/15",
-    blob3: "bg-[#84CC16]/10"
+    blob1: "bg-[#00F5D4]/10",
+    blob2: "bg-[#10B981]/8",
+    blob3: "bg-[#6366F1]/10",
+    buttonText: "text-[#070A13]",
+    userChatBg: "bg-[#10B981]/10"
+  },
+  forest: {
+    name: "Botanical Sage",
+    bg: "bg-[#050B08] text-[#F1F5F9]",
+    bgRaw: "#050B08",
+    text: "text-[#F1F5F9]",
+    textMuted: "text-[#668277]",
+    accent: "text-[#52D1A2]", // Mint Sage
+    accentBg: "bg-[#52D1A2]",
+    accentBorder: "border-[#52D1A2]/20",
+    accentBorderActive: "border-[#52D1A2]/60",
+    accentHover: "hover:border-[#52D1A2]/80",
+    accentText: "text-[#52D1A2]",
+    accentBgLight: "bg-[#52D1A2]/5",
+    footerBg: "bg-[#030605]",
+    divider: "border-[#15241F]",
+    cardBg: "bg-[#0C1411]/50 backdrop-blur-md",
+    cardBorder: "border-[#1A2E27]",
+    cardBorderHover: "hover:border-[#52D1A2]/40",
+    inputBg: "bg-[#0C1411]/70",
+    inputBorder: "border-[#1A2E27]",
+    inputFocus: "focus:border-[#52D1A2]/60",
+    chatBtn: "bg-[#52D1A2] text-[#050B08] shadow-[0_4px_20px_rgba(82,209,162,0.2)]",
+    buttonBg: "bg-[#52D1A2] text-[#050B08] border border-[#52D1A2]",
+    dotColor: "bg-[#52D1A2]",
+    blob1: "bg-[#52D1A2]/10",
+    blob2: "bg-[#059669]/10",
+    blob3: "bg-[#34D399]/8",
+    buttonText: "text-[#050B08]",
+    userChatBg: "bg-[#52D1A2]/10"
   },
   terracotta: {
-    name: "Cyber Terracotta",
-    bg: "bg-[#1E0F0A] text-[#FAF8F5]",
-    bgRaw: "#1E0F0A",
+    name: "Velvet Orchid",
+    bg: "bg-[#0A0612] text-[#FAF8F5]",
+    bgRaw: "#0A0612",
     text: "text-[#FAF8F5]",
-    textMuted: "text-[#A8A296]",
-    accent: "text-[#F97316]", // Terracotta Orange
-    accentBg: "bg-[#F97316]",
-    accentBorder: "border-[#F97316]/20",
-    accentBorderActive: "border-[#F97316]/60",
-    accentHover: "hover:border-[#F97316]/80",
-    accentText: "text-[#F97316]",
-    accentBgLight: "bg-[#F97316]/5",
-    footerBg: "bg-[#150A06]",
-    divider: "border-[#3C2016]",
-    cardBg: "bg-[#2E1911]/40 backdrop-blur-md",
-    cardBorder: "border-[#4C281B]",
-    cardBorderHover: "hover:border-[#F97316]/50",
-    inputBg: "bg-[#2E1911]/60",
-    inputBorder: "border-[#4C281B]",
-    inputFocus: "focus:border-[#F97316]/60",
-    chatBtn: "bg-[#F97316] text-[#1E0F0A] shadow-[0_4px_20px_rgba(249,115,22,0.15)]",
-    buttonBg: "bg-[#F97316] text-[#1E0F0A] border border-[#F97316]",
-    dotColor: "bg-[#F97316]",
-    blob1: "bg-[#F97316]/15",
-    blob2: "bg-[#EF4444]/15",
-    blob3: "bg-[#F59E0B]/10"
+    textMuted: "text-[#8B809E]",
+    accent: "text-[#D946EF]", // Orchid Violet
+    accentBg: "bg-[#D946EF]",
+    accentBorder: "border-[#D946EF]/20",
+    accentBorderActive: "border-[#D946EF]/60",
+    accentHover: "hover:border-[#D946EF]/80",
+    accentText: "text-[#D946EF]",
+    accentBgLight: "bg-[#D946EF]/5",
+    footerBg: "bg-[#06030B]",
+    divider: "border-[#22163B]",
+    cardBg: "bg-[#130D22]/50 backdrop-blur-md",
+    cardBorder: "border-[#281B47]",
+    cardBorderHover: "hover:border-[#D946EF]/40",
+    inputBg: "bg-[#130D22]/70",
+    inputBorder: "border-[#281B47]",
+    inputFocus: "focus:border-[#D946EF]/60",
+    chatBtn: "bg-[#D946EF] text-[#0A0612] shadow-[0_4px_20px_rgba(217,70,239,0.2)]",
+    buttonBg: "bg-[#D946EF] text-[#0A0612] border border-[#D946EF]",
+    dotColor: "bg-[#D946EF]",
+    blob1: "bg-[#D946EF]/10",
+    blob2: "bg-[#A855F7]/10",
+    blob3: "bg-[#EC4899]/8",
+    buttonText: "text-[#0A0612]",
+    userChatBg: "bg-[#D946EF]/10"
   }
-};
+};;
 
 export default function App() {
   const [theme, setTheme] = useState(() => {
@@ -583,10 +591,10 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
                   onChange={(e) => setTheme(e.target.value)}
                   className={`appearance-none bg-transparent border ${t.accentBorder} ${t.text} text-[9px] font-mono uppercase tracking-widest pl-3 pr-7 py-1 rounded focus:outline-none cursor-pointer hover:bg-white/5 transition`}
                 >
-                  <option value="midnight" className="bg-[#0C122C] text-[#F8FAFC]">Midnight Gold</option>
-                  <option value="obsidian" className="bg-[#0A1828] text-[#F1F5F9]">Obsidian Teal</option>
-                  <option value="forest" className="bg-[#071B12] text-[#F1F5F9]">Forest Emerald</option>
-                  <option value="terracotta" className="bg-[#1E0F0A] text-[#FAF8F5]">Cyber Orange</option>
+                  <option value="midnight" className="bg-[#080C14] text-[#F8FAFC]">Slate Bronze</option>
+                  <option value="obsidian" className="bg-[#070A13] text-[#F1F5F9]">Obsidian Mint</option>
+                  <option value="forest" className="bg-[#050B08] text-[#F1F5F9]">Botanical Sage</option>
+                  <option value="terracotta" className="bg-[#0A0612] text-[#FAF8F5]">Velvet Orchid</option>
                 </select>
                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-1.5 text-zinc-500">
                   <ChevronDown size={10} />
@@ -609,10 +617,10 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
               onChange={(e) => setTheme(e.target.value)}
               className={`bg-transparent border ${t.accentBorder} ${t.text} text-[8px] font-mono uppercase tracking-widest px-2 py-0.5 rounded focus:outline-none`}
             >
-              <option value="midnight" className="bg-[#0C122C] text-white">Midnight</option>
-              <option value="obsidian" className="bg-[#0A1828] text-white">Obsidian</option>
-              <option value="forest" className="bg-[#071B12] text-white">Forest</option>
-              <option value="terracotta" className="bg-[#1E0F0A] text-white">Cyber</option>
+              <option value="midnight" className="bg-[#080C14] text-white">Slate Bronze</option>
+              <option value="obsidian" className="bg-[#070A13] text-white">Obsidian Mint</option>
+              <option value="forest" className="bg-[#050B08] text-white">Botanical Sage</option>
+              <option value="terracotta" className="bg-[#0A0612] text-white">Velvet Orchid</option>
             </select>
             <button 
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -671,7 +679,7 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
           <div className="flex gap-4 flex-wrap">
             <button 
               onClick={() => scrollToSection('projects')} 
-              className={`px-6 py-3 ${t.buttonBg} text-xs font-mono uppercase tracking-wider font-semibold flex items-center gap-2 hover:opacity-90 transition ${theme === 'midnight' ? 'text-[#060813]' : theme === 'obsidian' ? 'text-[#07090F]' : theme === 'forest' ? 'text-[#050806]' : 'text-[#0E0A08]'}`}
+              className={`px-6 py-3 ${t.buttonBg} text-xs font-mono uppercase tracking-wider font-semibold flex items-center gap-2 hover:opacity-90 transition`}
             >
               Explore Logs <Terminal size={12} />
             </button>
@@ -723,7 +731,7 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
               onClick={() => setActiveArchTab('ipl')}
               className={`px-3 py-1.5 text-[9px] font-mono uppercase tracking-widest rounded-md transition-all ${
                 activeArchTab === 'ipl' 
-                  ? `${t.buttonBg} font-semibold ${theme === 'midnight' ? 'text-[#060813]' : theme === 'obsidian' ? 'text-[#07090F]' : theme === 'forest' ? 'text-[#050806]' : 'text-[#0E0A08]'}` 
+                  ? `${t.buttonBg} font-semibold` 
                   : 'text-zinc-400 hover:text-white'
               }`}
             >
@@ -733,7 +741,7 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
               onClick={() => setActiveArchTab('rag')}
               className={`px-3 py-1.5 text-[9px] font-mono uppercase tracking-widest rounded-md transition-all ${
                 activeArchTab === 'rag' 
-                  ? `${t.buttonBg} font-semibold ${theme === 'midnight' ? 'text-[#060813]' : theme === 'obsidian' ? 'text-[#07090F]' : theme === 'forest' ? 'text-[#050806]' : 'text-[#0E0A08]'}` 
+                  ? `${t.buttonBg} font-semibold` 
                   : 'text-zinc-400 hover:text-white'
               }`}
             >
@@ -1021,7 +1029,7 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
             onClick={() => setActiveProjectTab('ipl')}
             className={`px-3 py-1.5 text-[9px] font-mono uppercase tracking-widest rounded-md transition-all ${
               activeProjectTab === 'ipl' 
-                ? `${t.buttonBg} font-semibold ${theme === 'midnight' ? 'text-[#060813]' : theme === 'obsidian' ? 'text-[#07090F]' : theme === 'forest' ? 'text-[#050806]' : 'text-[#0E0A08]'}` 
+                ? `${t.buttonBg} font-semibold` 
                 : 'text-zinc-400 hover:text-white'
             }`}
           >
@@ -1031,7 +1039,7 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
             onClick={() => setActiveProjectTab('rag')}
             className={`px-3 py-1.5 text-[9px] font-mono uppercase tracking-widest rounded-md transition-all ${
               activeProjectTab === 'rag' 
-                ? `${t.buttonBg} font-semibold ${theme === 'midnight' ? 'text-[#060813]' : theme === 'obsidian' ? 'text-[#07090F]' : theme === 'forest' ? 'text-[#050806]' : 'text-[#0E0A08]'}` 
+                ? `${t.buttonBg} font-semibold` 
                 : 'text-zinc-400 hover:text-white'
             }`}
           >
@@ -1066,7 +1074,7 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
                     href={proj.demoLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`flex items-center gap-1.5 px-3 py-1.5 ${t.buttonBg} text-[9px] font-mono uppercase tracking-widest rounded hover:opacity-90 transition ${theme === 'midnight' ? 'text-[#0C122C]' : theme === 'obsidian' ? 'text-[#0A1828]' : theme === 'forest' ? 'text-[#071B12]' : 'text-[#1E0F0A]'}`}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 ${t.buttonBg} text-[9px] font-mono uppercase tracking-widest rounded hover:opacity-90 transition`}
                   >
                     <ExternalLink size={12} /> Live Demo
                   </a>
@@ -1507,7 +1515,7 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
               <button
                 type="submit"
                 disabled={formStatus === 'sending'}
-                className={`w-full py-3.5 ${t.buttonBg} text-xs font-mono uppercase tracking-widest font-semibold flex items-center justify-center gap-1.5 cursor-pointer hover:opacity-90 transition ${theme === 'midnight' ? 'text-[#060813]' : theme === 'obsidian' ? 'text-[#07090F]' : theme === 'forest' ? 'text-[#050806]' : 'text-[#0E0A08]'}`}
+                className={`w-full py-3.5 ${t.buttonBg} text-xs font-mono uppercase tracking-widest font-semibold flex items-center justify-center gap-1.5 cursor-pointer hover:opacity-90 transition`}
               >
                 {formStatus === 'sending' ? 'TRANSMITTING...' : 'INITIATE_CONTACT_COMMAND →'}
               </button>
@@ -1641,7 +1649,7 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
               >
                 <div className={`max-w-[85%] rounded-lg px-3 py-2 text-xs leading-relaxed font-sans ${
                   msg.sender === 'user'
-                    ? `bg-[#E6C65A]/10 text-white border ${t.accentBorder} rounded-tr-none`
+                    ? `${t.userChatBg} text-white border ${t.accentBorder} rounded-tr-none`
                     : `${t.cardBg} text-zinc-300 border ${t.cardBorder} rounded-tl-none`
                 }`}>
                   {msg.text}
