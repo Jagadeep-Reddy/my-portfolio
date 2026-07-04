@@ -19,7 +19,9 @@ import {
   Layers,
   Database,
   ArrowRight,
-  Sparkles
+  Sparkles,
+  Copy,
+  Check
 } from 'lucide-react';
 
 // Design Theme Definitions - Technical Architect Canvas Style
@@ -176,6 +178,12 @@ export default function App() {
   const [activeProjectTab, setActiveProjectTab] = useState('rag'); // 'ipl' or 'rag'
   const [expandedSkillCat, setExpandedSkillCat] = useState(null); // Accordion logic for skills
   
+  // Interactive UI UX States
+  const [activeTag, setActiveTag] = useState(null); // Highlight same tags on hover
+  const [activeLayer, setActiveLayer] = useState(null); // Highlight diagram nodes
+  const [copiedField, setCopiedField] = useState(null); // Copy link feedback
+  const [scrollProgress, setScrollProgress] = useState(0); // Progress bar percentage
+
   // Form submission state
   const [formEmail, setFormEmail] = useState('');
   const [formSubject, setFormSubject] = useState('');
@@ -197,6 +205,13 @@ export default function App() {
   // Active theme styles shorthand
   const t = themes[theme] || themes.midnight;
 
+  const handleCopyToClipboard = (text, fieldName) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedField(fieldName);
+      setTimeout(() => setCopiedField(null), 2000);
+    });
+  };
+
   useEffect(() => {
     localStorage.setItem('portfolio-theme', theme);
   }, [theme]);
@@ -205,6 +220,11 @@ export default function App() {
     const handleScroll = () => {
       setScrolled(window.scrollY > 40);
       setShowScrollTop(window.scrollY > 400);
+      
+      const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolledPercent = height > 0 ? (winScroll / height) * 100 : 0;
+      setScrollProgress(scrolledPercent);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -567,6 +587,8 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
           ? `${t.bg} bg-opacity-90 backdrop-blur-md border-b ${t.divider}`
           : 'bg-transparent'
       }`}>
+        {/* Scroll Progress Indicator */}
+        <div className={`absolute bottom-0 left-0 h-[1.5px] ${t.accentBg} transition-all duration-100 z-50`} style={{ width: `${scrollProgress}%` }}></div>
         <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center relative z-10">
           <div>
             <span 
@@ -770,7 +792,15 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
             {activeArchTab === 'ipl' ? (
               // IPL Platform Layers
               <>
-                <div className={`group p-5 border ${t.cardBorder} ${t.cardBg} ${t.cardBorderHover} rounded-xl transition duration-300`}>
+                <div 
+                  onMouseEnter={() => setActiveLayer(1)}
+                  onMouseLeave={() => setActiveLayer(null)}
+                  className={`group p-5 border rounded-xl transition duration-300 cursor-pointer ${
+                    activeLayer === 1 
+                      ? `${t.accentBorderActive} shadow-sm shadow-[#10B981]/5 bg-[#10B981]/5` 
+                      : `${t.cardBorder} ${t.cardBg} ${t.cardBorderHover}`
+                  }`}
+                >
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 01 // INGRESS</span>
                     <span className={`w-2 h-2 rounded-full ${t.dotColor}`}></span>
@@ -785,7 +815,15 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
                   <div className="h-4 w-[1px] border-l border-dashed border-zinc-700"></div>
                 </div>
 
-                <div className={`group p-5 border ${t.cardBorder} ${t.cardBg} ${t.cardBorderHover} rounded-xl transition duration-300`}>
+                <div 
+                  onMouseEnter={() => setActiveLayer(2)}
+                  onMouseLeave={() => setActiveLayer(null)}
+                  className={`group p-5 border rounded-xl transition duration-300 cursor-pointer ${
+                    activeLayer === 2 
+                      ? `${t.accentBorderActive} shadow-sm shadow-[#10B981]/5 bg-[#10B981]/5` 
+                      : `${t.cardBorder} ${t.cardBg} ${t.cardBorderHover}`
+                  }`}
+                >
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 02 // ORCHESTRATION</span>
                     <span className={`w-2 h-2 rounded-full ${t.dotColor}`}></span>
@@ -800,7 +838,15 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
                   <div className="h-4 w-[1px] border-l border-dashed border-zinc-700"></div>
                 </div>
 
-                <div className={`group p-5 border ${t.cardBorder} ${t.cardBg} ${t.cardBorderHover} rounded-xl transition duration-300`}>
+                <div 
+                  onMouseEnter={() => setActiveLayer(3)}
+                  onMouseLeave={() => setActiveLayer(null)}
+                  className={`group p-5 border rounded-xl transition duration-300 cursor-pointer ${
+                    activeLayer === 3 
+                      ? `${t.accentBorderActive} shadow-sm shadow-[#10B981]/5 bg-[#10B981]/5` 
+                      : `${t.cardBorder} ${t.cardBg} ${t.cardBorderHover}`
+                  }`}
+                >
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 03 // INTELLIGENT AGENTS</span>
                     <span className={`w-2 h-2 rounded-full ${t.dotColor}`}></span>
@@ -815,7 +861,15 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
                   <div className="h-4 w-[1px] border-l border-dashed border-zinc-700"></div>
                 </div>
 
-                <div className={`group p-5 border ${t.cardBorder} ${t.cardBg} ${t.cardBorderHover} rounded-xl transition duration-300`}>
+                <div 
+                  onMouseEnter={() => setActiveLayer(4)}
+                  onMouseLeave={() => setActiveLayer(null)}
+                  className={`group p-5 border rounded-xl transition duration-300 cursor-pointer ${
+                    activeLayer === 4 
+                      ? `${t.accentBorderActive} shadow-sm shadow-[#10B981]/5 bg-[#10B981]/5` 
+                      : `${t.cardBorder} ${t.cardBg} ${t.cardBorderHover}`
+                  }`}
+                >
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 04 // DATA & KNOWLEDGE RETRIEVAL</span>
                     <span className={`w-2 h-2 rounded-full ${t.dotColor}`}></span>
@@ -830,7 +884,15 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
                   <div className="h-4 w-[1px] border-l border-dashed border-zinc-700"></div>
                 </div>
 
-                <div className={`group p-5 border ${t.cardBorder} ${t.cardBg} ${t.cardBorderHover} rounded-xl transition duration-300`}>
+                <div 
+                  onMouseEnter={() => setActiveLayer(5)}
+                  onMouseLeave={() => setActiveLayer(null)}
+                  className={`group p-5 border rounded-xl transition duration-300 cursor-pointer ${
+                    activeLayer === 5 
+                      ? `${t.accentBorderActive} shadow-sm shadow-[#10B981]/5 bg-[#10B981]/5` 
+                      : `${t.cardBorder} ${t.cardBg} ${t.cardBorderHover}`
+                  }`}
+                >
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 05 // DELIVERY LAYER</span>
                     <span className={`w-2 h-2 rounded-full ${t.dotColor}`}></span>
@@ -844,7 +906,15 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
             ) : (
               // Financial RAG Layers
               <>
-                <div className={`group p-5 border ${t.cardBorder} ${t.cardBg} ${t.cardBorderHover} rounded-xl transition duration-300`}>
+                <div 
+                  onMouseEnter={() => setActiveLayer(1)}
+                  onMouseLeave={() => setActiveLayer(null)}
+                  className={`group p-5 border rounded-xl transition duration-300 cursor-pointer ${
+                    activeLayer === 1 
+                      ? `${t.accentBorderActive} shadow-sm shadow-[#10B981]/5 bg-[#10B981]/5` 
+                      : `${t.cardBorder} ${t.cardBg} ${t.cardBorderHover}`
+                  }`}
+                >
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 01 // QUERY ANALYSIS</span>
                     <span className={`w-2 h-2 rounded-full ${t.dotColor}`}></span>
@@ -859,7 +929,15 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
                   <div className="h-4 w-[1px] border-l border-dashed border-zinc-700"></div>
                 </div>
 
-                <div className={`group p-5 border ${t.cardBorder} ${t.cardBg} ${t.cardBorderHover} rounded-xl transition duration-300`}>
+                <div 
+                  onMouseEnter={() => setActiveLayer(2)}
+                  onMouseLeave={() => setActiveLayer(null)}
+                  className={`group p-5 border rounded-xl transition duration-300 cursor-pointer ${
+                    activeLayer === 2 
+                      ? `${t.accentBorderActive} shadow-sm shadow-[#10B981]/5 bg-[#10B981]/5` 
+                      : `${t.cardBorder} ${t.cardBg} ${t.cardBorderHover}`
+                  }`}
+                >
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 02 // SEARCH RETRIEVAL</span>
                     <span className={`w-2 h-2 rounded-full ${t.dotColor}`}></span>
@@ -874,7 +952,15 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
                   <div className="h-4 w-[1px] border-l border-dashed border-zinc-700"></div>
                 </div>
 
-                <div className={`group p-5 border ${t.cardBorder} ${t.cardBg} ${t.cardBorderHover} rounded-xl transition duration-300`}>
+                <div 
+                  onMouseEnter={() => setActiveLayer(3)}
+                  onMouseLeave={() => setActiveLayer(null)}
+                  className={`group p-5 border rounded-xl transition duration-300 cursor-pointer ${
+                    activeLayer === 3 
+                      ? `${t.accentBorderActive} shadow-sm shadow-[#10B981]/5 bg-[#10B981]/5` 
+                      : `${t.cardBorder} ${t.cardBg} ${t.cardBorderHover}`
+                  }`}
+                >
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 03 // EXTRACTION & RERANK</span>
                     <span className={`w-2 h-2 rounded-full ${t.dotColor}`}></span>
@@ -889,7 +975,15 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
                   <div className="h-4 w-[1px] border-l border-dashed border-zinc-700"></div>
                 </div>
 
-                <div className={`group p-5 border ${t.cardBorder} ${t.cardBg} ${t.cardBorderHover} rounded-xl transition duration-300`}>
+                <div 
+                  onMouseEnter={() => setActiveLayer(4)}
+                  onMouseLeave={() => setActiveLayer(null)}
+                  className={`group p-5 border rounded-xl transition duration-300 cursor-pointer ${
+                    activeLayer === 4 
+                      ? `${t.accentBorderActive} shadow-sm shadow-[#10B981]/5 bg-[#10B981]/5` 
+                      : `${t.cardBorder} ${t.cardBg} ${t.cardBorderHover}`
+                  }`}
+                >
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 04 // SYNTHESIS & SAFEGUARD</span>
                     <span className={`w-2 h-2 rounded-full ${t.dotColor}`}></span>
@@ -904,7 +998,15 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
                   <div className="h-4 w-[1px] border-l border-dashed border-zinc-700"></div>
                 </div>
 
-                <div className={`group p-5 border ${t.cardBorder} ${t.cardBg} ${t.cardBorderHover} rounded-xl transition duration-300`}>
+                <div 
+                  onMouseEnter={() => setActiveLayer(5)}
+                  onMouseLeave={() => setActiveLayer(null)}
+                  className={`group p-5 border rounded-xl transition duration-300 cursor-pointer ${
+                    activeLayer === 5 
+                      ? `${t.accentBorderActive} shadow-sm shadow-[#10B981]/5 bg-[#10B981]/5` 
+                      : `${t.cardBorder} ${t.cardBg} ${t.cardBorderHover}`
+                  }`}
+                >
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 05 // DELIVERY GATEWAY</span>
                     <span className={`w-2 h-2 rounded-full ${t.dotColor}`}></span>
@@ -931,8 +1033,8 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
 
             <div className="space-y-4">
               <div>
-                <h4 className="text-[9px] font-mono uppercase tracking-widest text-zinc-500">Design Decisions</h4>
-                <ul className="text-xs text-zinc-300 mt-2 space-y-2.5">
+                <h4 className="text-[9px] font-mono uppercase tracking-widest text-zinc-500 mb-2">Design Decisions</h4>
+                <ul className="text-xs text-zinc-400 mt-2 space-y-2.5">
                   {activeArchTab === 'ipl' ? (
                     <>
                       <li className="flex items-start gap-2">
@@ -967,29 +1069,207 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
                 </ul>
               </div>
 
+              {/* Interactive System Blueprint Flowchart */}
+              <div>
+                <h4 className="text-[9px] font-mono uppercase tracking-widest text-zinc-500 mb-2">System Blueprint Flow</h4>
+                <div className={`relative border border-dashed ${t.cardBorder} rounded-xl p-4 overflow-hidden bg-black/10 backdrop-blur-sm min-h-[360px] flex flex-col justify-between`}>
+                  <div className="absolute top-2 left-2 text-[7px] font-mono text-zinc-500 uppercase tracking-widest flex items-center gap-1">
+                    <Activity size={8} className="animate-pulse text-[#10B981]" /> LIVE_SYSTEM_BLUEPRINT
+                  </div>
+                  
+                  {activeArchTab === 'ipl' ? (
+                    // IPL Flowchart Diagram
+                    <div className="relative flex-grow flex flex-col justify-between py-6">
+                      {/* Connection Line */}
+                      <div className="absolute left-1/2 top-0 bottom-0 w-[1px] border-l border-dashed border-zinc-700/80 -translate-x-1/2 z-0">
+                        {/* Animating Data pulse */}
+                        <div className={`absolute w-1.5 h-1.5 rounded-full ${t.dotColor} left-[-3px] top-0 animate-bounce`}></div>
+                      </div>
+
+                      {/* Node 1: Ingress */}
+                      <div 
+                        onMouseEnter={() => setActiveLayer(1)}
+                        onMouseLeave={() => setActiveLayer(null)}
+                        className={`relative z-10 mx-auto px-4 py-2 border rounded-md text-[10px] font-mono transition duration-300 cursor-pointer ${
+                          activeLayer === 1 
+                            ? `${t.accentBg} ${t.buttonText} scale-105 shadow-md` 
+                            : `${t.cardBg} ${t.cardBorder} ${t.text} hover:border-[#10B981]/50`
+                        }`}
+                      >
+                        <div className="text-[7px] text-zinc-500 mb-0.5">LAYER 01 // INGRESS</div>
+                        WebSocket Stream Router
+                      </div>
+
+                      {/* Node 2: LangGraph Classify */}
+                      <div 
+                        onMouseEnter={() => setActiveLayer(2)}
+                        onMouseLeave={() => setActiveLayer(null)}
+                        className={`relative z-10 mx-auto px-4 py-2 border rounded-md text-[10px] font-mono transition duration-300 cursor-pointer ${
+                          activeLayer === 2 
+                            ? `${t.accentBg} ${t.buttonText} scale-105 shadow-md` 
+                            : `${t.cardBg} ${t.cardBorder} ${t.text} hover:border-[#10B981]/50`
+                        }`}
+                      >
+                        <div className="text-[7px] text-zinc-500 mb-0.5">LAYER 02 // ORCHESTRATION</div>
+                        LangGraph Router <span className="text-[8px] opacity-75">(~20ms)</span>
+                      </div>
+
+                      {/* Node 3: Specialized Agent cluster */}
+                      <div 
+                        onMouseEnter={() => setActiveLayer(3)}
+                        onMouseLeave={() => setActiveLayer(null)}
+                        className="relative z-10 flex justify-center gap-2"
+                      >
+                        {/* Connection branches */}
+                        <div className="absolute top-1/2 -translate-y-1/2 w-4/5 h-[1px] border-t border-dashed border-zinc-700/80 z-0"></div>
+                        
+                        {['StatsQA', 'Matchup', 'Predict'].map((agent, i) => (
+                          <div 
+                            key={i}
+                            className={`relative z-10 px-2.5 py-1.5 border rounded-full text-[8px] font-mono transition duration-300 ${
+                              activeLayer === 3 
+                                ? `${t.accentBg} ${t.buttonText} scale-105 shadow-md` 
+                                : `${t.cardBg} ${t.cardBorder} ${t.text} hover:border-[#10B981]/50`
+                            }`}
+                          >
+                            {agent}
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Node 4: Knowledge / Hybrid Retrieval */}
+                      <div 
+                        onMouseEnter={() => setActiveLayer(4)}
+                        onMouseLeave={() => setActiveLayer(null)}
+                        className={`relative z-10 mx-auto px-4 py-2 border rounded-md text-[10px] font-mono transition duration-300 cursor-pointer ${
+                          activeLayer === 4 
+                            ? `${t.accentBg} ${t.buttonText} scale-105 shadow-md` 
+                            : `${t.cardBg} ${t.cardBorder} ${t.text} hover:border-[#10B981]/50`
+                        }`}
+                      >
+                        <div className="text-[7px] text-zinc-500 mb-0.5">LAYER 04 // KNOWLEDGE</div>
+                        Qdrant + BM25 Fusion
+                      </div>
+
+                      {/* Node 5: Output Stream */}
+                      <div 
+                        onMouseEnter={() => setActiveLayer(5)}
+                        onMouseLeave={() => setActiveLayer(null)}
+                        className={`relative z-10 mx-auto px-4 py-2 border rounded-md text-[10px] font-mono transition duration-300 cursor-pointer ${
+                          activeLayer === 5 
+                            ? `${t.accentBg} ${t.buttonText} scale-105 shadow-md` 
+                            : `${t.cardBg} ${t.cardBorder} ${t.text} hover:border-[#10B981]/50`
+                        }`}
+                      >
+                        <div className="text-[7px] text-zinc-500 mb-0.5">LAYER 05 // DELIVERY</div>
+                        WebSocket Broadcast &lt;300ms
+                      </div>
+                    </div>
+                  ) : (
+                    // RAG Flowchart Diagram
+                    <div className="relative flex-grow flex flex-col justify-between py-6">
+                      {/* Connection Line */}
+                      <div className="absolute left-1/2 top-0 bottom-0 w-[1px] border-l border-dashed border-zinc-700/80 -translate-x-1/2 z-0">
+                        <div className={`absolute w-1.5 h-1.5 rounded-full ${t.dotColor} left-[-3px] top-0 animate-bounce`}></div>
+                      </div>
+
+                      {/* Node 1: Decomposer */}
+                      <div 
+                        onMouseEnter={() => setActiveLayer(1)}
+                        onMouseLeave={() => setActiveLayer(null)}
+                        className={`relative z-10 mx-auto px-4 py-2 border rounded-md text-[10px] font-mono transition duration-300 cursor-pointer ${
+                          activeLayer === 1 
+                            ? `${t.accentBg} ${t.buttonText} scale-105 shadow-md` 
+                            : `${t.cardBg} ${t.cardBorder} ${t.text} hover:border-[#10B981]/50`
+                        }`}
+                      >
+                        <div className="text-[7px] text-zinc-500 mb-0.5">LAYER 01 // QUERY</div>
+                        Multi-Hop Query Decomposer
+                      </div>
+
+                      {/* Node 2: Hybrid Search */}
+                      <div 
+                        onMouseEnter={() => setActiveLayer(2)}
+                        onMouseLeave={() => setActiveLayer(null)}
+                        className={`relative z-10 mx-auto px-4 py-2 border rounded-md text-[10px] font-mono transition duration-300 cursor-pointer ${
+                          activeLayer === 2 
+                            ? `${t.accentBg} ${t.buttonText} scale-105 shadow-md` 
+                            : `${t.cardBg} ${t.cardBorder} ${t.text} hover:border-[#10B981]/50`
+                        }`}
+                      >
+                        <div className="text-[7px] text-zinc-500 mb-0.5">LAYER 02 // SEARCH</div>
+                        FAISS (Dense) & BM25 (Sparse)
+                      </div>
+
+                      {/* Node 3: Cross Encoder Rerank */}
+                      <div 
+                        onMouseEnter={() => setActiveLayer(3)}
+                        onMouseLeave={() => setActiveLayer(null)}
+                        className={`relative z-10 mx-auto px-4 py-2 border rounded-md text-[10px] font-mono transition duration-300 cursor-pointer ${
+                          activeLayer === 3 
+                            ? `${t.accentBg} ${t.buttonText} scale-105 shadow-md` 
+                            : `${t.cardBg} ${t.cardBorder} ${t.text} hover:border-[#10B981]/50`
+                        }`}
+                      >
+                        <div className="text-[7px] text-zinc-500 mb-0.5">LAYER 03 // RERANK</div>
+                        MiniLM Cross-Encoder
+                      </div>
+
+                      {/* Node 4: Self-Consistency */}
+                      <div 
+                        onMouseEnter={() => setActiveLayer(4)}
+                        onMouseLeave={() => setActiveLayer(null)}
+                        className={`relative z-10 mx-auto px-4 py-2 border rounded-md text-[10px] font-mono transition duration-300 cursor-pointer ${
+                          activeLayer === 4 
+                            ? `${t.accentBg} ${t.buttonText} scale-105 shadow-md` 
+                            : `${t.cardBg} ${t.cardBorder} ${t.text} hover:border-[#10B981]/50`
+                        }`}
+                      >
+                        <div className="text-[7px] text-zinc-500 mb-0.5">LAYER 04 // VALIDATION</div>
+                        3x Self-Consistency Check
+                      </div>
+
+                      {/* Node 5: Gate */}
+                      <div 
+                        onMouseEnter={() => setActiveLayer(5)}
+                        onMouseLeave={() => setActiveLayer(null)}
+                        className={`relative z-10 mx-auto px-4 py-2 border rounded-md text-[10px] font-mono transition duration-300 cursor-pointer ${
+                          activeLayer === 5 
+                            ? `${t.accentBg} ${t.buttonText} scale-105 shadow-md` 
+                            : `${t.cardBg} ${t.cardBorder} ${t.text} hover:border-[#10B981]/50`
+                        }`}
+                      >
+                        <div className="text-[7px] text-zinc-500 mb-0.5">LAYER 05 // CI GATE</div>
+                        RAGAS-Gated Deployment
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
               <div>
                 <h4 className="text-[9px] font-mono uppercase tracking-widest text-zinc-500">Core Metrics</h4>
                 <div className="grid grid-cols-2 gap-3 mt-2 text-xs font-mono">
                   {activeArchTab === 'ipl' ? (
                     <>
-                      <div className="p-3 border border-zinc-900 rounded-lg">
+                      <div className={`p-3 border ${t.cardBorder} ${t.cardBg} rounded-lg`}>
                         <div className="text-zinc-500 text-[9px] uppercase tracking-wider">End-to-End Latency</div>
-                        <div className="text-sm font-bold text-white mt-1">&lt;300ms</div>
+                        <div className={`text-sm font-bold ${t.text} mt-1`}>&lt;300ms</div>
                       </div>
-                      <div className="p-3 border border-zinc-900 rounded-lg">
+                      <div className={`p-3 border ${t.cardBorder} ${t.cardBg} rounded-lg`}>
                         <div className="text-zinc-500 text-[9px] uppercase tracking-wider">RAGAS Faithfulness</div>
-                        <div className="text-sm font-bold text-white mt-1">0.88 / 0.98</div>
+                        <div className={`text-sm font-bold ${t.text} mt-1`}>0.88 / 0.98</div>
                       </div>
                     </>
                   ) : (
                     <>
-                      <div className="p-3 border border-zinc-900 rounded-lg">
+                      <div className={`p-3 border ${t.cardBorder} ${t.cardBg} rounded-lg`}>
                         <div className="text-zinc-500 text-[9px] uppercase tracking-wider">Retrieval Gain</div>
-                        <div className="text-sm font-bold text-white mt-1">+40% vs Naive</div>
+                        <div className={`text-sm font-bold ${t.text} mt-1`}>+40% vs Naive</div>
                       </div>
-                      <div className="p-3 border border-zinc-900 rounded-lg">
+                      <div className={`p-3 border ${t.cardBorder} ${t.cardBg} rounded-lg`}>
                         <div className="text-zinc-500 text-[9px] uppercase tracking-wider">CI Gate Threshold</div>
-                        <div className="text-sm font-bold text-white mt-1">0.75 Score</div>
+                        <div className={`text-sm font-bold ${t.text} mt-1`}>0.75 Score</div>
                       </div>
                     </>
                   )}
@@ -1001,13 +1281,31 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
                 <div className="flex flex-wrap gap-1.5 mt-2">
                   {activeArchTab === 'ipl' ? (
                     ["LangGraph", "Qdrant", "XGBoost", "FastAPI", "Redis", "WebSockets"].map((item, idx) => (
-                      <span key={idx} className={`text-[9px] font-mono uppercase px-2 py-0.5 border ${t.cardBorder} text-zinc-400 ${t.cardBg} rounded`}>
+                      <span 
+                        key={idx} 
+                        onMouseEnter={() => setActiveTag(item)}
+                        onMouseLeave={() => setActiveTag(null)}
+                        className={`text-[9px] font-mono uppercase px-2 py-0.5 border rounded transition duration-200 cursor-pointer ${
+                          activeTag === item 
+                            ? `${t.accentBg} ${t.buttonText} scale-105` 
+                            : `${t.cardBorder} text-zinc-400 ${t.cardBg}`
+                        }`}
+                      >
                         {item}
                       </span>
                     ))
                   ) : (
                     ["FAISS", "LangChain", "RAGAS", "Cross-encoders", "Python", "CI/CD"].map((item, idx) => (
-                      <span key={idx} className={`text-[9px] font-mono uppercase px-2 py-0.5 border ${t.cardBorder} text-zinc-400 ${t.cardBg} rounded`}>
+                      <span 
+                        key={idx} 
+                        onMouseEnter={() => setActiveTag(item)}
+                        onMouseLeave={() => setActiveTag(null)}
+                        className={`text-[9px] font-mono uppercase px-2 py-0.5 border rounded transition duration-200 cursor-pointer ${
+                          activeTag === item 
+                            ? `${t.accentBg} ${t.buttonText} scale-105` 
+                            : `${t.cardBorder} text-zinc-400 ${t.cardBg}`
+                        }`}
+                      >
                         {item}
                       </span>
                     ))
@@ -1140,7 +1438,13 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
                 {proj.tech.map((tech, idx) => (
                   <span 
                     key={idx} 
-                    className={`text-[9px] font-mono uppercase px-2.5 py-1 ${t.cardBg} border ${t.cardBorder} text-zinc-400 rounded`}
+                    onMouseEnter={() => setActiveTag(tech)}
+                    onMouseLeave={() => setActiveTag(null)}
+                    className={`text-[9px] font-mono uppercase px-2.5 py-1 border rounded transition duration-200 cursor-pointer ${
+                      activeTag === tech 
+                        ? `${t.accentBg} ${t.buttonText} scale-105 shadow-sm` 
+                        : `${t.cardBorder} text-zinc-400 ${t.cardBg}`
+                    }`}
                   >
                     {tech}
                   </span>
@@ -1182,7 +1486,13 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
                   {cat.items.map((skill, i) => (
                     <span 
                       key={i} 
-                      className={`text-[10px] font-mono px-2.5 py-1 border ${t.cardBorder} ${t.textBody} ${t.cardBg} rounded flex items-center gap-1.5`}
+                      onMouseEnter={() => setActiveTag(skill)}
+                      onMouseLeave={() => setActiveTag(null)}
+                      className={`text-[10px] font-mono px-2.5 py-1 border transition duration-200 cursor-pointer rounded flex items-center gap-1.5 ${
+                        activeTag === skill 
+                          ? `${t.accentBg} ${t.buttonText} scale-105 shadow-sm` 
+                          : `${t.cardBorder} ${t.textBody} ${t.cardBg}`
+                      }`}
                     >
                       <span className={`w-1 h-1 rounded-full ${t.dotColor}`}></span>
                       {skill}
@@ -1251,7 +1561,13 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
                 {exp.techStack.map((tech, i) => (
                   <span 
                     key={i} 
-                    className={`text-[8px] font-mono uppercase px-2 py-0.5 border ${t.cardBorder} text-zinc-400 ${t.cardBg} rounded`}
+                    onMouseEnter={() => setActiveTag(tech)}
+                    onMouseLeave={() => setActiveTag(null)}
+                    className={`text-[8px] font-mono uppercase px-2 py-0.5 border rounded transition duration-200 cursor-pointer ${
+                      activeTag === tech 
+                        ? `${t.accentBg} ${t.buttonText} scale-105 shadow-sm` 
+                        : `${t.cardBorder} text-zinc-400 ${t.cardBg}`
+                    }`}
                   >
                     {tech}
                   </span>
@@ -1406,59 +1722,95 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
 
             {/* Direct details grid */}
             <div className="space-y-5">
-              <div className="flex gap-4">
-                <div className={`w-9 h-9 border ${t.cardBorder} rounded-lg flex items-center justify-center text-zinc-400 flex-shrink-0`}>
+              <div className="flex gap-4 group">
+                <div className={`w-9 h-9 border ${t.cardBorder} rounded-lg flex items-center justify-center text-zinc-400 flex-shrink-0 group-hover:border-zinc-500 transition`}>
                   <Mail size={15} />
                 </div>
-                <div>
-                  <div className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">EMAIL</div>
-                  <a href="mailto:jagadeepreddy3638@gmail.com" className={`text-xs font-mono ${t.textBody} ${t.hoverText} transition`}>
-                    jagadeepreddy3638@gmail.com
-                  </a>
+                <div className="flex-grow flex items-center justify-between">
+                  <div>
+                    <div className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">EMAIL</div>
+                    <a href="mailto:jagadeepreddy3638@gmail.com" className={`text-xs font-mono ${t.textBody} ${t.hoverText} transition`}>
+                      jagadeepreddy3638@gmail.com
+                    </a>
+                  </div>
+                  <button 
+                    onClick={() => handleCopyToClipboard('jagadeepreddy3638@gmail.com', 'email')}
+                    className="p-1.5 opacity-0 group-hover:opacity-100 transition rounded-md hover:bg-zinc-500/10 text-zinc-500 hover:text-zinc-300"
+                    title="Copy Email"
+                  >
+                    {copiedField === 'email' ? <Check size={12} className="text-emerald-500" /> : <Copy size={12} />}
+                  </button>
                 </div>
               </div>
 
-              <div className="flex gap-4">
-                <div className={`w-9 h-9 border ${t.cardBorder} rounded-lg flex items-center justify-center text-zinc-400 flex-shrink-0`}>
+              <div className="flex gap-4 group">
+                <div className={`w-9 h-9 border ${t.cardBorder} rounded-lg flex items-center justify-center text-zinc-400 flex-shrink-0 group-hover:border-zinc-500 transition`}>
                   <MapPin size={15} />
                 </div>
-                <div>
-                  <div className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">LOCATION</div>
-                  <div className={`text-xs font-mono ${t.textBody}`}>{`Bengaluru, Karnataka, India`}</div>
+                <div className="flex-grow flex items-center justify-between">
+                  <div>
+                    <div className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">LOCATION</div>
+                    <div className={`text-xs font-mono ${t.textBody}`}>{`Bengaluru, Karnataka, India`}</div>
+                  </div>
+                  <button 
+                    onClick={() => handleCopyToClipboard('Bengaluru, Karnataka, India', 'location')}
+                    className="p-1.5 opacity-0 group-hover:opacity-100 transition rounded-md hover:bg-zinc-500/10 text-zinc-500 hover:text-zinc-300"
+                    title="Copy Location"
+                  >
+                    {copiedField === 'location' ? <Check size={12} className="text-emerald-500" /> : <Copy size={12} />}
+                  </button>
                 </div>
               </div>
 
-              <div className="flex gap-4">
-                <div className={`w-9 h-9 border ${t.cardBorder} rounded-lg flex items-center justify-center text-zinc-400 flex-shrink-0`}>
+              <div className="flex gap-4 group">
+                <div className={`w-9 h-9 border ${t.cardBorder} rounded-lg flex items-center justify-center text-zinc-400 flex-shrink-0 group-hover:border-zinc-500 transition`}>
                   <Linkedin size={15} />
                 </div>
-                <div>
-                  <div className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">LINKEDIN</div>
-                  <a 
-                    href="https://www.linkedin.com/in/buthuru-jagadeep-reddy-a522961a1/" 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    className={`text-xs font-mono ${t.textBody} ${t.hoverText} flex items-center gap-1 transition`}
+                <div className="flex-grow flex items-center justify-between">
+                  <div>
+                    <div className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">LINKEDIN</div>
+                    <a 
+                      href="https://www.linkedin.com/in/buthuru-jagadeep-reddy-a522961a1/" 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className={`text-xs font-mono ${t.textBody} ${t.hoverText} flex items-center gap-1 transition`}
+                    >
+                      linkedin/buthuru-jagadeep-reddy <ArrowUpRight size={10} />
+                    </a>
+                  </div>
+                  <button 
+                    onClick={() => handleCopyToClipboard('https://www.linkedin.com/in/buthuru-jagadeep-reddy-a522961a1/', 'linkedin')}
+                    className="p-1.5 opacity-0 group-hover:opacity-100 transition rounded-md hover:bg-zinc-500/10 text-zinc-500 hover:text-zinc-300"
+                    title="Copy LinkedIn Link"
                   >
-                    linkedin/buthuru-jagadeep-reddy <ArrowUpRight size={10} />
-                  </a>
+                    {copiedField === 'linkedin' ? <Check size={12} className="text-emerald-500" /> : <Copy size={12} />}
+                  </button>
                 </div>
               </div>
 
-              <div className="flex gap-4">
-                <div className={`w-9 h-9 border ${t.cardBorder} rounded-lg flex items-center justify-center text-zinc-400 flex-shrink-0`}>
+              <div className="flex gap-4 group">
+                <div className={`w-9 h-9 border ${t.cardBorder} rounded-lg flex items-center justify-center text-zinc-400 flex-shrink-0 group-hover:border-zinc-500 transition`}>
                   <Github size={15} />
                 </div>
-                <div>
-                  <div className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">GITHUB</div>
-                  <a 
-                    href="https://github.com/Jagadeep-Reddy" 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    className={`text-xs font-mono ${t.textBody} ${t.hoverText} flex items-center gap-1 transition`}
+                <div className="flex-grow flex items-center justify-between">
+                  <div>
+                    <div className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">GITHUB</div>
+                    <a 
+                      href="https://github.com/Jagadeep-Reddy" 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className={`text-xs font-mono ${t.textBody} ${t.hoverText} flex items-center gap-1 transition`}
+                    >
+                      github/Jagadeep-Reddy <ArrowUpRight size={10} />
+                    </a>
+                  </div>
+                  <button 
+                    onClick={() => handleCopyToClipboard('https://github.com/Jagadeep-Reddy', 'github')}
+                    className="p-1.5 opacity-0 group-hover:opacity-100 transition rounded-md hover:bg-zinc-500/10 text-zinc-500 hover:text-zinc-300"
+                    title="Copy GitHub Link"
                   >
-                    github/Jagadeep-Reddy <ArrowUpRight size={10} />
-                  </a>
+                    {copiedField === 'github' ? <Check size={12} className="text-emerald-500" /> : <Copy size={12} />}
+                  </button>
                 </div>
               </div>
             </div>
@@ -1627,7 +1979,7 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
 
       {/* AI Agent Chat Drawer Panel */}
       {chatOpen && (
-        <div className={`fixed bottom-22 right-6 w-[350px] md:w-[380px] h-[480px] border ${t.cardBorder} rounded-xl shadow-2xl flex flex-col overflow-hidden z-50 transition-all duration-300 ${t.cardBg} backdrop-blur-xl ${t.text}`}>
+        <div className={`fixed bottom-22 right-6 w-[360px] md:w-[390px] h-[500px] border ${t.cardBorder} rounded-xl shadow-2xl flex flex-col overflow-hidden z-50 transition-all duration-300 ${t.cardBg} backdrop-blur-xl ${t.text}`}>
           
           {/* Header */}
           <div className={`p-4 border-b ${t.cardBorder} flex justify-between items-center ${t.cardBg}`}>
@@ -1635,8 +1987,10 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping absolute"></span>
               <span className="w-2 h-2 rounded-full bg-emerald-500 relative"></span>
               <div>
-                <h4 className="text-xs font-mono font-bold uppercase tracking-wider">Recruiter Agent</h4>
-                <p className="text-[9px] text-zinc-500 font-mono">portfolio.query.engine : v1.0</p>
+                <h4 className="text-xs font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
+                  <Terminal size={12} /> RECRUITER_SHELL
+                </h4>
+                <p className="text-[9px] text-zinc-500 font-mono">portfolio.query.engine : v1.0.0</p>
               </div>
             </div>
             <button 
@@ -1648,19 +2002,24 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
           </div>
 
           {/* Conversation Area */}
-          <div className={`flex-grow p-4 overflow-y-auto space-y-4 ${t.cardBg}`}>
+          <div className={`flex-grow p-4 overflow-y-auto space-y-4 ${t.cardBg} scrollbar-thin`}>
             {messages.map((msg, idx) => (
               <div 
                 key={idx} 
                 className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
               >
-                <div className={`max-w-[85%] rounded-lg px-3 py-2 text-xs leading-relaxed font-sans ${
-                  msg.sender === 'user'
-                    ? `${t.userChatBg} rounded-tr-none`
-                    : `${t.agentChatBg} ${t.agentChatText} border ${t.cardBorder} rounded-tl-none`
-                }`}>
-                  {msg.text}
-                </div>
+                {msg.sender === 'user' ? (
+                  <div className="w-full text-right font-mono text-[11px] leading-relaxed text-zinc-300">
+                    <span className="text-zinc-500">guest@portfolio:~$</span> {msg.text}
+                  </div>
+                ) : (
+                  <div className={`max-w-[95%] rounded-lg px-3.5 py-2 text-[11px] leading-relaxed font-mono ${t.agentChatBg} ${t.agentChatText} border ${t.cardBorder} rounded-tl-none`}>
+                    <div className="text-[7px] text-zinc-500 uppercase tracking-widest mb-1.5 flex items-center gap-1">
+                      <Sparkles size={8} className="text-[#10B981]" /> // RESPONSE FROM ENGINE
+                    </div>
+                    {msg.text}
+                  </div>
+                )}
               </div>
             ))}
             
@@ -1679,49 +2038,50 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
           </div>
 
           {/* Quick recommendations */}
-          <div className={`px-4 py-2 border-t border-dashed ${t.divider} ${t.cardBg}`}>
-            <p className="text-[8px] font-mono uppercase tracking-wider text-zinc-500 mb-1.5">Suggested Queries:</p>
+          <div className={`px-4 py-2.5 border-t border-dashed ${t.divider} ${t.cardBg}`}>
+            <p className="text-[8px] font-mono uppercase tracking-wider text-zinc-500 mb-1.5">Suggested Query Flags:</p>
             <div className="flex flex-wrap gap-1">
               <button 
                 onClick={() => handleQuickAction("Summarize Jagadeep's expertise")} 
                 className={`text-[9px] font-mono px-2 py-0.5 border ${t.cardBorder} text-zinc-400 hover:text-white ${t.cardBorderHover} ${t.cardBg} rounded`}
               >
-                Expertise
+                --expertise
               </button>
               <button 
                 onClick={() => handleQuickAction("About the IPL AI Platform")} 
                 className={`text-[9px] font-mono px-2 py-0.5 border ${t.cardBorder} text-zinc-400 hover:text-white ${t.cardBorderHover} ${t.cardBg} rounded`}
               >
-                IPL Platform
+                --ipl-platform
               </button>
               <button 
                 onClick={() => handleQuickAction("Tell me about his RAG experience")} 
                 className={`text-[9px] font-mono px-2 py-0.5 border ${t.cardBorder} text-zinc-400 hover:text-white ${t.cardBorderHover} ${t.cardBg} rounded`}
               >
-                RAG Stack
+                --rag-stack
               </button>
               <button 
                 onClick={() => handleQuickAction("Is he open to full-time remote roles?")} 
                 className={`text-[9px] font-mono px-2 py-0.5 border ${t.cardBorder} text-zinc-400 hover:text-white ${t.cardBorderHover} ${t.cardBg} rounded`}
               >
-                Remote?
+                --remote
               </button>
             </div>
           </div>
 
           {/* Text Input Row */}
-          <div className={`p-3 border-t ${t.cardBorder} flex gap-2 ${t.cardBg}`}>
+          <div className={`p-3 border-t ${t.cardBorder} flex items-center gap-1.5 ${t.cardBg}`}>
+            <span className="text-[10px] font-mono text-zinc-500 flex-shrink-0">guest@portfolio:~$</span>
             <input
               type="text"
-              placeholder="Query portfolio database..."
+              placeholder="help or run command..."
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-              className={`flex-grow px-3 py-1.5 rounded border ${t.inputBorder} ${t.inputBg} ${t.text} text-xs font-mono focus:outline-none ${t.inputFocus}`}
+              className={`flex-grow px-1 py-1 rounded bg-transparent border-none ${t.text} text-[11px] font-mono focus:outline-none`}
             />
             <button
               onClick={handleSendMessage}
-              className={`px-3 rounded flex items-center justify-center cursor-pointer transition ${t.chatBtn}`}
+              className={`px-3 py-1.5 rounded flex items-center justify-center cursor-pointer transition ${t.chatBtn}`}
               aria-label="Send"
             >
               <Send size={12} />
