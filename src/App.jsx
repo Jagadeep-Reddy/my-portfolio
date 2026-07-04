@@ -533,15 +533,9 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
     <div className={`min-h-screen relative ${t.bg} transition-colors duration-500 font-sans antialiased selection:bg-current/10 overflow-x-hidden`}>
       
       {/* Background Ambient Glows */}
-      <div className="absolute top-[5%] left-[10%] w-[300px] md:w-[500px] h-[300px] md:h-[500px] rounded-full blur-[100px] md:blur-[150px] pointer-events-none z-0 opacity-70 transition-all duration-1000 mix-blend-screen bg-current">
-        <div className={`w-full h-full rounded-full ${t.blob1}`}></div>
-      </div>
-      <div className="absolute top-[35%] right-[5%] w-[250px] md:w-[450px] h-[250px] md:h-[450px] rounded-full blur-[100px] md:blur-[150px] pointer-events-none z-0 opacity-60 transition-all duration-1000 mix-blend-screen bg-current">
-        <div className={`w-full h-full rounded-full ${t.blob2}`}></div>
-      </div>
-      <div className="absolute top-[70%] left-[10%] w-[280px] md:w-[480px] h-[280px] md:h-[480px] rounded-full blur-[100px] md:blur-[150px] pointer-events-none z-0 opacity-50 transition-all duration-1000 mix-blend-screen bg-current">
-        <div className={`w-full h-full rounded-full ${t.blob3}`}></div>
-      </div>
+      <div className={`absolute top-[5%] left-[10%] w-[300px] md:w-[500px] h-[300px] md:h-[500px] rounded-full blur-[100px] md:blur-[150px] pointer-events-none z-0 opacity-70 transition-all duration-1000 mix-blend-screen ${t.blob1}`}></div>
+      <div className={`absolute top-[35%] right-[5%] w-[250px] md:w-[450px] h-[250px] md:h-[450px] rounded-full blur-[100px] md:blur-[150px] pointer-events-none z-0 opacity-60 transition-all duration-1000 mix-blend-screen ${t.blob2}`}></div>
+      <div className={`absolute top-[70%] left-[10%] w-[280px] md:w-[480px] h-[280px] md:h-[480px] rounded-full blur-[100px] md:blur-[150px] pointer-events-none z-0 opacity-50 transition-all duration-1000 mix-blend-screen ${t.blob3}`}></div>
 
       {/* Editorial Style Grid Lines (Background blueprint canvas decoration) */}
       <div className="fixed inset-0 pointer-events-none grid grid-cols-4 max-w-6xl mx-auto px-6 opacity-[0.03] z-0">
