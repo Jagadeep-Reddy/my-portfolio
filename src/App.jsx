@@ -633,7 +633,7 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
   };
 
   return (
-    <div className={`min-h-screen relative ${t.bg} transition-colors duration-500 font-sans antialiased selection:bg-current/10 overflow-x-hidden`}>
+    <div className={`min-h-screen relative ${t.bg} transition-colors duration-500 font-sans antialiased selection:bg-current/10 overflow-x-clip`}>
       
       {/* Background Ambient Glows */}
       <div className={`absolute top-[5%] left-[10%] w-[300px] md:w-[500px] h-[300px] md:h-[500px] rounded-full blur-[100px] md:blur-[150px] pointer-events-none z-0 opacity-70 transition-all duration-1000 mix-blend-screen ${t.blob1}`}></div>
