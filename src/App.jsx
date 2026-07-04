@@ -1562,9 +1562,6 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
                 <li>location: bangalore_india</li>
                 <li>email: jagadeepreddy3638@gmail.com</li>
                 <li>github: github/Jagadeep-Reddy</li>
-                <li className="flex items-center gap-1">
-                  status: <span className="text-emerald-500">available_from_july_14_2026</span>
-                </li>
               </ul>
             </div>
           </div>
