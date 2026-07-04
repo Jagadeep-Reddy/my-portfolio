@@ -734,10 +734,10 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
       )}
 
       {/* Main Dashboard Grid Frame */}
-      <div className="max-w-7xl mx-auto px-4 md:px-6 py-6 pt-24 grid lg:grid-cols-12 gap-8 items-start relative z-10">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 pt-24 pb-6 lg:flex lg:gap-8 relative z-10">
         
         {/* Left Side: Systems Cockpit & Diagnostics (Sticky) */}
-        <aside className="lg:col-span-4 lg:sticky lg:top-28 lg:self-start lg:h-fit space-y-6">
+        <aside className="lg:w-[340px] xl:w-[380px] flex-shrink-0 lg:sticky lg:top-24 lg:self-start lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto space-y-6 py-6 scrollbar-thin">
           
           {/* Section A: Profile ID */}
           <div className={`p-6 border ${t.cardBorder} ${t.cardBg} rounded-2xl`}>
@@ -841,7 +841,7 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
         </aside>
 
         {/* Right Side: Main Dashboard Content Feed */}
-        <main className="lg:col-span-8 space-y-12">
+        <main className="flex-1 min-w-0 space-y-12 py-6">
           
           {/* 01 HERO NODE */}
           <section id="hero" className={`p-6 md:p-10 border ${t.cardBorder} ${t.cardBg} rounded-2xl relative overflow-hidden`}>
