@@ -52,99 +52,115 @@ const themes = {
     blob2: "bg-[#C5A880]/8",
     blob3: "bg-[#7C3AED]/10",
     buttonText: "text-[#080C14]",
-    userChatBg: "bg-[#C5A880]/10"
+    userChatBg: "bg-[#C5A880]/10 text-white border border-[#C5A880]/20",
+    agentChatBg: "bg-[#0F1524]/60",
+    agentChatText: "text-zinc-300",
+    textBody: "text-zinc-300",
+    hoverText: "hover:text-white"
   },
   obsidian: {
-    name: "Obsidian Mint",
-    bg: "bg-[#070A13] text-[#F1F5F9]",
-    bgRaw: "#070A13",
+    name: "Obsidian Teal",
+    bg: "bg-[#050505] text-[#F1F5F9]",
+    bgRaw: "#050505",
     text: "text-[#F1F5F9]",
     textMuted: "text-[#718096]",
-    accent: "text-[#10B981]", // Vibrant Mint
-    accentBg: "bg-[#10B981]",
-    accentBorder: "border-[#10B981]/25",
-    accentBorderActive: "border-[#10B981]/60",
-    accentHover: "hover:border-[#10B981]/80",
-    accentText: "text-[#10B981]",
-    accentBgLight: "bg-[#10B981]/5",
-    footerBg: "bg-[#04060B]",
-    divider: "border-[#1B2336]",
-    cardBg: "bg-[#0F1322]/50 backdrop-blur-md",
-    cardBorder: "border-[#1C263F]",
-    cardBorderHover: "hover:border-[#10B981]/40",
-    inputBg: "bg-[#0F1322]/70",
-    inputBorder: "border-[#1C263F]",
-    inputFocus: "focus:border-[#10B981]/60",
-    chatBtn: "bg-[#10B981] text-[#070A13] shadow-[0_4px_20px_rgba(16,185,129,0.2)]",
-    buttonBg: "bg-[#10B981] text-[#070A13] border border-[#10B981]",
-    dotColor: "bg-[#10B981]",
+    accent: "text-[#00F5D4]", // Vibrant Mint
+    accentBg: "bg-[#00F5D4]",
+    accentBorder: "border-[#00F5D4]/25",
+    accentBorderActive: "border-[#00F5D4]/60",
+    accentHover: "hover:border-[#00F5D4]/80",
+    accentText: "text-[#00F5D4]",
+    accentBgLight: "bg-[#00F5D4]/5",
+    footerBg: "bg-[#0A0A0A]",
+    divider: "border-[#1A1A1A]",
+    cardBg: "bg-[#0A0A0A]/50 backdrop-blur-md",
+    cardBorder: "border-[#222]",
+    cardBorderHover: "hover:border-[#00F5D4]/40",
+    inputBg: "bg-[#0A0A0A]/70",
+    inputBorder: "border-[#222]",
+    inputFocus: "focus:border-[#00F5D4]/60",
+    chatBtn: "bg-[#00F5D4] text-[#050505] shadow-[0_4px_20px_rgba(0,245,212,0.2)]",
+    buttonBg: "bg-[#00F5D4] text-[#050505] border border-[#00F5D4]",
+    dotColor: "bg-[#00F5D4]",
     blob1: "bg-[#00F5D4]/10",
-    blob2: "bg-[#10B981]/8",
+    blob2: "bg-[#06B6D4]/8",
     blob3: "bg-[#6366F1]/10",
-    buttonText: "text-[#070A13]",
-    userChatBg: "bg-[#10B981]/10"
+    buttonText: "text-[#050505]",
+    userChatBg: "bg-[#00F5D4]/10 text-white border border-[#00F5D4]/20",
+    agentChatBg: "bg-[#0A0A0A]/60",
+    agentChatText: "text-zinc-300",
+    textBody: "text-zinc-300",
+    hoverText: "hover:text-white"
   },
   forest: {
     name: "Botanical Sage",
-    bg: "bg-[#050B08] text-[#F1F5F9]",
-    bgRaw: "#050B08",
-    text: "text-[#F1F5F9]",
-    textMuted: "text-[#668277]",
-    accent: "text-[#52D1A2]", // Mint Sage
-    accentBg: "bg-[#52D1A2]",
-    accentBorder: "border-[#52D1A2]/20",
-    accentBorderActive: "border-[#52D1A2]/60",
-    accentHover: "hover:border-[#52D1A2]/80",
-    accentText: "text-[#52D1A2]",
-    accentBgLight: "bg-[#52D1A2]/5",
-    footerBg: "bg-[#030605]",
-    divider: "border-[#15241F]",
-    cardBg: "bg-[#0C1411]/50 backdrop-blur-md",
-    cardBorder: "border-[#1A2E27]",
-    cardBorderHover: "hover:border-[#52D1A2]/40",
-    inputBg: "bg-[#0C1411]/70",
-    inputBorder: "border-[#1A2E27]",
-    inputFocus: "focus:border-[#52D1A2]/60",
-    chatBtn: "bg-[#52D1A2] text-[#050B08] shadow-[0_4px_20px_rgba(82,209,162,0.2)]",
-    buttonBg: "bg-[#52D1A2] text-[#050B08] border border-[#52D1A2]",
-    dotColor: "bg-[#52D1A2]",
-    blob1: "bg-[#52D1A2]/10",
-    blob2: "bg-[#059669]/10",
-    blob3: "bg-[#34D399]/8",
-    buttonText: "text-[#050B08]",
-    userChatBg: "bg-[#52D1A2]/10"
+    bg: "bg-[#F4F6F5] text-[#1E293B]",
+    bgRaw: "#F4F6F5",
+    text: "text-[#1E293B]",
+    textMuted: "text-[#5A6E65]",
+    accent: "text-[#15803D]", // Forest Green
+    accentBg: "bg-[#15803D]",
+    accentBorder: "border-[#15803D]/20",
+    accentBorderActive: "border-[#15803D]/60",
+    accentHover: "hover:border-[#15803D]/80",
+    accentText: "text-[#15803D]",
+    accentBgLight: "bg-[#15803D]/5",
+    footerBg: "bg-[#14211A]",
+    divider: "border-[#D1D8D5]",
+    cardBg: "bg-white/60 backdrop-blur-md",
+    cardBorder: "border-[#E2E8F0]",
+    cardBorderHover: "hover:border-[#15803D]/50",
+    inputBg: "bg-white/80",
+    inputBorder: "border-[#CBD5E1]",
+    inputFocus: "focus:border-[#15803D]/60",
+    chatBtn: "bg-[#15803D] text-white shadow-[0_4px_20px_rgba(21,128,61,0.2)]",
+    buttonBg: "bg-[#15803D] text-white border border-[#15803D]",
+    dotColor: "bg-[#15803D]",
+    blob1: "bg-[#15803D]/5",
+    blob2: "bg-[#10B981]/5",
+    blob3: "bg-[#34D399]/4",
+    buttonText: "text-white",
+    userChatBg: "bg-[#15803D] text-white border border-[#15803D]/25",
+    agentChatBg: "bg-white/90",
+    agentChatText: "text-[#1E293B]",
+    textBody: "text-slate-700",
+    hoverText: "hover:text-black"
   },
   terracotta: {
-    name: "Velvet Orchid",
-    bg: "bg-[#0A0612] text-[#FAF8F5]",
-    bgRaw: "#0A0612",
-    text: "text-[#FAF8F5]",
-    textMuted: "text-[#8B809E]",
-    accent: "text-[#D946EF]", // Orchid Violet
-    accentBg: "bg-[#D946EF]",
-    accentBorder: "border-[#D946EF]/20",
-    accentBorderActive: "border-[#D946EF]/60",
-    accentHover: "hover:border-[#D946EF]/80",
-    accentText: "text-[#D946EF]",
-    accentBgLight: "bg-[#D946EF]/5",
-    footerBg: "bg-[#06030B]",
-    divider: "border-[#22163B]",
-    cardBg: "bg-[#130D22]/50 backdrop-blur-md",
-    cardBorder: "border-[#281B47]",
-    cardBorderHover: "hover:border-[#D946EF]/40",
-    inputBg: "bg-[#130D22]/70",
-    inputBorder: "border-[#281B47]",
-    inputFocus: "focus:border-[#D946EF]/60",
-    chatBtn: "bg-[#D946EF] text-[#0A0612] shadow-[0_4px_20px_rgba(217,70,239,0.2)]",
-    buttonBg: "bg-[#D946EF] text-[#0A0612] border border-[#D946EF]",
-    dotColor: "bg-[#D946EF]",
-    blob1: "bg-[#D946EF]/10",
-    blob2: "bg-[#A855F7]/10",
-    blob3: "bg-[#EC4899]/8",
-    buttonText: "text-[#0A0612]",
-    userChatBg: "bg-[#D946EF]/10"
+    name: "Warm Terracotta",
+    bg: "bg-[#FAF7F0] text-[#221F1B]",
+    bgRaw: "#FAF7F0",
+    text: "text-[#221F1B]",
+    textMuted: "text-[#6D6860]",
+    accent: "text-[#C2410C]", // Terracotta Orange
+    accentBg: "bg-[#C2410C]",
+    accentBorder: "border-[#C2410C]/20",
+    accentBorderActive: "border-[#C2410C]/60",
+    accentHover: "hover:border-[#C2410C]/80",
+    accentText: "text-[#C2410C]",
+    accentBgLight: "bg-[#C2410C]/5",
+    footerBg: "bg-[#1F1A17]",
+    divider: "border-[#E6E1D5]",
+    cardBg: "bg-white/60 backdrop-blur-md",
+    cardBorder: "border-[#EBE6DA]",
+    cardBorderHover: "hover:border-[#C2410C]/50",
+    inputBg: "bg-white/80",
+    inputBorder: "border-[#D6D0C2]",
+    inputFocus: "focus:border-[#C2410C]/60",
+    chatBtn: "bg-[#C2410C] text-white shadow-[0_4px_20px_rgba(194,65,12,0.2)]",
+    buttonBg: "bg-[#C2410C] text-white border border-[#C2410C]",
+    dotColor: "bg-[#C2410C]",
+    blob1: "bg-[#C2410C]/5",
+    blob2: "bg-[#EA580C]/5",
+    blob3: "bg-[#F59E0B]/4",
+    buttonText: "text-white",
+    userChatBg: "bg-[#C2410C] text-white border border-[#C2410C]/25",
+    agentChatBg: "bg-white/90",
+    agentChatText: "text-[#221F1B]",
+    textBody: "text-zinc-700",
+    hoverText: "hover:text-black"
   }
-};;
+};;;
 
 export default function App() {
   const [theme, setTheme] = useState(() => {
@@ -568,11 +584,11 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
           {/* Desktop Navigation Links */}
           <div className="hidden md:flex items-center gap-6">
             <nav className="flex gap-6 text-[10px] font-mono uppercase tracking-widest text-zinc-400">
-              <button onClick={() => scrollToSection('architecture')} className="hover:text-white transition">Architecture</button>
-              <button onClick={() => scrollToSection('projects')} className="hover:text-white transition">Projects</button>
-              <button onClick={() => scrollToSection('skills')} className="hover:text-white transition">Skills</button>
-              <button onClick={() => scrollToSection('experience')} className="hover:text-white transition">Experience</button>
-              <button onClick={() => scrollToSection('education')} className="hover:text-white transition">Academics</button>
+              <button onClick={() => scrollToSection('architecture')} className={`${t.hoverText} transition`}>Architecture</button>
+              <button onClick={() => scrollToSection('projects')} className={`${t.hoverText} transition`}>Projects</button>
+              <button onClick={() => scrollToSection('skills')} className={`${t.hoverText} transition`}>Skills</button>
+              <button onClick={() => scrollToSection('experience')} className={`${t.hoverText} transition`}>Experience</button>
+              <button onClick={() => scrollToSection('education')} className={`${t.hoverText} transition`}>Academics</button>
             </nav>
 
             <span className="h-4 w-[1px] bg-zinc-800"></span>
@@ -638,12 +654,12 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
             <X size={22} />
           </button>
           <nav className="flex flex-col gap-6 text-sm font-mono uppercase tracking-widest text-center">
-            <button onClick={() => scrollToSection('architecture')} className="hover:text-white transition">Architecture</button>
-            <button onClick={() => scrollToSection('projects')} className="hover:text-white transition">Projects</button>
-            <button onClick={() => scrollToSection('skills')} className="hover:text-white transition">Skills</button>
-            <button onClick={() => scrollToSection('experience')} className="hover:text-white transition">Experience</button>
-            <button onClick={() => scrollToSection('education')} className="hover:text-white transition">Academics</button>
-            <button onClick={() => scrollToSection('contact')} className="hover:text-white transition">Connect</button>
+            <button onClick={() => scrollToSection('architecture')} className={`${t.hoverText} transition`}>Architecture</button>
+            <button onClick={() => scrollToSection('projects')} className={`${t.hoverText} transition`}>Projects</button>
+            <button onClick={() => scrollToSection('skills')} className={`${t.hoverText} transition`}>Skills</button>
+            <button onClick={() => scrollToSection('experience')} className={`${t.hoverText} transition`}>Experience</button>
+            <button onClick={() => scrollToSection('education')} className={`${t.hoverText} transition`}>Academics</button>
+            <button onClick={() => scrollToSection('contact')} className={`${t.hoverText} transition`}>Connect</button>
           </nav>
         </div>
       )}
@@ -1080,15 +1096,15 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
                 <div className="space-y-6">
                   <div>
                     <h4 className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 mb-1.5">01 // Problem Statement</h4>
-                    <p className="text-zinc-300 leading-relaxed font-sans">{proj.problem}</p>
+                    <p className={`${t.textBody} leading-relaxed font-sans`}>{proj.problem}</p>
                   </div>
                   <div>
                     <h4 className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 mb-1.5">02 // Core Architecture</h4>
-                    <p className="text-zinc-300 leading-relaxed font-sans">{proj.architecture}</p>
+                    <p className={`${t.textBody} leading-relaxed font-sans`}>{proj.architecture}</p>
                   </div>
                   <div>
                     <h4 className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 mb-1.5">03 // System Design Details</h4>
-                    <p className="text-zinc-300 leading-relaxed font-sans">{proj.systemDesign}</p>
+                    <p className={`${t.textBody} leading-relaxed font-sans`}>{proj.systemDesign}</p>
                   </div>
                 </div>
 
@@ -1099,7 +1115,7 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
                       {proj.challenges.map((c, i) => (
                         <li key={i} className="flex items-start gap-2.5">
                           <span className="text-orange-500 text-xs mt-0.5">△</span>
-                          <span className="text-zinc-300 leading-relaxed font-sans text-xs">{c}</span>
+                          <span className={`${t.textBody} leading-relaxed font-sans text-xs`}>{c}</span>
                         </li>
                       ))}
                     </ul>
@@ -1111,7 +1127,7 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
                       {proj.results.map((r, i) => (
                         <li key={i} className="flex items-start gap-2.5">
                           <span className={`text-emerald-500 text-xs mt-0.5`}>✓</span>
-                          <span className="text-zinc-300 leading-relaxed font-sans text-xs">{r}</span>
+                          <span className={`${t.textBody} leading-relaxed font-sans text-xs`}>{r}</span>
                         </li>
                       ))}
                     </ul>
@@ -1166,7 +1182,7 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
                   {cat.items.map((skill, i) => (
                     <span 
                       key={i} 
-                      className={`text-[10px] font-mono px-2.5 py-1 border ${t.cardBorder} text-zinc-300 ${t.cardBg} rounded flex items-center gap-1.5`}
+                      className={`text-[10px] font-mono px-2.5 py-1 border ${t.cardBorder} ${t.textBody} ${t.cardBg} rounded flex items-center gap-1.5`}
                     >
                       <span className={`w-1 h-1 rounded-full ${t.dotColor}`}></span>
                       {skill}
@@ -1223,7 +1239,7 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
 
               <ul className="space-y-2.5 mb-6">
                 {exp.highlights.map((bullet, i) => (
-                  <li key={i} className="text-xs text-zinc-300 font-sans flex items-start gap-2.5">
+                  <li key={i} className={`text-xs ${t.textBody} font-sans flex items-start gap-2.5`}>
                     <span className={`w-1.5 h-1.5 rounded-full mt-1.5 ${t.dotColor} flex-shrink-0`}></span>
                     <span className="leading-relaxed">{bullet}</span>
                   </li>
@@ -1396,7 +1412,7 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
                 </div>
                 <div>
                   <div className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">EMAIL</div>
-                  <a href="mailto:jagadeepreddy3638@gmail.com" className="text-xs font-mono text-zinc-300 hover:text-white transition">
+                  <a href="mailto:jagadeepreddy3638@gmail.com" className={`text-xs font-mono ${t.textBody} ${t.hoverText} transition`}>
                     jagadeepreddy3638@gmail.com
                   </a>
                 </div>
@@ -1408,7 +1424,7 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
                 </div>
                 <div>
                   <div className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">LOCATION</div>
-                  <div className="text-xs font-mono text-zinc-300">Bengaluru, Karnataka, India</div>
+                  <div className={`text-xs font-mono ${t.textBody}`}>{`Bengaluru, Karnataka, India`}</div>
                 </div>
               </div>
 
@@ -1422,7 +1438,7 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
                     href="https://www.linkedin.com/in/buthuru-jagadeep-reddy-a522961a1/" 
                     target="_blank" 
                     rel="noopener noreferrer" 
-                    className="text-xs font-mono text-zinc-300 hover:text-white flex items-center gap-1 transition"
+                    className={`text-xs font-mono ${t.textBody} ${t.hoverText} flex items-center gap-1 transition`}
                   >
                     linkedin/buthuru-jagadeep-reddy <ArrowUpRight size={10} />
                   </a>
@@ -1439,7 +1455,7 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
                     href="https://github.com/Jagadeep-Reddy" 
                     target="_blank" 
                     rel="noopener noreferrer" 
-                    className="text-xs font-mono text-zinc-300 hover:text-white flex items-center gap-1 transition"
+                    className={`text-xs font-mono ${t.textBody} ${t.hoverText} flex items-center gap-1 transition`}
                   >
                     github/Jagadeep-Reddy <ArrowUpRight size={10} />
                   </a>
@@ -1640,8 +1656,8 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
               >
                 <div className={`max-w-[85%] rounded-lg px-3 py-2 text-xs leading-relaxed font-sans ${
                   msg.sender === 'user'
-                    ? `${t.userChatBg} text-white border ${t.accentBorder} rounded-tr-none`
-                    : `${t.cardBg} text-zinc-300 border ${t.cardBorder} rounded-tl-none`
+                    ? `${t.userChatBg} rounded-tr-none`
+                    : `${t.agentChatBg} ${t.agentChatText} border ${t.cardBorder} rounded-tl-none`
                 }`}>
                   {msg.text}
                 </div>
@@ -1651,7 +1667,7 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
             {/* Typing simulator */}
             {isTyping && (
               <div className="flex justify-start">
-                <div className={`rounded-lg px-3.5 py-2 border ${t.cardBorder} ${t.cardBg} flex items-center gap-1.5`}>
+                <div className={`rounded-lg px-3.5 py-2 border ${t.cardBorder} ${t.agentChatBg} flex items-center gap-1.5`}>
                   <span className="w-1.5 h-1.5 bg-zinc-500 rounded-full animate-bounce"></span>
                   <span className="w-1.5 h-1.5 bg-zinc-500 rounded-full animate-bounce delay-150"></span>
                   <span className="w-1.5 h-1.5 bg-zinc-500 rounded-full animate-bounce delay-300"></span>
