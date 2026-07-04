@@ -737,7 +737,7 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-6 pt-24 grid lg:grid-cols-12 gap-8 items-start relative z-10">
         
         {/* Left Side: Systems Cockpit & Diagnostics (Sticky) */}
-        <aside className="lg:col-span-4 lg:sticky lg:top-24 space-y-6">
+        <aside className="lg:col-span-4 lg:sticky lg:top-28 lg:self-start lg:h-fit space-y-6">
           
           {/* Section A: Profile ID */}
           <div className={`p-6 border ${t.cardBorder} ${t.cardBg} rounded-2xl`}>
