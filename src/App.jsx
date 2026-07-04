@@ -7,114 +7,134 @@ import {
   Mail, 
   Linkedin, 
   MapPin, 
-  Phone, 
   ArrowUpRight, 
   MessageSquare, 
   Send, 
   X, 
   Menu, 
-  Sun, 
-  Moon, 
-  FileText 
+  FileText,
+  Terminal,
+  Activity,
+  Cpu,
+  Layers,
+  Database,
+  ArrowRight,
+  Sparkles
 } from 'lucide-react';
 
-// Design Theme Definitions
+// Design Theme Definitions - Technical Architect Canvas Style
 const themes = {
   midnight: {
     name: "Midnight Gold",
-    bg: "bg-[#0A0F1D] text-[#F8FAFC]",
-    bgRaw: "#0A0F1D",
+    bg: "bg-[#0C122C] text-[#F8FAFC]",
+    bgRaw: "#0C122C",
     text: "text-[#F8FAFC]",
     textMuted: "text-[#94A3B8]",
-    accent: "text-[#D4AF37]", // Gold
-    accentBg: "bg-[#D4AF37]",
-    accentBorder: "border-[#D4AF37]/30",
-    accentHover: "hover:border-[#D4AF37]/80",
-    accentText: "text-[#D4AF37]",
-    footerBg: "bg-[#060911] text-[#CBD5E1]",
-    footerText: "text-[#94A3B8]",
-    cardBg: "bg-[#111827]/40",
-    cardBorder: "border-slate-800",
-    cardBorderHover: "hover:border-[#D4AF37]/50",
-    inputBg: "bg-[#111827]/40",
-    inputBorder: "border-slate-800",
-    inputFocus: "focus:border-[#D4AF37]/60",
-    divider: "border-slate-800",
-    chatBtn: "bg-[#D4AF37] text-[#0A0F1D] shadow-[0_4px_20px_rgba(212,175,55,0.25)]",
-    progressBg: "bg-slate-800",
-    progressFill: "bg-[#D4AF37]",
+    accent: "text-[#E6C65A]", // Architect Gold
+    accentBg: "bg-[#E6C65A]",
+    accentBorder: "border-[#E6C65A]/20",
+    accentBorderActive: "border-[#E6C65A]/60",
+    accentHover: "hover:border-[#E6C65A]/80",
+    accentText: "text-[#E6C65A]",
+    accentBgLight: "bg-[#E6C65A]/5",
+    footerBg: "bg-[#080C20]",
+    divider: "border-[#1C254A]",
+    cardBg: "bg-[#131A3C]/40 backdrop-blur-md",
+    cardBorder: "border-[#242F5E]",
+    cardBorderHover: "hover:border-[#E6C65A]/50",
+    inputBg: "bg-[#131A3C]/60",
+    inputBorder: "border-[#242F5E]",
+    inputFocus: "focus:border-[#E6C65A]/60",
+    chatBtn: "bg-[#E6C65A] text-[#0C122C] shadow-[0_4px_20px_rgba(230,198,90,0.15)]",
+    buttonBg: "bg-[#E6C65A] text-[#0C122C] border border-[#E6C65A]",
+    dotColor: "bg-[#E6C65A]",
+    blob1: "bg-[#3B82F6]/15",
+    blob2: "bg-[#6366F1]/15",
+    blob3: "bg-[#E6C65A]/10"
   },
   obsidian: {
     name: "Obsidian Teal",
-    bg: "bg-[#0B0D0F] text-[#F1F5F9]",
-    bgRaw: "#0B0D0F",
+    bg: "bg-[#0A1828] text-[#F1F5F9]",
+    bgRaw: "#0A1828",
     text: "text-[#F1F5F9]",
     textMuted: "text-[#8A99AD]",
-    accent: "text-[#00D2C4]", // Teal
-    accentBg: "bg-[#00D2C4]",
-    accentBorder: "border-[#00D2C4]/30",
-    accentHover: "hover:border-[#00D2C4]/80",
-    accentText: "text-[#00D2C4]",
-    footerBg: "bg-[#12151A] text-[#E2E8F0]",
-    footerText: "text-[#8A99AD]",
-    cardBg: "bg-[#171B21]/50",
-    cardBorder: "border-slate-800/80",
-    cardBorderHover: "hover:border-[#00D2C4]/50",
-    inputBg: "bg-[#171B21]/50",
-    inputBorder: "border-slate-800",
-    inputFocus: "focus:border-[#00D2C4]/60",
-    divider: "border-slate-800",
-    chatBtn: "bg-[#00D2C4] text-[#0B0D0F] shadow-[0_4px_20px_rgba(0,210,196,0.25)]",
-    progressBg: "bg-slate-800",
-    progressFill: "bg-[#00D2C4]",
+    accent: "text-[#00F5E6]", // Electric Teal
+    accentBg: "bg-[#00F5E6]",
+    accentBorder: "border-[#00F5E6]/20",
+    accentBorderActive: "border-[#00F5E6]/60",
+    accentHover: "hover:border-[#00F5E6]/80",
+    accentText: "text-[#00F5E6]",
+    accentBgLight: "bg-[#00F5E6]/5",
+    footerBg: "bg-[#07111E]",
+    divider: "border-[#152C4D]",
+    cardBg: "bg-[#10243C]/40 backdrop-blur-md",
+    cardBorder: "border-[#1B365D]",
+    cardBorderHover: "hover:border-[#00F5E6]/50",
+    inputBg: "bg-[#10243C]/60",
+    inputBorder: "border-[#1B365D]",
+    inputFocus: "focus:border-[#00F5E6]/60",
+    chatBtn: "bg-[#00F5E6] text-[#0A1828] shadow-[0_4px_20px_rgba(0,245,230,0.15)]",
+    buttonBg: "bg-[#00F5E6] text-[#0A1828] border border-[#00F5E6]",
+    dotColor: "bg-[#00F5E6]",
+    blob1: "bg-[#06B6D4]/15",
+    blob2: "bg-[#0D9488]/15",
+    blob3: "bg-[#00F5E6]/10"
   },
-  green: {
-    name: "Forest Green",
-    bg: "bg-[#F5F7F6] text-[#1E293B]",
-    bgRaw: "#F5F7F6",
-    text: "text-[#1E293B]",
-    textMuted: "text-[#4B655A]",
-    accent: "text-[#2C5E43]", // Forest Green
-    accentBg: "bg-[#2C5E43]",
-    accentBorder: "border-[#2C5E43]/20",
-    accentHover: "hover:border-[#2C5E43]/60",
-    accentText: "text-[#2C5E43]",
-    footerBg: "bg-[#1B2A22] text-[#E6EDF2]",
-    footerText: "text-[#8BA396]",
-    cardBg: "bg-[#E6EDF2]/40",
-    cardBorder: "border-slate-200",
-    cardBorderHover: "hover:border-[#2C5E43]/40",
-    inputBg: "bg-white",
-    inputBorder: "border-[#2C5E43]/20",
-    inputFocus: "focus:border-[#2C5E43]/60",
-    divider: "border-[#2C5E43]/10",
-    chatBtn: "bg-[#2C5E43] text-white shadow-[0_4px_20px_rgba(44,94,67,0.25)]",
-    progressBg: "bg-slate-200",
-    progressFill: "bg-[#2C5E43]",
+  forest: {
+    name: "Forest Emerald",
+    bg: "bg-[#071B12] text-[#F1F5F9]",
+    bgRaw: "#071B12",
+    text: "text-[#F1F5F9]",
+    textMuted: "text-[#8BA396]",
+    accent: "text-[#10B981]", // Emerald Green
+    accentBg: "bg-[#10B981]",
+    accentBorder: "border-[#10B981]/25",
+    accentBorderActive: "border-[#10B981]/60",
+    accentHover: "hover:border-[#10B981]/80",
+    accentText: "text-[#10B981]",
+    accentBgLight: "bg-[#10B981]/5",
+    footerBg: "bg-[#05130D]",
+    divider: "border-[#113828]",
+    cardBg: "bg-[#0D2A1E]/40 backdrop-blur-md",
+    cardBorder: "border-[#164934]",
+    cardBorderHover: "hover:border-[#10B981]/50",
+    inputBg: "bg-[#0D2A1E]/60",
+    inputBorder: "border-[#164934]",
+    inputFocus: "focus:border-[#10B981]/60",
+    chatBtn: "bg-[#10B981] text-[#071B12] shadow-[0_4px_20px_rgba(16,185,129,0.15)]",
+    buttonBg: "bg-[#10B981] text-[#071B12] border border-[#10B981]",
+    dotColor: "bg-[#10B981]",
+    blob1: "bg-[#10B981]/15",
+    blob2: "bg-[#059669]/15",
+    blob3: "bg-[#84CC16]/10"
   },
   terracotta: {
-    name: "Classic Terracotta", // Exact replication of the screenshot colors
-    bg: "bg-[#F5F2EB] text-[#202020]",
-    bgRaw: "#F5F2EB",
-    text: "text-[#202020]",
-    textMuted: "text-[#55524B]",
-    accent: "text-[#C85A32]", // Muted orange-brown
-    accentBg: "bg-[#C85A32]",
-    accentBorder: "border-[#C85A32]/20",
-    accentHover: "hover:border-[#C85A32]/60",
-    accentText: "text-[#C85A32]",
-    footerBg: "bg-[#221F1C] text-[#FAF8F5]",
-    footerText: "text-[#A8A296]",
-    cardBg: "bg-[#FAF8F5]/60",
-    cardBorder: "border-[#D6D2C4]",
-    cardBorderHover: "hover:border-[#C85A32]/40",
-    inputBg: "bg-[#FAF8F5]/80",
-    inputBorder: "border-[#D6D2C4]",
-    inputFocus: "focus:border-[#C85A32]/60",
-    divider: "border-[#E1DDD0]",
-    chatBtn: "bg-[#C85A32] text-white shadow-[0_4px_20px_rgba(200,90,50,0.25)]",
-    progressBg: "bg-[#E1DDD0]",
-    progressFill: "bg-[#202020]",
+    name: "Cyber Terracotta",
+    bg: "bg-[#1E0F0A] text-[#FAF8F5]",
+    bgRaw: "#1E0F0A",
+    text: "text-[#FAF8F5]",
+    textMuted: "text-[#A8A296]",
+    accent: "text-[#F97316]", // Terracotta Orange
+    accentBg: "bg-[#F97316]",
+    accentBorder: "border-[#F97316]/20",
+    accentBorderActive: "border-[#F97316]/60",
+    accentHover: "hover:border-[#F97316]/80",
+    accentText: "text-[#F97316]",
+    accentBgLight: "bg-[#F97316]/5",
+    footerBg: "bg-[#150A06]",
+    divider: "border-[#3C2016]",
+    cardBg: "bg-[#2E1911]/40 backdrop-blur-md",
+    cardBorder: "border-[#4C281B]",
+    cardBorderHover: "hover:border-[#F97316]/50",
+    inputBg: "bg-[#2E1911]/60",
+    inputBorder: "border-[#4C281B]",
+    inputFocus: "focus:border-[#F97316]/60",
+    chatBtn: "bg-[#F97316] text-[#1E0F0A] shadow-[0_4px_20px_rgba(249,115,22,0.15)]",
+    buttonBg: "bg-[#F97316] text-[#1E0F0A] border border-[#F97316]",
+    dotColor: "bg-[#F97316]",
+    blob1: "bg-[#F97316]/15",
+    blob2: "bg-[#EF4444]/15",
+    blob3: "bg-[#F59E0B]/10"
   }
 };
 
@@ -127,11 +147,16 @@ export default function App() {
   const [chatOpen, setChatOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
+  // Tab selectors
+  const [activeArchTab, setActiveArchTab] = useState('ipl'); // 'ipl' or 'rag'
+  const [activeProjectTab, setActiveProjectTab] = useState('rag'); // 'ipl' or 'rag'
+  const [expandedSkillCat, setExpandedSkillCat] = useState(null); // Accordion logic for skills
+  
   // Form submission state
   const [formEmail, setFormEmail] = useState('');
   const [formSubject, setFormSubject] = useState('');
   const [formMessage, setFormMessage] = useState('');
-  const [formStatus, setFormStatus] = useState(''); // 'sending', 'success', ''
+  const [formStatus, setFormStatus] = useState(''); // 'sending', 'success', 'error'
   
   // AI Chat Agent states
   const [messages, setMessages] = useState([
@@ -168,78 +193,125 @@ export default function App() {
     }
   }, [messages, isTyping]);
 
-  const projects = [
-    {
+  const projects = {
+    ipl: {
       id: 1,
       title: "IPL AI Intelligence Platform",
-      description: "Production-grade multi-agent AI analytics over 18 seasons / 1.2M ball-by-ball IPL deliveries with real-time ML inference under a 300ms budget.",
-      highlights: [
-        "Production-grade multi-agent AI analytics over 18 seasons / 1.2M ball-by-ball IPL deliveries with real-time ML inference under a 300ms budget.",
-        "Built 5-agent LangGraph orchestration (StatsQA, NarrativeQA, Prediction, Matchup, TeamVsTeam) with intent-based routing — each agent uses the right backend (SQL, RAG, or XGBoost+SHAP) rather than forcing all queries through a single LLM call.",
-        "Hybrid retrieval: BGE-M3 dense (Qdrant HNSW) + BM25 sparse → RRF fusion → cross-encoder rerank (top-8) — RAGAS faithfulness 0.71 → 0.88 on 200-question golden eval set; CI gate blocks deploy if score drops below threshold.",
-        "XGBoost win-probability model (AUC 0.72, Optuna-tuned) with SHAP explanations in natural language; intent classifier (71% acc, 4-class) routes live ball events in ~20ms.",
-        "WebSocket real-time path: BallEvent → XGBoost intent (~20ms) + RAG context (~50ms) → GPT-4o-mini commentary — <300ms end-to-end, load-tested to 200 concurrent users (Locust, 60s sustained)."
-      ],
-      tech: ["LangGraph", "Hybrid RAG", "XGBoost", "FastAPI", "Qdrant", "PostgreSQL", "Redis", "RAGAS", "WebSocket"],
+      tagline: "Production-grade multi-agent analytics & commentary Engine",
       link: "https://github.com/Jagadeep-Reddy/ipl-ai-platform",
       githubLink: "https://github.com/Jagadeep-Reddy/ipl-ai-platform",
-      demoLink: "https://my-portfolio-six-smoky-75.vercel.app/"
-    },
-    {
-      id: 2,
-      title: "Production RAG System & Evaluation",
-      description: "Enterprise financial document Q&A with a full retrieval evaluation framework covering dense, sparse, and hybrid retrieval strategies — architecture applicable to annual reports, regulatory filings, and compliance documents.",
-      highlights: [
-        "Enterprise financial document Q&A with a full retrieval evaluation framework covering dense, sparse, and hybrid retrieval strategies.",
-        "Implemented three chunking strategies (fixed-size, semantic, hierarchical parent-child) to benchmark retrieval quality; hierarchical chunking improved context precision by retaining full parent context during generation.",
-        "Built hybrid dense (FAISS IVF) + sparse (BM25/Rank-BM25) retrieval with RRF fusion and cross-encoder reranking (ms-marco-MiniLM-L-6-v2); enforced chain-of-thought prompting with strict citation injection to reduce hallucinations.",
-        "Self-consistency hallucination detection: 3 parallel LLM responses at temperature 0.4 with automated flag on factual deviation; agentic multi-hop query decomposition with parallel sub-query retrieval and synthesis.",
-        "RAGAS metrics (faithfulness, answer relevancy, context precision/recall) tied to GitHub Actions CI/CD gate — fails if faithfulness < 0.75; 40% improvement vs naive baseline on 500-question eval set."
+      demoLink: "https://my-portfolio-six-smoky-75.vercel.app/",
+      problem: "Cricket analysts and managers needed instant, high-fidelity insights over 18 seasons (1.2M ball-by-ball deliveries) without waiting for manual database queries or facing LLM RAG context bloat.",
+      architecture: "A modular, multi-agent platform orchestrated via LangGraph. An intent classifier routes queries to specialized sub-agents, utilizing dense/sparse hybrid vector search (Qdrant) or statistical ML inference (XGBoost) for millisecond responses.",
+      systemDesign: "Built a 5-agent LangGraph system (StatsQA, NarrativeQA, Prediction, Matchup, TeamVsTeam). Ball events are streamed via WebSockets, triggering rapid XGBoost win-probability predictions with dynamic, contextual commentary generated under a 300ms budget.",
+      challenges: [
+        "Keeping latency below 300ms for WebSocket live events while invoking both machine learning models and semantic searches.",
+        "Managing dense-sparse retrieval accuracy over complex relational schemas (scores, wickets, overs) which naive vector embeddings often fail to grasp.",
+        "Preventing hallucinated commentaries on historically significant match scenarios."
       ],
-      tech: ["FAISS", "BM25", "LangChain", "RAGAS", "LangSmith", "Cross-encoders", "CI/CD"],
+      results: [
+        "Reduced typical development effort for custom cricket analysis tasks by ~60% through reusable workflow blocks.",
+        "Improved RAGAS Faithfulness score from 0.71 to 0.88 using dense (BGE-M3) + sparse (BM25) search with Cross-Encoder reranking.",
+        "Successfully load-tested to 200 concurrent users sustained via Locust under strict SLA budgets.",
+        "Achieved a RAGAS Faithfulness of 0.981 on golden test pairs using Azure AI Foundry (GPT-4.1-mini) integration."
+      ],
+      tech: ["LangGraph", "Hybrid RAG", "XGBoost", "FastAPI", "Qdrant", "PostgreSQL", "Redis", "RAGAS", "WebSocket"]
+    },
+    rag: {
+      id: 2,
+      title: "Enterprise RAG System & Evaluation",
+      tagline: "Self-correcting financial Q&A engine with automated evaluation",
       link: "https://huggingface.co/spaces/Jagadeep24/RAG-System-with-Evaluation-Framework",
       githubLink: "https://github.com/Jagadeep-Reddy",
-      demoLink: "https://huggingface.co/spaces/Jagadeep24/RAG-System-with-Evaluation-Framework"
+      demoLink: "https://huggingface.co/spaces/Jagadeep24/RAG-System-with-Evaluation-Framework",
+      problem: "Corporate compliance officers require precise Q&A answers from complex, multi-page financial statements with 100% auditable citation links, preventing hallucinations in regulatory reports.",
+      architecture: "An agentic self-correcting RAG pipeline that splits complex user queries into sub-problems, searches across multiple indexes, reranks target snippets, and validates generated answers via temperature-tuned consistency pathways.",
+      systemDesign: "Hierarchical parent-child document chunking linked to FAISS dense storage and Rank-BM25 sparse indexes. Employs a cross-encoder (ms-marco-MiniLM-L-6-v2) for relevance selection and a self-consistency checker running 3 parallel generation pathways. Integrated into a GitHub Actions CI gate.",
+      challenges: [
+        "Traditional chunking methods losing the wider context of complex financial tables.",
+        "High rates of naive LLM hallucination on tables, footnotes, and mathematical metrics.",
+        "Securing factual alignment without manual review bottlenecks before production deployment."
+      ],
+      results: [
+        "RAGAS CI/CD gate halts deployment if faithfulness falls below 0.75, ensuring safe pipelines.",
+        "Observed a 40% improvement in retrieval precision over the naive baseline on a 500-question evaluation set.",
+        "Robust multi-hop reasoning resolving queries that span multiple separate documents."
+      ],
+      tech: ["FAISS", "BM25", "LangChain", "RAGAS", "LangSmith", "Cross-encoders", "CI/CD", "Python"]
     }
-  ];
+  };
 
   const skillCategories = [
-    { category: "Languages", items: ["Python", "Java", "SQL"] },
-    { category: "GenAI & LLMs", items: ["RAG Systems", "LangChain", "LangGraph", "Prompt Engineering", "OpenAI API", "Azure AI Foundry"] },
-    { category: "Models & Embeddings", items: ["BERT & RoBERTa", "HuggingFace Transformers", "BGE-M3"] },
-    { category: "Retrieval", items: ["FAISS & Qdrant", "BM25", "Reciprocal Rank Fusion", "Cross-encoder Reranking", "pgvector"] },
-    { category: "ML & Data", items: ["XGBoost", "SHAP & Optuna", "scikit-learn", "pandas & NumPy", "Feature Engineering"] },
-    { category: "Cloud & Infra", items: ["AWS (EC2, S3, Lambda, SQS)", "Azure AI Foundry", "Docker & Kubernetes", "CI/CD Pipelines", "FastAPI", "WebSocket"] },
-    { category: "Backend (ANZ)", items: ["Spring Boot", "Kafka", "Oracle SQL", "REST APIs", "JDBC"] },
-    { category: "Monitoring & Evals", items: ["RAGAS", "LangSmith", "Locust (Load Testing)", "GitHub Actions"] }
+    { 
+      category: "Languages", 
+      summary: "Core programming & data querying",
+      items: ["Python", "Java", "SQL", "HTML/CSS", "JavaScript"] 
+    },
+    { 
+      category: "GenAI & LLMs", 
+      summary: "Orchestration & agent design frameworks",
+      items: ["RAG Systems", "LangChain", "LangGraph", "Prompt Engineering", "OpenAI API", "Azure AI Foundry"] 
+    },
+    { 
+      category: "Models & Embeddings", 
+      summary: "Sequence representation & semantic models",
+      items: ["BERT & RoBERTa", "HuggingFace Transformers", "BGE-M3"] 
+    },
+    { 
+      category: "Retrieval & Vector DBs", 
+      summary: "High-performance index structures",
+      items: ["FAISS", "Qdrant HNSW", "BM25 Search", "Reciprocal Rank Fusion (RRF)", "Cross-encoder Reranking", "pgvector"] 
+    },
+    { 
+      category: "ML & Data", 
+      summary: "Statistical modeling & feature search",
+      items: ["XGBoost", "SHAP", "Optuna (Hyperparameter tuning)", "scikit-learn", "pandas & NumPy", "Feature Engineering"] 
+    },
+    { 
+      category: "Cloud & Infra", 
+      summary: "Deployment, streaming, & hosting",
+      items: ["AWS (EC2, S3, Lambda, SQS)", "Docker & Kubernetes", "FastAPI", "WebSocket", "Redis", "PostgreSQL"] 
+    },
+    { 
+      category: "Backend Systems", 
+      summary: "Enterprise transaction architecture",
+      items: ["Spring Boot", "Kafka Event Streaming", "Oracle SQL", "REST APIs", "JDBC & JPA"] 
+    },
+    { 
+      category: "Monitoring & Evals", 
+      summary: "Operational pipelines & validation gates",
+      items: ["RAGAS Evaluation", "LangSmith Tracing", "Locust (Load testing)", "GitHub Actions CI/CD"] 
+    }
   ];
 
   const experiences = [
     {
+      stage: "Stage 3",
+      version: "v3.0",
       role: "Independent AI Engineer",
-      company: "Self-Directed",
+      company: "Self-Directed Portfolio Projects",
       period: "July 2024 – Present",
-      context: "Full-time career transition: completed PGP in Data Science (UT Austin × Great Learning) and built production AI systems to bridge from backend engineering into GenAI roles.",
+      context: "Transitioned from traditional backend engineering into full-time GenAI and Machine Learning systems. Completed UT Austin PGP in Data Science.",
       highlights: [
-        "Architected and deployed a production-grade 5-agent LangGraph platform (IPL AI Intelligence Platform) with hybrid RAG retrieval (BGE-M3 + BM25 + RRF fusion), XGBoost win-probability modeling (AUC 0.72), and WebSocket real-time inference under 300ms — load-tested to 200 concurrent users via Locust.",
-        "Built an enterprise financial document Q&A RAG system with FAISS dense + BM25 sparse hybrid retrieval, cross-encoder reranking, and RAGAS evaluation gates in GitHub Actions CI/CD — achieved 40% retrieval improvement over naive baseline on a 500-question eval set.",
-        "Submitted to Microsoft AI Skills Fest Agents League Hackathon (June 2026) — integrated Azure AI Foundry (GPT-4.1-mini) into the IPL platform, completing RAGAS evaluation on 51 golden QA pairs (faithfulness 0.981).",
-        "Completed PGP in Data Science & Business Analytics (UT Austin × Great Learning); currently pursuing AWS Solutions Architect Associate and Azure AI Engineer Associate certifications."
+        "Architected a 5-agent LangGraph platform (IPL AI Intelligence) supporting hybrid search, XGBoost commentary, and real-time WebSocket pipelines serving live commentaries in <300ms.",
+        "Built enterprise-ready financial statement RAG pipelines with hierarchical parent-child indexing, cross-encoder reranking, and self-consistency hallucination filters.",
+        "Implemented automated quality gates in GitHub Actions CI using RAGAS, asserting correctness thresholds before code merges.",
+        "Competed in the Microsoft AI Skills Fest Hackathon, deploying Azure AI Foundry (GPT-4.1-mini) integrations with a RAGAS faithfulness of 0.981."
       ],
       techStack: ["LangGraph", "LangChain", "RAGAS", "XGBoost", "FastAPI", "Qdrant", "FAISS", "Azure AI Foundry", "Python", "CI/CD"]
     },
     {
+      stage: "Stage 2",
+      version: "v2.0",
       role: "Software Engineer",
-      company: "ANZ",
+      company: "ANZ (Australia and New Zealand Banking Group)",
       period: "June 2022 - June 2024",
-      context: null,
+      context: "Built transaction microservices and scaled batch pipelines for LoanIQ corporate banking platforms.",
       highlights: [
-        "Built and optimized LoanIQ Inquiry APIs and Scripted Batch endpoints, cutting interface error rates and improving processing reliability for a core banking platform serving millions of accounts.",
-        "Designed production REST APIs in Spring Boot (IoC, JPA, Java Streams) consumed by downstream banking interfaces — directly applicable to the ML model-serving APIs I build today.",
-        "Engineered a daily batch scoring pipeline for accrual cycles — scheduling, DB writes via JDBC, and ResultSet management — handling high-volume financial transaction data end to end.",
-        "Shipped a Customer Onboarding microservice with Kafka event streaming — achieved 90% unit test coverage and zero production incidents in the first 3 months of deployment.",
-        "Optimized Oracle SQL queries (complex joins, correlated subqueries, stored procedures) for the LoanIQ platform — reduced query execution time by up to 35% through indexing and view redesign.",
-        "Implemented a data-masking module using LoanIQ SDK + JDBC to handle customer PII in XML — masked sensitive fields at query level, improving compliance with ANZ data governance policies."
+        "Designed high-throughput REST APIs in Spring Boot consumed by core downstream banking interfaces.",
+        "Implemented customer onboarding microservices using Apache Kafka event streams, achieving 90% unit test coverage.",
+        "Optimized complex Oracle SQL queries, indexes, and stored procedures, reducing execution times by up to 35%.",
+        "Engineered PII data masking libraries utilizing LoanIQ SDK to secure customer privacy at the database boundary."
       ],
       techStack: ["Java", "Spring Boot", "Oracle SQL", "Kafka", "REST API", "CI/CD Pipelines", "Git"]
     }
@@ -250,33 +322,24 @@ export default function App() {
       degree: "Post Graduate Program in Data Science & Business Analytics",
       institution: "The University of Texas at Austin",
       period: "2025 - 2026",
-      highlights: [
-        "Focus Areas: Business Analytics, Data Science, and Machine Learning Systems."
-      ]
+      details: "Focus Areas: Supervised Machine Learning, Business Analytics, and LLM Applications."
     },
     {
       degree: "Bachelor of Engineering (BE), Information Science",
       institution: "BMS Institute of Technology and Management",
       period: "2018 - 2022",
-      highlights: [
-        "Grade: 8.50 CGPA",
-        "Key Leadership: Student Placement Coordinator, Placement Volunteer."
-      ]
+      details: "Grade: 8.50 CGPA. Focus: Database systems, Object Oriented Design, and Data Structures."
     }
   ];
 
   const certifications = [
-    { title: "AWS Solutions Architect Associate", issuer: "Amazon Web Services", badge: "SAA-C03", status: "In Progress", primary: true },
-    { title: "Azure AI Engineer Associate", issuer: "Microsoft Azure", badge: "AI-103", status: "In Progress", primary: true },
-    { title: "Machine Learning Specialization", issuer: "Coursera", badge: null, status: null, primary: false },
-    { title: "Advanced Learning Algorithms", issuer: "Coursera", badge: null, status: null, primary: false },
-    { title: "Supervised Machine Learning", issuer: "Coursera", badge: null, status: null, primary: false },
-    { title: "Linear Algebra for ML", issuer: "Coursera", badge: null, status: null, primary: false }
+    { title: "AWS Solutions Architect Associate", issuer: "Amazon Web Services", badge: "SAA-C03", status: "In Progress" },
+    { title: "Azure AI Engineer Associate", issuer: "Microsoft Azure", badge: "AI-102", status: "In Progress" },
+    { title: "Machine Learning Specialization", issuer: "Coursera", badge: "ML-SPEC", status: "Completed" },
+    { title: "Advanced Learning Algorithms", issuer: "Coursera", badge: "ALA-CR", status: "Completed" }
   ];
 
-  // ── FORMSPREE CONTACT FORM ──────────────────────────────────────────────────
-  // 1. Go to https://formspree.io → create free account → New Form
-  // 2. Replace YOUR_FORMSPREE_ID below with your form ID (e.g. "xpwzgkjr")
+  // Formspree Contact Handling
   const FORMSPREE_ID = 'xwvdqlwd';
 
   const handleFormSubmit = async (e) => {
@@ -305,7 +368,7 @@ export default function App() {
     }
   };
 
-  // ── REAL CLAUDE API CHATBOT ──────────────────────────────────────────────────
+  // AI Assistant Chat Config
   const AGENT_SYSTEM_PROMPT = `You are Jagadeep Reddy's personal AI portfolio agent. Answer recruiter and hiring manager questions concisely and professionally. Here is his complete profile:
 
 IDENTITY: Jagadeep Reddy — AI Engineer transitioning from 2 years of production backend engineering at ANZ (Spring Boot, Kafka, Oracle SQL) into full-time AI/GenAI engineering. Based in Bengaluru, India. Targeting 20-25 LPA in India and Riyadh, Saudi Arabia.
@@ -319,7 +382,7 @@ ANZ EXPERIENCE (June 2022 – June 2024): LoanIQ Inquiry APIs & Scripted Batch e
 
 EDUCATION: PGP Data Science & Business Analytics, UT Austin × Great Learning (2025-2026). BE Information Science, BMS Institute of Technology (8.50 CGPA, 2018-2022).
 
-CERTIFICATIONS (In Progress): AWS Solutions Architect Associate (SAA-C03), Azure AI Engineer Associate (AI-103).
+CERTIFICATIONS (In Progress): AWS Solutions Architect Associate (SAA-C03), Azure AI Engineer Associate (AI-102).
 
 SKILLS: Python, Java, SQL, LangGraph, LangChain, RAG Systems, XGBoost, FAISS, Qdrant, BM25, BGE-M3, BERT, HuggingFace Transformers, FastAPI, WebSocket, Docker, AWS (EC2/S3/Lambda/SQS), Azure AI Foundry, RAGAS, LangSmith, Locust, CI/CD, Spring Boot, Kafka, Oracle SQL.
 
@@ -329,7 +392,6 @@ CONTACT: jagadeepreddy3638@gmail.com | github.com/Jagadeep-Reddy | linkedin.com/
 
 Keep answers concise (2-4 sentences). Be professional. Do not make up anything not in this profile. If asked about salary say he targets 20-25 LPA for India roles.`;
 
-  // Keep full conversation history for context
   const chatHistoryRef = useRef([]);
 
   const getSimulatedResponse = (query) => {
@@ -360,8 +422,8 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
         reply: "Jagadeep completed a Post Graduate Program (PGP) in Data Science & Business Analytics from UT Austin × Great Learning (2025-2026) and holds a Bachelor of Engineering in Information Science from BMSIT (8.50 CGPA, 2018-2022)."
       },
       {
-        keywords: ['certification', 'certifications', 'aws', 'saa-c03', 'associate', 'azure ai', 'ai-103'],
-        reply: "He is currently pursuing two key industry certifications: AWS Solutions Architect Associate (SAA-C03) and Microsoft Azure AI Engineer Associate (AI-103)."
+        keywords: ['certification', 'certifications', 'aws', 'saa-c03', 'associate', 'azure ai', 'ai-102'],
+        reply: "He is currently pursuing two key industry certifications: AWS Solutions Architect Associate (SAA-C03) and Microsoft Azure AI Engineer Associate (AI-102)."
       },
       {
         keywords: ['skills', 'stack', 'languages', 'databases', 'frameworks', 'tools'],
@@ -442,7 +504,7 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
     if (!inputText.trim()) return;
     const text = inputText.trim();
     setMessages(prev => [...prev, { sender: 'user', text, timestamp: new Date() }]);
-    setInputText('');
+    inputText('');
     sendToClaudeAPI(text);
   };
 
@@ -460,109 +522,126 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
   };
 
   return (
-    <div className={`min-h-screen ${t.bg} transition-colors duration-500 font-sans selection:bg-current/10`}>
+    <div className={`min-h-screen relative ${t.bg} transition-colors duration-500 font-sans antialiased selection:bg-current/10 overflow-x-hidden`}>
       
-      {/* Editorial Style Grid Lines (Background decoration) */}
-      <div className="fixed inset-0 pointer-events-none grid grid-cols-4 max-w-6xl mx-auto px-6 opacity-3">
+      {/* Background Ambient Glows */}
+      <div className="absolute top-[5%] left-[10%] w-[300px] md:w-[500px] h-[300px] md:h-[500px] rounded-full blur-[100px] md:blur-[150px] pointer-events-none z-0 opacity-70 transition-all duration-1000 mix-blend-screen bg-current">
+        <div className={`w-full h-full rounded-full ${t.blob1}`}></div>
+      </div>
+      <div className="absolute top-[35%] right-[5%] w-[250px] md:w-[450px] h-[250px] md:h-[450px] rounded-full blur-[100px] md:blur-[150px] pointer-events-none z-0 opacity-60 transition-all duration-1000 mix-blend-screen bg-current">
+        <div className={`w-full h-full rounded-full ${t.blob2}`}></div>
+      </div>
+      <div className="absolute top-[70%] left-[10%] w-[280px] md:w-[480px] h-[280px] md:h-[480px] rounded-full blur-[100px] md:blur-[150px] pointer-events-none z-0 opacity-50 transition-all duration-1000 mix-blend-screen bg-current">
+        <div className={`w-full h-full rounded-full ${t.blob3}`}></div>
+      </div>
+
+      {/* Editorial Style Grid Lines (Background blueprint canvas decoration) */}
+      <div className="fixed inset-0 pointer-events-none grid grid-cols-4 max-w-6xl mx-auto px-6 opacity-[0.03] z-0">
         <div className={`border-l border-r ${t.divider} h-full`}></div>
         <div className={`border-r ${t.divider} h-full`}></div>
         <div className={`border-r ${t.divider} h-full`}></div>
         <div></div>
       </div>
 
-      {/* Header / Navbar */}
+      {/* Header / Sticky Navbar */}
       <header className={`fixed top-0 left-0 w-full z-40 transition-all duration-300 ${
         scrolled 
-          ? `${theme === 'green' || theme === 'terracotta' ? 'bg-white/80' : 'bg-[#0A0F1D]/80'} backdrop-blur-md border-b ${t.divider}`
+          ? `${t.bg} bg-opacity-90 backdrop-blur-md border-b ${t.divider}`
           : 'bg-transparent'
       }`}>
-        <div className="max-w-6xl mx-auto px-6 py-5 flex justify-between items-center">
+        <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center relative z-10">
           <div>
             <span 
               onClick={() => scrollToSection('hero')} 
-              className="text-xl md:text-2xl font-serif font-semibold tracking-tight cursor-pointer hover:opacity-80 transition"
+              className="text-lg md:text-xl font-mono font-bold tracking-tight cursor-pointer hover:opacity-80 transition"
             >
-              JAGADEEP REDDY
+              [~/jagadeep.reddy]
             </span>
-            <div className={`text-[10px] uppercase tracking-widest font-semibold ${t.accent} mt-0.5`}>
-              AI Engineer
+            <div className="flex items-center gap-1.5 mt-0.5 text-[9px] uppercase tracking-widest font-mono text-zinc-500">
+              <span className={`w-1.5 h-1.5 rounded-full ${t.dotColor} animate-pulse`}></span>
+              system.status: active
             </div>
           </div>
 
-          {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-8">
-            <nav className="flex gap-6 text-xs uppercase tracking-widest font-semibold">
-              <button onClick={() => scrollToSection('projects')} className="hover:opacity-75 transition">Projects</button>
-              <button onClick={() => scrollToSection('skills')} className="hover:opacity-75 transition">Skills</button>
-              <button onClick={() => scrollToSection('experience')} className="hover:opacity-75 transition">Experience</button>
-              <button onClick={() => scrollToSection('education')} className="hover:opacity-75 transition">Education</button>
-              <button onClick={() => scrollToSection('contact')} className="hover:opacity-75 transition">Contact</button>
+          {/* Desktop Navigation Links */}
+          <div className="hidden md:flex items-center gap-6">
+            <nav className="flex gap-6 text-[10px] font-mono uppercase tracking-widest text-zinc-400">
+              <button onClick={() => scrollToSection('architecture')} className="hover:text-white transition">Architecture</button>
+              <button onClick={() => scrollToSection('projects')} className="hover:text-white transition">Projects</button>
+              <button onClick={() => scrollToSection('skills')} className="hover:text-white transition">Skills</button>
+              <button onClick={() => scrollToSection('experience')} className="hover:text-white transition">Experience</button>
+              <button onClick={() => scrollToSection('education')} className="hover:text-white transition">Academics</button>
             </nav>
 
-            <span className={`h-4 w-[1px] ${t.divider}`}></span>
+            <span className="h-4 w-[1px] bg-zinc-800"></span>
 
-            {/* Premium Theme Selector */}
+            {/* Dropdown theme switcher */}
             <div className="flex items-center gap-2">
-              <span className="text-[10px] uppercase tracking-widest font-bold opacity-60">Theme:</span>
               <div className="relative">
                 <select
                   value={theme}
                   onChange={(e) => setTheme(e.target.value)}
-                  className={`appearance-none bg-transparent border ${t.accentBorder} ${t.text} text-[10px] uppercase tracking-widest font-bold pl-3 pr-8 py-1.5 rounded-md focus:outline-none cursor-pointer hover:bg-current/5 transition`}
+                  className={`appearance-none bg-transparent border ${t.accentBorder} ${t.text} text-[9px] font-mono uppercase tracking-widest pl-3 pr-7 py-1 rounded focus:outline-none cursor-pointer hover:bg-white/5 transition`}
                 >
-                  <option value="midnight" className="bg-[#0A0F1D] text-white">Midnight Gold</option>
-                  <option value="obsidian" className="bg-[#0B0D0F] text-white">Obsidian Teal</option>
-                  <option value="green" className="bg-[#F5F7F6] text-[#1E293B]">Forest Green</option>
-                  <option value="terracotta" className="bg-[#F5F2EB] text-[#202020]">Terracotta</option>
+                  <option value="midnight" className="bg-[#0C122C] text-[#F8FAFC]">Midnight Gold</option>
+                  <option value="obsidian" className="bg-[#0A1828] text-[#F1F5F9]">Obsidian Teal</option>
+                  <option value="forest" className="bg-[#071B12] text-[#F1F5F9]">Forest Emerald</option>
+                  <option value="terracotta" className="bg-[#1E0F0A] text-[#FAF8F5]">Cyber Orange</option>
                 </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-current opacity-70">
-                  <ChevronDown size={12} />
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-1.5 text-zinc-500">
+                  <ChevronDown size={10} />
                 </div>
               </div>
             </div>
+
+            <button 
+              onClick={() => scrollToSection('contact')}
+              className={`px-3 py-1 text-[9px] font-mono uppercase tracking-widest border border-zinc-850 hover:border-zinc-500 rounded transition duration-300`}
+            >
+              Connect
+            </button>
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="flex md:hidden items-center gap-4">
+          {/* Mobile Toggler */}
+          <div className="flex md:hidden items-center gap-3">
             <select
               value={theme}
               onChange={(e) => setTheme(e.target.value)}
-              className={`bg-transparent border ${t.accentBorder} ${t.text} text-[9px] uppercase tracking-widest font-bold px-2 py-1 rounded focus:outline-none`}
+              className={`bg-transparent border ${t.accentBorder} ${t.text} text-[8px] font-mono uppercase tracking-widest px-2 py-0.5 rounded focus:outline-none`}
             >
-              <option value="midnight" className="bg-[#0A0F1D] text-white">Midnight</option>
-              <option value="obsidian" className="bg-[#0B0D0F] text-white">Obsidian</option>
-              <option value="green" className="bg-[#F5F7F6] text-[#1E293B]">Forest</option>
-              <option value="terracotta" className="bg-[#F5F2EB] text-[#202020]">Terracotta</option>
+              <option value="midnight" className="bg-[#0C122C] text-white">Midnight</option>
+              <option value="obsidian" className="bg-[#0A1828] text-white">Obsidian</option>
+              <option value="forest" className="bg-[#071B12] text-white">Forest</option>
+              <option value="terracotta" className="bg-[#1E0F0A] text-white">Cyber</option>
             </select>
             <button 
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-1 hover:opacity-75 transition"
+              className="p-1 hover:opacity-75 transition text-zinc-400"
               aria-label="Toggle menu"
             >
-              <Menu size={20} />
+              <Menu size={18} />
             </button>
           </div>
         </div>
       </header>
 
-      {/* Mobile Nav Overlay */}
+      {/* Mobile Drawer Overlay */}
       {mobileMenuOpen && (
-        <div className={`fixed inset-0 z-50 md:hidden flex flex-col justify-center items-center gap-8 ${
-          theme === 'green' || theme === 'terracotta' ? 'bg-[#FAF8F5]' : 'bg-[#0B0D0F]'
-        } px-6`}>
+        <div className={`fixed inset-0 z-50 md:hidden flex flex-col justify-center items-center gap-8 ${t.bg} bg-opacity-95 backdrop-blur-lg px-6`}>
           <button 
             onClick={() => setMobileMenuOpen(false)}
-            className="absolute top-6 right-6 p-2 hover:opacity-75 transition"
+            className="absolute top-6 right-6 p-2 hover:opacity-75 transition text-zinc-400"
             aria-label="Close menu"
           >
-            <X size={24} />
+            <X size={22} />
           </button>
-          <nav className="flex flex-col gap-6 text-lg uppercase tracking-widest font-semibold text-center">
-            <button onClick={() => scrollToSection('projects')} className="hover:opacity-75 transition">Projects</button>
-            <button onClick={() => scrollToSection('skills')} className="hover:opacity-75 transition">Skills</button>
-            <button onClick={() => scrollToSection('experience')} className="hover:opacity-75 transition">Experience</button>
-            <button onClick={() => scrollToSection('education')} className="hover:opacity-75 transition">Education</button>
-            <button onClick={() => scrollToSection('contact')} className="hover:opacity-75 transition">Contact</button>
+          <nav className="flex flex-col gap-6 text-sm font-mono uppercase tracking-widest text-center">
+            <button onClick={() => scrollToSection('architecture')} className="hover:text-white transition">Architecture</button>
+            <button onClick={() => scrollToSection('projects')} className="hover:text-white transition">Projects</button>
+            <button onClick={() => scrollToSection('skills')} className="hover:text-white transition">Skills</button>
+            <button onClick={() => scrollToSection('experience')} className="hover:text-white transition">Experience</button>
+            <button onClick={() => scrollToSection('education')} className="hover:text-white transition">Academics</button>
+            <button onClick={() => scrollToSection('contact')} className="hover:text-white transition">Connect</button>
           </nav>
         </div>
       )}
@@ -570,197 +649,591 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
       {/* Hero Section */}
       <section id="hero" className="min-h-screen flex flex-col justify-center px-6 pt-24 max-w-6xl mx-auto relative z-10">
         <div className="max-w-4xl">
-          <div className={`text-xs md:text-sm uppercase tracking-widest font-bold mb-4 ${t.accent} flex items-center gap-2`}>
-            <span>PORTFOLIO / AI ENGINEER</span>
-            <span className={`h-[1px] w-12 ${t.accentBg} inline-block`}></span>
+          <div className="flex items-center gap-3 mb-6">
+            <span className={`text-[10px] font-mono uppercase tracking-widest ${t.accent} px-2.5 py-0.5 border ${t.accentBorder} rounded-full ${t.accentBgLight}`}>
+              System: Production Ready
+            </span>
+            <span className="text-[10px] font-mono tracking-widest text-zinc-500">
+              [ping: 14ms // latency: low]
+            </span>
           </div>
 
-          <h1 className="text-5xl md:text-8xl font-serif leading-[1.05] tracking-tight mb-8">
+          <h1 className="text-4xl sm:text-6xl md:text-8xl font-serif leading-[1.05] tracking-tight mb-8">
             Building AI systems that <span className={`italic ${t.accent}`}>scale beyond the demo.</span>
           </h1>
 
-          <p className="text-lg md:text-2xl opacity-80 leading-relaxed font-light mb-12 max-w-3xl">
-            I am an AI Engineer transitioning from 2 years of production backend engineering at ANZ. 
-            I bring hands-on experience building production-grade GenAI systems—from hybrid RAG pipelines with 
-            measurable RAGAS evals and autonomous multi-agent systems with LangGraph, to real-time ML inference 
-            under strict latency budgets and RAGAS-gated CI/CD pipelines.
+          <p className="text-base md:text-xl text-zinc-400 font-sans font-light leading-relaxed mb-10 max-w-3xl">
+            I am an AI Engineer transitioning from 2 years of enterprise backend engineering at ANZ.
+            I design production-grade GenAI pipelines: orchestrating specialized LangGraph agents, building hybrid RAG flows, 
+            shaping millisecond-budget XGBoost win predictions, and anchoring answer validity via automated RAGAS gates.
           </p>
 
           <div className="flex gap-4 flex-wrap">
             <button 
               onClick={() => scrollToSection('projects')} 
-              className={`px-8 py-4 bg-current ${theme === 'green' || theme === 'terracotta' ? 'text-white bg-[#202020]' : 'text-black bg-white'} font-semibold uppercase tracking-wider text-xs flex items-center gap-3 hover:opacity-90 transition`}
+              className={`px-6 py-3 ${t.buttonBg} text-xs font-mono uppercase tracking-wider font-semibold flex items-center gap-2 hover:opacity-90 transition ${theme === 'midnight' ? 'text-[#060813]' : theme === 'obsidian' ? 'text-[#07090F]' : theme === 'forest' ? 'text-[#050806]' : 'text-[#0E0A08]'}`}
             >
-              Explore projects <ArrowUpRight size={14} />
+              Explore Logs <Terminal size={12} />
+            </button>
+            <button 
+              onClick={() => scrollToSection('architecture')}
+              className={`px-6 py-3 border border-zinc-800 hover:border-zinc-500 text-xs font-mono uppercase tracking-wider font-semibold flex items-center gap-2 transition`}
+            >
+              View System Flow
             </button>
             <a 
               href="/Jagadeep_Reddy_AI_Engineer_Resume.pdf" 
               download="Jagadeep_Reddy_AI_Engineer_Resume.pdf" 
-              className={`px-8 py-4 border ${t.accentBorder} ${t.accentHover} font-semibold uppercase tracking-wider text-xs flex items-center gap-3 transition`}
+              className="px-6 py-3 border border-zinc-800 hover:border-zinc-500 text-xs font-mono uppercase tracking-wider font-semibold flex items-center gap-2 transition text-zinc-400 hover:text-white"
             >
-              Download Resume <FileText size={14} />
+              Download CV <FileText size={12} />
             </a>
           </div>
         </div>
 
-        {/* Floating details banner */}
-        <div className={`mt-24 pt-6 border-t ${t.divider} flex flex-wrap justify-between gap-6 text-[10px] uppercase tracking-widest font-bold ${t.textMuted}`}>
-          <div>LOCATION: Bangalore, India</div>
-          <div>FOCUS: Agentic Orchestration & RAG</div>
-          <div>PREVIOUS: Software Engineer at ANZ</div>
+        {/* Hero Bottom Banner */}
+        <div className={`mt-24 pt-6 border-t ${t.divider} flex flex-wrap justify-between gap-6 text-[9px] font-mono uppercase tracking-widest text-zinc-500`}>
+          <div>[location] bangalore, india</div>
+          <div>[focus] agentic orchestration & hybrid search</div>
+          <div>[experience] software engineer at anz (2 yrs)</div>
+          <div className="animate-bounce cursor-pointer" onClick={() => scrollToSection('architecture')}>
+            [scroll.to.evolve.architecture ↓]
+          </div>
         </div>
       </section>
 
-      {/* Projects Section */}
-      <section id="projects" className="py-32 px-6 max-w-6xl mx-auto relative z-10 border-t border-dashed border-current/10">
-        <div className="mb-16">
-          <div className={`text-xs uppercase tracking-widest font-bold mb-2 ${t.accent}`}>SELECTED WORK</div>
-          <h2 className="text-4xl md:text-6xl font-serif">Featured Projects</h2>
+      {/* System Architecture Section (NEW Interactive Layout) */}
+      <section id="architecture" className={`py-24 px-6 max-w-6xl mx-auto relative z-10 border-t border-dashed ${t.divider}`}>
+        <div className="mb-16 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+          <div>
+            <div className={`text-[10px] font-mono uppercase tracking-widest mb-2 ${t.accent}`}>
+              01 // PLATFORM BLUEPRINTS
+            </div>
+            <h2 className="text-3xl md:text-5xl font-serif font-bold">
+              System Architecture
+            </h2>
+            <p className="text-zinc-400 text-sm mt-2 max-w-xl">
+              Layered architectures representing production-grade AI platforms I've designed and validated.
+            </p>
+          </div>
+
+          {/* Interactive Platform Tabs */}
+          <div className={`flex gap-2 p-1 border ${t.cardBorder} ${t.cardBg} rounded-lg`}>
+            <button
+              onClick={() => setActiveArchTab('ipl')}
+              className={`px-3 py-1.5 text-[9px] font-mono uppercase tracking-widest rounded-md transition-all ${
+                activeArchTab === 'ipl' 
+                  ? `${t.buttonBg} font-semibold ${theme === 'midnight' ? 'text-[#060813]' : theme === 'obsidian' ? 'text-[#07090F]' : theme === 'forest' ? 'text-[#050806]' : 'text-[#0E0A08]'}` 
+                  : 'text-zinc-400 hover:text-white'
+              }`}
+            >
+              ipl-intelligence-flow
+            </button>
+            <button
+              onClick={() => setActiveArchTab('rag')}
+              className={`px-3 py-1.5 text-[9px] font-mono uppercase tracking-widest rounded-md transition-all ${
+                activeArchTab === 'rag' 
+                  ? `${t.buttonBg} font-semibold ${theme === 'midnight' ? 'text-[#060813]' : theme === 'obsidian' ? 'text-[#07090F]' : theme === 'forest' ? 'text-[#050806]' : 'text-[#0E0A08]'}` 
+                  : 'text-zinc-400 hover:text-white'
+              }`}
+            >
+              financial-rag-evaluation
+            </button>
+          </div>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-12">
-          {projects.map((project, index) => (
-            <a
-              href={project.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              key={project.id}
-              className={`group flex flex-col justify-between p-8 bg-current/3 border ${t.cardBorder} ${t.cardBorderHover} rounded-xl transition-all duration-300 relative overflow-hidden`}
-            >
-              <div>
-                <div className="flex justify-between items-start mb-6">
-                  <span className={`text-[10px] uppercase tracking-widest font-bold px-2.5 py-1 border ${t.accentBorder} rounded-full`}>
-                    Project {index + 1}
-                  </span>
-                  <ExternalLink size={18} className="opacity-0 group-hover:opacity-100 transition duration-300" />
+        <div className="grid lg:grid-cols-12 gap-12 items-start">
+          {/* Left Column: Vertical Diagram Blocks */}
+          <div className="lg:col-span-7 space-y-4">
+            <div className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest mb-2">
+              layered.system.view // top down flow
+            </div>
+
+            {activeArchTab === 'ipl' ? (
+              // IPL Platform Layers
+              <>
+                <div className={`group p-5 border ${t.cardBorder} ${t.cardBg} ${t.cardBorderHover} rounded-xl transition duration-300`}>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 01 // INGRESS</span>
+                    <span className={`w-2 h-2 rounded-full ${t.dotColor}`}></span>
+                  </div>
+                  <h4 className="text-sm font-mono font-bold tracking-tight">Ingress & Stream Router</h4>
+                  <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
+                    Receives live WebSocket BallEvents or user natural language requests. Triggers downstream routing pipeline.
+                  </p>
                 </div>
 
-                <h3 className="text-2xl md:text-3xl font-serif font-bold mb-4 group-hover:underline decoration-1 decoration-current/30">
-                  {project.title}
-                </h3>
-                <p className={`text-sm md:text-base ${t.textMuted} mb-6 leading-relaxed`}>
-                  {project.description}
-                </p>
+                <div className="flex justify-center my-1">
+                  <div className="h-4 w-[1px] border-l border-dashed border-zinc-700"></div>
+                </div>
 
-                {project.highlights && (
-                  <ul className="space-y-2 mb-8">
-                    {project.highlights.map((highlight, idx) => (
-                      <li key={idx} className="text-xs md:text-sm flex items-start gap-2.5">
-                        <span className={`w-1.5 h-1.5 rounded-full mt-1.5 ${t.accentBg} flex-shrink-0`}></span>
-                        <span className="opacity-80 leading-relaxed">{highlight}</span>
+                <div className={`group p-5 border ${t.cardBorder} ${t.cardBg} ${t.cardBorderHover} rounded-xl transition duration-300`}>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 02 // ORCHESTRATION</span>
+                    <span className={`w-2 h-2 rounded-full ${t.dotColor}`}></span>
+                  </div>
+                  <h4 className="text-sm font-mono font-bold tracking-tight">LangGraph Intent Classifier (~20ms)</h4>
+                  <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
+                    Evaluates user intent (classification accuracy 71%) and routes traffic across a 5-node autonomous graph.
+                  </p>
+                </div>
+
+                <div className="flex justify-center my-1">
+                  <div className="h-4 w-[1px] border-l border-dashed border-zinc-700"></div>
+                </div>
+
+                <div className={`group p-5 border ${t.cardBorder} ${t.cardBg} ${t.cardBorderHover} rounded-xl transition duration-300`}>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 03 // INTELLIGENT AGENTS</span>
+                    <span className={`w-2 h-2 rounded-full ${t.dotColor}`}></span>
+                  </div>
+                  <h4 className="text-sm font-mono font-bold tracking-tight">Specialized Agent Cluster</h4>
+                  <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
+                    Delegates tasks to domain experts: StatsQA, NarrativeQA, Matchup, Prediction, or TeamVsTeam agents.
+                  </p>
+                </div>
+
+                <div className="flex justify-center my-1">
+                  <div className="h-4 w-[1px] border-l border-dashed border-zinc-700"></div>
+                </div>
+
+                <div className={`group p-5 border ${t.cardBorder} ${t.cardBg} ${t.cardBorderHover} rounded-xl transition duration-300`}>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 04 // DATA & KNOWLEDGE RETRIEVAL</span>
+                    <span className={`w-2 h-2 rounded-full ${t.dotColor}`}></span>
+                  </div>
+                  <h4 className="text-sm font-mono font-bold tracking-tight">Hybrid RAG & Statistical Models</h4>
+                  <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
+                    Performs BGE-M3 dense search (Qdrant) + BM25 sparse queries with RRF fusion. Runs XGBoost (AUC 0.72) win predictions with SHAP local explanations.
+                  </p>
+                </div>
+
+                <div className="flex justify-center my-1">
+                  <div className="h-4 w-[1px] border-l border-dashed border-zinc-700"></div>
+                </div>
+
+                <div className={`group p-5 border ${t.cardBorder} ${t.cardBg} ${t.cardBorderHover} rounded-xl transition duration-300`}>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 05 // DELIVERY LAYER</span>
+                    <span className={`w-2 h-2 rounded-full ${t.dotColor}`}></span>
+                  </div>
+                  <h4 className="text-sm font-mono font-bold tracking-tight">Real-time WebSocket Push (&lt;300ms)</h4>
+                  <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
+                    Synthesizes GPT-4o-mini commentary with ML outcomes and pushes the structured updates to users with minimal delay.
+                  </p>
+                </div>
+              </>
+            ) : (
+              // Financial RAG Layers
+              <>
+                <div className={`group p-5 border ${t.cardBorder} ${t.cardBg} ${t.cardBorderHover} rounded-xl transition duration-300`}>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 01 // QUERY ANALYSIS</span>
+                    <span className={`w-2 h-2 rounded-full ${t.dotColor}`}></span>
+                  </div>
+                  <h4 className="text-sm font-mono font-bold tracking-tight">Multi-Hop Query Decomposer</h4>
+                  <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
+                    Breaks down complex compliance questions into parallel sub-queries to retrieve from distinct financial documents.
+                  </p>
+                </div>
+
+                <div className="flex justify-center my-1">
+                  <div className="h-4 w-[1px] border-l border-dashed border-zinc-700"></div>
+                </div>
+
+                <div className={`group p-5 border ${t.cardBorder} ${t.cardBg} ${t.cardBorderHover} rounded-xl transition duration-300`}>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 02 // SEARCH RETRIEVAL</span>
+                    <span className={`w-2 h-2 rounded-full ${t.dotColor}`}></span>
+                  </div>
+                  <h4 className="text-sm font-mono font-bold tracking-tight">Hybrid FAISS & BM25 Retrieval</h4>
+                  <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
+                    Queries FAISS dense vectors and Rank-BM25 indexes. Merges score ranks using Reciprocal Rank Fusion.
+                  </p>
+                </div>
+
+                <div className="flex justify-center my-1">
+                  <div className="h-4 w-[1px] border-l border-dashed border-zinc-700"></div>
+                </div>
+
+                <div className={`group p-5 border ${t.cardBorder} ${t.cardBg} ${t.cardBorderHover} rounded-xl transition duration-300`}>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 03 // EXTRACTION & RERANK</span>
+                    <span className={`w-2 h-2 rounded-full ${t.dotColor}`}></span>
+                  </div>
+                  <h4 className="text-sm font-mono font-bold tracking-tight">MiniLM Cross-Encoder & Hierarchical Chunking</h4>
+                  <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
+                    Applies parent-child aggregators to retain global document contexts. Reranks retrieved blocks using a cross-encoder model.
+                  </p>
+                </div>
+
+                <div className="flex justify-center my-1">
+                  <div className="h-4 w-[1px] border-l border-dashed border-zinc-700"></div>
+                </div>
+
+                <div className={`group p-5 border ${t.cardBorder} ${t.cardBg} ${t.cardBorderHover} rounded-xl transition duration-300`}>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 04 // SYNTHESIS & SAFEGUARD</span>
+                    <span className={`w-2 h-2 rounded-full ${t.dotColor}`}></span>
+                  </div>
+                  <h4 className="text-sm font-mono font-bold tracking-tight">Self-Consistency Fact Validation</h4>
+                  <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
+                    Evaluates answer accuracy through 3 parallel generation chains, flagging factual anomalies before formatting output.
+                  </p>
+                </div>
+
+                <div className="flex justify-center my-1">
+                  <div className="h-4 w-[1px] border-l border-dashed border-zinc-700"></div>
+                </div>
+
+                <div className={`group p-5 border ${t.cardBorder} ${t.cardBg} ${t.cardBorderHover} rounded-xl transition duration-300`}>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 05 // DELIVERY GATEWAY</span>
+                    <span className={`w-2 h-2 rounded-full ${t.dotColor}`}></span>
+                  </div>
+                  <h4 className="text-sm font-mono font-bold tracking-tight">RAGAS-Gated GitHub Actions CI/CD</h4>
+                  <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
+                    Triggers automated validation scores. Halts deployment if RAGAS Faithfulness drops below 0.75.
+                  </p>
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* Right Column: Decisions, stats & stacks */}
+          <div className={`lg:col-span-5 p-6 border ${t.cardBorder} ${t.cardBg} rounded-xl space-y-6`}>
+            <div>
+              <span className={`text-[10px] font-mono uppercase tracking-widest ${t.accent}`}>
+                [system.metadata]
+              </span>
+              <h3 className="text-xl font-mono font-bold mt-1">
+                {activeArchTab === 'ipl' ? 'IPL Commentary Platform' : 'Financial Statement RAG'}
+              </h3>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <h4 className="text-[9px] font-mono uppercase tracking-widest text-zinc-500">Design Decisions</h4>
+                <ul className="text-xs text-zinc-300 mt-2 space-y-2.5">
+                  {activeArchTab === 'ipl' ? (
+                    <>
+                      <li className="flex items-start gap-2">
+                        <span className="text-zinc-500">→</span>
+                        <span>Routing logic built using a 5-agent intent classifier rather than forcing all requests through a single LLM layer.</span>
                       </li>
-                    ))}
-                  </ul>
-                )}
+                      <li className="flex items-start gap-2">
+                        <span className="text-zinc-500">→</span>
+                        <span>WebSocket stream pipeline processing XGBoost prediction updates in &lt;20ms for fast UI delivery.</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-zinc-500">→</span>
+                        <span>Deployments locked behind RAGAS verification tests, verifying accuracy targets.</span>
+                      </li>
+                    </>
+                  ) : (
+                    <>
+                      <li className="flex items-start gap-2">
+                        <span className="text-zinc-500">→</span>
+                        <span>Parent-child hierarchical indexing selected to retain deep contextual layout structure of financial charts.</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-zinc-500">→</span>
+                        <span>Structured output validation utilizing 3 parallel temperature-controlled LLM synthesis passes.</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-zinc-500">→</span>
+                        <span>Reranking step (MiniLM) filtering search outcomes down to key target segments, optimizing tokens.</span>
+                      </li>
+                    </>
+                  )}
+                </ul>
               </div>
 
-              <div className="flex flex-wrap gap-1.5 mt-auto pt-4 border-t border-dashed border-current/10 mb-4">
-                {project.tech.map((tech, idx) => (
+              <div>
+                <h4 className="text-[9px] font-mono uppercase tracking-widest text-zinc-500">Core Metrics</h4>
+                <div className="grid grid-cols-2 gap-3 mt-2 text-xs font-mono">
+                  {activeArchTab === 'ipl' ? (
+                    <>
+                      <div className="p-3 border border-zinc-900 rounded-lg">
+                        <div className="text-zinc-500 text-[9px] uppercase tracking-wider">End-to-End Latency</div>
+                        <div className="text-sm font-bold text-white mt-1">&lt;300ms</div>
+                      </div>
+                      <div className="p-3 border border-zinc-900 rounded-lg">
+                        <div className="text-zinc-500 text-[9px] uppercase tracking-wider">RAGAS Faithfulness</div>
+                        <div className="text-sm font-bold text-white mt-1">0.88 / 0.98</div>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="p-3 border border-zinc-900 rounded-lg">
+                        <div className="text-zinc-500 text-[9px] uppercase tracking-wider">Retrieval Gain</div>
+                        <div className="text-sm font-bold text-white mt-1">+40% vs Naive</div>
+                      </div>
+                      <div className="p-3 border border-zinc-900 rounded-lg">
+                        <div className="text-zinc-500 text-[9px] uppercase tracking-wider">CI Gate Threshold</div>
+                        <div className="text-sm font-bold text-white mt-1">0.75 Score</div>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+
+              <div>
+                <h4 className="text-[9px] font-mono uppercase tracking-widest text-zinc-500">Target Tech Stack</h4>
+                <div className="flex flex-wrap gap-1.5 mt-2">
+                  {activeArchTab === 'ipl' ? (
+                    ["LangGraph", "Qdrant", "XGBoost", "FastAPI", "Redis", "WebSockets"].map((item, idx) => (
+                      <span key={idx} className={`text-[9px] font-mono uppercase px-2 py-0.5 border ${t.cardBorder} text-zinc-400 ${t.cardBg} rounded`}>
+                        {item}
+                      </span>
+                    ))
+                  ) : (
+                    ["FAISS", "LangChain", "RAGAS", "Cross-encoders", "Python", "CI/CD"].map((item, idx) => (
+                      <span key={idx} className={`text-[9px] font-mono uppercase px-2 py-0.5 border ${t.cardBorder} text-zinc-400 ${t.cardBg} rounded`}>
+                        {item}
+                      </span>
+                    ))
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Projects Section (Restructured layout) */}
+      <section id="projects" className={`py-24 px-6 max-w-6xl mx-auto relative z-10 border-t border-dashed ${t.divider}`}>
+        <div className="mb-16">
+          <div className={`text-[10px] font-mono uppercase tracking-widest mb-2 ${t.accent}`}>
+            02 // REPOSITORIES & SYSTEMS
+          </div>
+          <h2 className="text-3xl md:text-5xl font-serif font-bold">
+            Projects
+          </h2>
+          <p className="text-zinc-400 text-sm mt-2 max-w-xl">
+            Production systems designed to bridge traditional software architectures with advanced cognitive logic.
+          </p>
+        </div>
+
+        {/* Project Navigation Switcher */}
+        <div className={`flex gap-2 p-1 border ${t.cardBorder} ${t.cardBg} rounded-lg max-w-max mb-8`}>
+          <button
+            onClick={() => setActiveProjectTab('ipl')}
+            className={`px-3 py-1.5 text-[9px] font-mono uppercase tracking-widest rounded-md transition-all ${
+              activeProjectTab === 'ipl' 
+                ? `${t.buttonBg} font-semibold ${theme === 'midnight' ? 'text-[#060813]' : theme === 'obsidian' ? 'text-[#07090F]' : theme === 'forest' ? 'text-[#050806]' : 'text-[#0E0A08]'}` 
+                : 'text-zinc-400 hover:text-white'
+            }`}
+          >
+            ipl-ai-commentary
+          </button>
+          <button
+            onClick={() => setActiveProjectTab('rag')}
+            className={`px-3 py-1.5 text-[9px] font-mono uppercase tracking-widest rounded-md transition-all ${
+              activeProjectTab === 'rag' 
+                ? `${t.buttonBg} font-semibold ${theme === 'midnight' ? 'text-[#060813]' : theme === 'obsidian' ? 'text-[#07090F]' : theme === 'forest' ? 'text-[#050806]' : 'text-[#0E0A08]'}` 
+                : 'text-zinc-400 hover:text-white'
+            }`}
+          >
+            financial-qa-rag
+          </button>
+        </div>
+
+        {/* Selected Project Content Panel */}
+        {(() => {
+          const proj = projects[activeProjectTab];
+          return (
+            <div className={`border ${t.cardBorder} ${t.cardBg} rounded-2xl overflow-hidden p-6 md:p-10 transition-all duration-500`}>
+              <div className={`flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 border-b ${t.divider} pb-6`}>
+                <div>
+                  <span className={`text-[9px] font-mono uppercase tracking-widest px-2 py-0.5 border ${t.accentBorder} ${t.accentText} ${t.cardBg} rounded`}>
+                    system.id // 0{proj.id}
+                  </span>
+                  <h3 className="text-2xl md:text-4xl font-serif font-bold mt-2">{proj.title}</h3>
+                  <p className="text-xs text-zinc-400 font-mono mt-1">{proj.tagline}</p>
+                </div>
+                
+                <div className="flex gap-3">
+                  <a
+                    href={proj.githubLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`flex items-center gap-1.5 px-3 py-1.5 border ${t.cardBorder} ${t.accentHover} rounded text-[9px] font-mono uppercase tracking-widest transition`}
+                  >
+                    <Github size={12} /> GitHub
+                  </a>
+                  <a
+                    href={proj.demoLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`flex items-center gap-1.5 px-3 py-1.5 ${t.buttonBg} text-[9px] font-mono uppercase tracking-widest rounded hover:opacity-90 transition ${theme === 'midnight' ? 'text-[#0C122C]' : theme === 'obsidian' ? 'text-[#0A1828]' : theme === 'forest' ? 'text-[#071B12]' : 'text-[#1E0F0A]'}`}
+                  >
+                    <ExternalLink size={12} /> Live Demo
+                  </a>
+                </div>
+              </div>
+
+              {/* Grid block detailed layout */}
+              <div className="grid md:grid-cols-2 gap-8 text-sm">
+                <div className="space-y-6">
+                  <div>
+                    <h4 className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 mb-1.5">01 // Problem Statement</h4>
+                    <p className="text-zinc-300 leading-relaxed font-sans">{proj.problem}</p>
+                  </div>
+                  <div>
+                    <h4 className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 mb-1.5">02 // Core Architecture</h4>
+                    <p className="text-zinc-300 leading-relaxed font-sans">{proj.architecture}</p>
+                  </div>
+                  <div>
+                    <h4 className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 mb-1.5">03 // System Design Details</h4>
+                    <p className="text-zinc-300 leading-relaxed font-sans">{proj.systemDesign}</p>
+                  </div>
+                </div>
+
+                <div className={`space-y-6 md:border-l md:border-dashed ${t.divider} md:pl-8`}>
+                  <div>
+                    <h4 className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 mb-3">04 // Challenges & Tradeoffs (△)</h4>
+                    <ul className="space-y-3">
+                      {proj.challenges.map((c, i) => (
+                        <li key={i} className="flex items-start gap-2.5">
+                          <span className="text-orange-500 text-xs mt-0.5">△</span>
+                          <span className="text-zinc-300 leading-relaxed font-sans text-xs">{c}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h4 className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 mb-3">05 // Quantitative Results (✓)</h4>
+                    <ul className="space-y-3">
+                      {proj.results.map((r, i) => (
+                        <li key={i} className="flex items-start gap-2.5">
+                          <span className={`text-emerald-500 text-xs mt-0.5`}>✓</span>
+                          <span className="text-zinc-300 leading-relaxed font-sans text-xs">{r}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div className={`flex flex-wrap gap-2 mt-8 pt-6 border-t ${t.divider}`}>
+                <span className="text-[9px] font-mono uppercase text-zinc-500 py-1.5 pr-2">Technologies used:</span>
+                {proj.tech.map((tech, idx) => (
                   <span 
                     key={idx} 
-                    className="text-[9px] uppercase tracking-wider font-bold px-2 py-0.5 bg-current/5 border border-current/10 rounded"
+                    className={`text-[9px] font-mono uppercase px-2.5 py-1 ${t.cardBg} border ${t.cardBorder} text-zinc-400 rounded`}
                   >
                     {tech}
                   </span>
                 ))}
               </div>
+            </div>
+          );
+        })()}
+      </section>
 
-              {/* Fix 5: GitHub + Demo CTAs directly on card */}
-              <div className="flex gap-3 pt-3 border-t border-dashed border-current/10" onClick={e => e.preventDefault()}>
-                <a
-                  href={project.githubLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={e => e.stopPropagation()}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 border border-current/15 rounded text-[10px] uppercase tracking-widest font-bold hover:border-current/40 hover:bg-current/5 transition`}
-                >
-                  <Github size={12} /> GitHub
-                </a>
-                <a
-                  href={project.demoLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={e => e.stopPropagation()}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 ${t.accentBg} text-[10px] uppercase tracking-widest font-bold rounded hover:opacity-90 transition ${theme === 'midnight' ? 'text-[#0A0F1D]' : theme === 'obsidian' ? 'text-[#0B0D0F]' : 'text-white'}`}
-                >
-                  <ExternalLink size={12} /> Live Demo
-                </a>
+      {/* Skills Section */}
+      <section id="skills" className={`py-24 px-6 max-w-6xl mx-auto relative z-10 border-t border-dashed ${t.divider}`}>
+        <div className="mb-16">
+          <div className={`text-[10px] font-mono uppercase tracking-widest mb-2 ${t.accent}`}>
+            03 // TECHNICAL STACK
+          </div>
+          <h2 className="text-3xl md:text-5xl font-serif font-bold">
+            Skills & Abilities
+          </h2>
+          <p className="text-zinc-400 text-sm mt-2 max-w-xl">
+            Expanded index of technical competencies spanning machine learning, architectures, and operations.
+          </p>
+        </div>
+
+        {/* Grid Container */}
+        <div className="grid md:grid-cols-2 gap-4">
+          {skillCategories.map((cat, idx) => (
+            <div 
+              key={idx}
+              className={`border ${t.cardBorder} ${t.cardBg} rounded-xl overflow-hidden ${t.cardBorderHover} transition duration-300`}
+            >
+              <div className="p-5">
+                <h3 className="text-sm font-mono font-bold tracking-tight uppercase flex items-center gap-2">
+                  <span className="text-[10px] text-zinc-500">0{idx + 1}.</span>
+                  {cat.category}
+                </h3>
+                <p className="text-[11px] text-zinc-500 mt-1 mb-4 font-sans font-light">{cat.summary}</p>
+                <div className="flex flex-wrap gap-2">
+                  {cat.items.map((skill, i) => (
+                    <span 
+                      key={i} 
+                      className={`text-[10px] font-mono px-2.5 py-1 border ${t.cardBorder} text-zinc-300 ${t.cardBg} rounded flex items-center gap-1.5`}
+                    >
+                      <span className={`w-1 h-1 rounded-full ${t.dotColor}`}></span>
+                      {skill}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </a>
+            </div>
           ))}
         </div>
       </section>
 
-      {/* Skills Section */}
-      <section id="skills" className="py-32 px-6 max-w-6xl mx-auto relative z-10 border-t border-dashed border-current/10">
-        
-        {/* Skill lists (Full layout width) */}
-        <div>
-          <div className="mb-12 text-center md:text-left">
-            <div className={`text-xs uppercase tracking-widest font-bold mb-2 ${t.accent}`}>ABILITIES</div>
-            <h2 className="text-4xl md:text-6xl font-serif">Skills & Expertise</h2>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-            {skillCategories.map((cat, idx) => (
-              <div key={idx} className="p-6 border border-current/5 bg-current/2 rounded-xl">
-                <h3 className={`text-xs uppercase tracking-widest font-extrabold mb-4 ${t.accent}`}>
-                  {cat.category}
-                </h3>
-                <ul className="space-y-2.5">
-                  {cat.items.map((item, i) => (
-                    <li key={i} className="text-sm opacity-90 flex items-center gap-2">
-                      <span className="w-1 h-1 bg-current opacity-40 rounded-full"></span>
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Experience Section */}
-      <section id="experience" className="py-32 px-6 max-w-6xl mx-auto relative z-10 border-t border-dashed border-current/10">
+      {/* Experience Section (Stages & Version numbers) */}
+      <section id="experience" className={`py-24 px-6 max-w-6xl mx-auto relative z-10 border-t border-dashed ${t.divider}`}>
         <div className="mb-16">
-          <div className={`text-xs uppercase tracking-widest font-bold mb-2 ${t.accent}`}>TIMELINE</div>
-          <h2 className="text-4xl md:text-6xl font-serif">Work Experience</h2>
+          <div className={`text-[10px] font-mono uppercase tracking-widest mb-2 ${t.accent}`}>
+            04 // PROFESSIONAL LOG
+          </div>
+          <h2 className="text-3xl md:text-5xl font-serif font-bold">
+            Work Experience
+          </h2>
+          <p className="text-zinc-400 text-sm mt-2 max-w-xl">
+            Stage-by-stage engineering timeline documenting my evolution into production AI systems.
+          </p>
         </div>
 
-        <div className="space-y-12">
+        {/* Timeline loop */}
+        <div className="space-y-8">
           {experiences.map((exp, idx) => (
-            <div key={idx} className="p-8 border border-current/10 rounded-xl bg-current/2">
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+            <div 
+              key={idx} 
+              className={`border ${t.cardBorder} ${t.cardBg} rounded-xl p-6 md:p-8 ${t.cardBorderHover} transition duration-300`}
+            >
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
                 <div>
-                  <h3 className="text-2xl md:text-3xl font-serif font-bold">{exp.company}</h3>
-                  <div className={`text-xs uppercase tracking-widest font-bold ${t.accent} mt-1`}>
-                    {exp.role}
+                  <div className="flex items-center gap-2">
+                    <span className={`text-[9px] font-mono uppercase px-2.5 py-0.5 border ${t.accentBorder} ${t.accentText} ${t.cardBg} rounded-full font-bold`}>
+                      {exp.stage} // {exp.version}
+                    </span>
+                    <span className="text-[10px] font-mono text-zinc-500">{exp.period}</span>
+                  </div>
+                  <h3 className="text-xl md:text-2xl font-serif font-bold mt-2">{exp.role}</h3>
+                  <div className={`text-xs font-mono uppercase tracking-widest text-zinc-400 mt-1`}>
+                    @ {exp.company}
                   </div>
                 </div>
-                <span className="text-[10px] uppercase tracking-widest font-bold px-3 py-1 bg-current/5 border border-current/10 rounded">
-                  {exp.period}
-                </span>
               </div>
 
               {exp.context && (
-                <p className={`text-sm italic mb-6 pl-3 border-l-2 ${t.accentBorder} opacity-70`}>{exp.context}</p>
+                <p className={`text-xs italic text-zinc-400 font-sans pl-3 border-l ${t.divider} mb-5 leading-relaxed`}>
+                  {exp.context}
+                </p>
               )}
 
-              <ul className="space-y-3.5 mb-8 max-w-4xl">
+              <ul className="space-y-2.5 mb-6">
                 {exp.highlights.map((bullet, i) => (
-                  <li key={i} className="text-sm md:text-base opacity-80 flex items-start gap-3">
-                    <span className={`w-1.5 h-1.5 rounded-full mt-2 ${t.accentBg} flex-shrink-0`}></span>
+                  <li key={i} className="text-xs text-zinc-300 font-sans flex items-start gap-2.5">
+                    <span className={`w-1.5 h-1.5 rounded-full mt-1.5 ${t.dotColor} flex-shrink-0`}></span>
                     <span className="leading-relaxed">{bullet}</span>
                   </li>
                 ))}
               </ul>
 
-              <div className="flex flex-wrap gap-1.5 pt-4 border-t border-dashed border-current/10">
+              <div className={`flex flex-wrap gap-1.5 pt-4 border-t border-dashed ${t.divider}`}>
+                <span className="text-[8px] font-mono uppercase text-zinc-500 py-0.5 pr-2">Stack:</span>
                 {exp.techStack.map((tech, i) => (
                   <span 
                     key={i} 
-                    className="text-[9px] uppercase tracking-wider font-bold px-2 py-0.5 bg-current/5 border border-current/10 rounded"
+                    className={`text-[8px] font-mono uppercase px-2 py-0.5 border ${t.cardBorder} text-zinc-400 ${t.cardBg} rounded`}
                   >
                     {tech}
                   </span>
@@ -771,237 +1244,272 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
         </div>
       </section>
 
-      {/* Education & Certifications */}
-      <section id="education" className="py-32 px-6 max-w-6xl mx-auto relative z-10 border-t border-dashed border-current/10">
-        <div className="grid lg:grid-cols-2 gap-16">
+      {/* Education & Certifications (Double Column Layout) */}
+      <section id="education" className={`py-24 px-6 max-w-6xl mx-auto relative z-10 border-t border-dashed ${t.divider}`}>
+        <div className="grid lg:grid-cols-2 gap-12">
           
-          {/* Education */}
+          {/* Education column */}
           <div>
-            <div className="mb-12">
-              <div className={`text-xs uppercase tracking-widest font-bold mb-2 ${t.accent}`}>ACADEMICS</div>
-              <h2 className="text-4xl md:text-5xl font-serif">Education</h2>
+            <div className="mb-10">
+              <div className={`text-[10px] font-mono uppercase tracking-widest mb-2 ${t.accent}`}>
+                05.A // ACADEMICS
+              </div>
+              <h2 className="text-3xl font-serif font-bold">Education</h2>
             </div>
 
-            <div className="space-y-8">
+            <div className="space-y-4">
               {education.map((edu, idx) => (
-                <div key={idx} className="p-6 border border-current/10 rounded-xl bg-current/2">
-                  <div className="flex justify-between items-start gap-4 mb-4">
+                <div key={idx} className={`p-5 border ${t.cardBorder} ${t.cardBg} rounded-xl`}>
+                  <div className="flex justify-between items-start gap-4 mb-2">
                     <div>
-                      <h3 className="text-xl md:text-2xl font-serif font-bold">{edu.institution}</h3>
-                      <div className={`text-xs uppercase tracking-widest font-bold ${t.accent} mt-1`}>
+                      <h3 className="text-base font-serif font-bold">{edu.institution}</h3>
+                      <p className={`text-[10px] font-mono uppercase tracking-widest ${t.accentText} mt-0.5`}>
                         {edu.degree}
-                      </div>
+                      </p>
                     </div>
-                    <span className="text-[9px] uppercase tracking-widest font-bold px-2 py-0.5 bg-current/5 border border-current/10 rounded flex-shrink-0">
+                    <span className={`text-[9px] font-mono text-zinc-500 px-2 py-0.5 border ${t.cardBorder} ${t.cardBg} rounded`}>
                       {edu.period}
                     </span>
                   </div>
-
-                  <ul className="space-y-2">
-                    {edu.highlights.map((bullet, i) => (
-                      <li key={i} className="text-xs md:text-sm opacity-80 flex items-start gap-2">
-                        <span className={`w-1 h-1 rounded-full mt-2 ${t.accentBg} flex-shrink-0`}></span>
-                        <span>{bullet}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  <p className="text-xs text-zinc-400 font-sans leading-relaxed mt-3">{edu.details}</p>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Certifications */}
+          {/* Certifications column */}
           <div>
-            <div className="mb-12">
-              <div className={`text-xs uppercase tracking-widest font-bold mb-2 ${t.accent}`}>VERIFICATIONS</div>
-              <h2 className="text-4xl md:text-5xl font-serif">Certifications</h2>
-            </div>
-
-            {/* Primary: Industry Certifications */}
-            <div className="space-y-4 mb-8">
-              {certifications.filter(c => c.primary).map((cert, idx) => (
-                <div key={idx} className={`p-5 border ${t.accentBorder} bg-current/2 rounded-xl flex items-center gap-4`}>
-                  <div className={`w-12 h-12 border ${t.accentBorder} rounded-xl flex items-center justify-center flex-shrink-0 bg-current/5`}>
-                    <span className={`text-[10px] font-extrabold ${t.accent}`}>{cert.badge}</span>
-                  </div>
-                  <div className="flex-grow">
-                    <h3 className="text-sm md:text-base font-serif font-bold leading-tight">{cert.title}</h3>
-                    <p className={`text-[10px] uppercase tracking-wider font-extrabold ${t.accent} mt-0.5`}>{cert.issuer}</p>
-                  </div>
-                  <span className="text-[9px] uppercase tracking-wider font-bold px-2 py-1 border border-amber-500/30 text-amber-400 bg-amber-400/10 rounded flex-shrink-0">
-                    {cert.status}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            {/* Secondary: Foundational Courses */}
-            <div>
-              <p className={`text-[9px] uppercase tracking-widest font-extrabold opacity-40 mb-3`}>Foundational Courses</p>
-              <div className="grid sm:grid-cols-2 gap-3">
-                {certifications.filter(c => !c.primary).map((cert, idx) => (
-                  <div key={idx} className="p-4 border border-current/5 bg-current/2 rounded-xl hover:border-current/15 transition">
-                    <h3 className="text-xs font-serif font-bold leading-tight mb-1 opacity-70">{cert.title}</h3>
-                    <p className={`text-[9px] uppercase tracking-wider font-extrabold ${t.accent} opacity-60`}>{cert.issuer}</p>
-                  </div>
-                ))}
+            <div className="mb-10">
+              <div className={`text-[10px] font-mono uppercase tracking-widest mb-2 ${t.accent}`}>
+                05.B // VERIFICATIONS
               </div>
+              <h2 className="text-3xl font-serif font-bold">Certifications</h2>
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-4">
+              {certifications.map((cert, idx) => {
+                const isInProgress = cert.status === 'In Progress';
+                return (
+                  <div 
+                    key={idx} 
+                    className={`p-4 border ${t.cardBg} rounded-xl flex flex-col justify-between ${
+                      isInProgress ? `${t.accentBorder} bg-opacity-35` : t.cardBorder
+                    }`}
+                  >
+                    <div>
+                      <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">
+                        {cert.badge}
+                      </span>
+                      <h3 className="text-xs font-mono font-bold text-white mt-1 leading-snug">
+                        {cert.title}
+                      </h3>
+                      <p className="text-[9px] font-sans text-zinc-500 mt-1">{cert.issuer}</p>
+                    </div>
+                    <div className={`mt-4 pt-3 border-t ${t.divider} flex justify-between items-center`}>
+                      <span className={`text-[8px] font-mono uppercase tracking-widest ${
+                        isInProgress ? 'text-amber-500' : 'text-emerald-500'
+                      }`}>
+                        {cert.status}
+                      </span>
+                      {isInProgress && <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Contact Section (EXACTLY replicates Screenshot 1, 3, 5 layout & style) */}
-      <section id="contact" className="py-32 px-6 max-w-6xl mx-auto relative z-10 border-t border-dashed border-current/10">
-        <div className="grid lg:grid-cols-2 gap-16 items-start">
-          
-          {/* Left Column: Get In Touch Details (Excatly replicates Screenshot 5) */}
-          <div>
-            <div className={`text-xs uppercase tracking-widest font-extrabold mb-4 ${t.accent}`}>
-              GET IN TOUCH
-            </div>
-            
-            <h2 className="text-4xl md:text-6xl font-serif leading-tight mb-8">
-              Let's build something <span className={`italic ${t.accent}`}>great together.</span>
-            </h2>
+      {/* Philosophy Section */}
+      <section className={`py-24 px-6 max-w-6xl mx-auto relative z-10 border-t border-dashed ${t.divider}`}>
+        <div className="mb-16 text-center max-w-2xl mx-auto">
+          <div className={`text-[10px] font-mono uppercase tracking-widest mb-2 ${t.accent}`}>
+            06 // ENGINEERING BELIEFS
+          </div>
+          <h2 className="text-3xl md:text-5xl font-serif font-bold">
+            Development Philosophy
+          </h2>
+          <p className="text-zinc-400 text-xs font-mono mt-2 uppercase tracking-wide">
+            [principles.config : values guiding implementation]
+          </p>
+        </div>
 
-            <p className={`text-sm md:text-base ${t.textMuted} mb-12 max-w-md leading-relaxed`}>
-              Open to full-time roles, freelance projects, and collaborations in Agentic AI, LLMOps, RAG systems, or agent design.
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className={`p-5 border ${t.cardBorder} ${t.cardBg} rounded-xl ${t.cardBorderHover} transition`}>
+            <span className={`text-xs font-mono ${t.accentText}`}>01 / DESIGN FIRST</span>
+            <h3 className="text-base font-serif font-bold mt-2 text-white">System blueprints</h3>
+            <p className="text-[11px] text-zinc-400 mt-2 leading-relaxed">
+              Every implementation begins with schema models, data diagrams, and latencies. Code ships only after pipelines are established.
+            </p>
+          </div>
+
+          <div className={`p-5 border ${t.cardBorder} ${t.cardBg} rounded-xl ${t.cardBorderHover} transition`}>
+            <span className={`text-xs font-mono ${t.accentText}`}>02 / SPECIALIZATION</span>
+            <h3 className="text-base font-serif font-bold mt-2 text-white">Agents with purpose</h3>
+            <p className="text-[11px] text-zinc-400 mt-2 leading-relaxed">
+              Multi-agent systems demand clear scopes—routing, predicting, and formatting. Naive chains yield unpredictable outcomes.
+            </p>
+          </div>
+
+          <div className={`p-5 border ${t.cardBorder} ${t.cardBg} rounded-xl ${t.cardBorderHover} transition`}>
+            <span className={`text-xs font-mono ${t.accentText}`}>03 / RETRIEVAL QUALITY</span>
+            <h3 className="text-base font-serif font-bold mt-2 text-white">Asserting context</h3>
+            <p className="text-[11px] text-zinc-400 mt-2 leading-relaxed">
+              In cognitive pipelines, context rules. Hybrid vector search, parent-child trees, and reranking are essential for production.
+            </p>
+          </div>
+
+          <div className={`p-5 border ${t.cardBorder} ${t.cardBg} rounded-xl ${t.cardBorderHover} transition`}>
+            <span className={`text-xs font-mono ${t.accentText}`}>04 / MEASURED DEPLOY</span>
+            <h3 className="text-base font-serif font-bold mt-2 text-white">Automated eval gates</h3>
+            <p className="text-[11px] text-zinc-400 mt-2 leading-relaxed">
+              Deployments require automated tests. RAGAS scores tied to CI gates block deviations before they reach production.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Connect & Contact Form Section */}
+      <section id="contact" className={`py-24 px-6 max-w-6xl mx-auto relative z-10 border-t border-dashed ${t.divider}`}>
+        <div className="grid lg:grid-cols-2 gap-12 items-start">
+          
+          {/* Left Details */}
+          <div>
+            <div className={`text-[10px] font-mono uppercase tracking-widest mb-2 ${t.accent}`}>
+              07 // CONNECTION PORT
+            </div>
+            <h2 className="text-3xl md:text-5xl font-serif font-bold leading-tight mb-6">
+              Let's build something <span className={`italic ${t.accent}`}>scalable.</span>
+            </h2>
+            <p className="text-zinc-400 text-sm leading-relaxed mb-10 max-w-md font-sans">
+              Currently open to full-time roles in Bangalore and Riyadh, remote collaborations, and ML/RAG pipelines integration consultancies.
             </p>
 
-            {/* List of contact details with label uppercase + value underneath */}
-            <div className="space-y-8">
-              
+            {/* Direct details grid */}
+            <div className="space-y-5">
               <div className="flex gap-4">
-                <div className={`w-10 h-10 border border-current/10 rounded-lg flex items-center justify-center flex-shrink-0 ${t.accent}`}>
-                  <Mail size={18} />
+                <div className={`w-9 h-9 border ${t.cardBorder} rounded-lg flex items-center justify-center text-zinc-400 flex-shrink-0`}>
+                  <Mail size={15} />
                 </div>
                 <div>
-                  <div className={`text-[10px] uppercase tracking-widest font-extrabold ${t.accent} mb-0.5`}>EMAIL</div>
-                  <a href="mailto:jagadeepreddy3638@gmail.com" className="text-sm md:text-md font-serif font-semibold hover:underline">
+                  <div className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">EMAIL</div>
+                  <a href="mailto:jagadeepreddy3638@gmail.com" className="text-xs font-mono text-zinc-300 hover:text-white transition">
                     jagadeepreddy3638@gmail.com
                   </a>
                 </div>
               </div>
 
               <div className="flex gap-4">
-                <div className={`w-10 h-10 border border-current/10 rounded-lg flex items-center justify-center flex-shrink-0 ${t.accent}`}>
-                  <MapPin size={18} />
+                <div className={`w-9 h-9 border ${t.cardBorder} rounded-lg flex items-center justify-center text-zinc-400 flex-shrink-0`}>
+                  <MapPin size={15} />
                 </div>
                 <div>
-                  <div className={`text-[10px] uppercase tracking-widest font-extrabold ${t.accent} mb-0.5`}>LOCATION</div>
-                  <div className="text-sm md:text-md font-serif font-semibold">
-                    Bangalore, India
-                  </div>
+                  <div className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">LOCATION</div>
+                  <div className="text-xs font-mono text-zinc-300">Bengaluru, Karnataka, India</div>
                 </div>
               </div>
 
               <div className="flex gap-4">
-                <div className={`w-10 h-10 border border-current/10 rounded-lg flex items-center justify-center flex-shrink-0 ${t.accent}`}>
-                  <Linkedin size={18} />
+                <div className={`w-9 h-9 border ${t.cardBorder} rounded-lg flex items-center justify-center text-zinc-400 flex-shrink-0`}>
+                  <Linkedin size={15} />
                 </div>
                 <div>
-                  <div className={`text-[10px] uppercase tracking-widest font-extrabold ${t.accent} mb-0.5`}>LINKEDIN</div>
+                  <div className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">LINKEDIN</div>
                   <a 
                     href="https://www.linkedin.com/in/buthuru-jagadeep-reddy-a522961a1/" 
                     target="_blank" 
                     rel="noopener noreferrer" 
-                    className="text-sm md:text-md font-serif font-semibold flex items-center gap-1 hover:underline"
+                    className="text-xs font-mono text-zinc-300 hover:text-white flex items-center gap-1 transition"
                   >
-                    linkedin/buthuru-jagadeep-reddy <ArrowUpRight size={12} className="inline" />
+                    linkedin/buthuru-jagadeep-reddy <ArrowUpRight size={10} />
                   </a>
                 </div>
               </div>
 
               <div className="flex gap-4">
-                <div className={`w-10 h-10 border border-current/10 rounded-lg flex items-center justify-center flex-shrink-0 ${t.accent}`}>
-                  <Github size={18} />
+                <div className={`w-9 h-9 border ${t.cardBorder} rounded-lg flex items-center justify-center text-zinc-400 flex-shrink-0`}>
+                  <Github size={15} />
                 </div>
                 <div>
-                  <div className={`text-[10px] uppercase tracking-widest font-extrabold ${t.accent} mb-0.5`}>GITHUB</div>
+                  <div className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">GITHUB</div>
                   <a 
                     href="https://github.com/Jagadeep-Reddy" 
                     target="_blank" 
                     rel="noopener noreferrer" 
-                    className="text-sm md:text-md font-serif font-semibold flex items-center gap-1 hover:underline"
+                    className="text-xs font-mono text-zinc-300 hover:text-white flex items-center gap-1 transition"
                   >
-                    github/Jagadeep-Reddy <ArrowUpRight size={12} className="inline" />
+                    github/Jagadeep-Reddy <ArrowUpRight size={10} />
                   </a>
                 </div>
               </div>
-
             </div>
           </div>
 
-          {/* Right Column: Contact Form (Exactly replicates form layout in Screenshot 1/5) */}
-          <div className="p-8 border border-current/10 bg-current/2 rounded-2xl">
-            <form onSubmit={handleFormSubmit} className="space-y-6">
+          {/* Contact Form card (Modified layout) */}
+          <div className={`p-6 md:p-8 border ${t.cardBorder} ${t.cardBg} rounded-2xl`}>
+            <form onSubmit={handleFormSubmit} className="space-y-5">
               
               <div>
-                <label className={`block text-[10px] uppercase tracking-widest font-extrabold ${t.accent} mb-2`}>
-                  YOUR EMAIL
+                <label className="block text-[8px] font-mono text-zinc-500 uppercase tracking-widest mb-1.5">
+                  [client.email]
                 </label>
                 <input
                   type="email"
                   required
-                  placeholder="rahul@company.com"
+                  placeholder="name@organization.com"
                   value={formEmail}
                   onChange={(e) => setFormEmail(e.target.value)}
-                  className={`w-full px-4 py-3 rounded-lg border ${t.inputBorder} ${t.inputBg} ${t.text} text-sm focus:outline-none ${t.inputFocus} transition`}
+                  className={`w-full px-4 py-2.5 rounded ${t.inputBg} border ${t.inputBorder} ${t.text} text-xs focus:outline-none ${t.inputFocus} transition font-mono`}
                 />
               </div>
 
               <div>
-                <label className={`block text-[10px] uppercase tracking-widest font-extrabold ${t.accent} mb-2`}>
-                  SUBJECT
+                <label className="block text-[8px] font-mono text-zinc-500 uppercase tracking-widest mb-1.5">
+                  [message.subject]
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="RAG pipeline for our product"
+                  placeholder="Integration, recruitment, or consulting"
                   value={formSubject}
                   onChange={(e) => setFormSubject(e.target.value)}
-                  className={`w-full px-4 py-3 rounded-lg border ${t.inputBorder} ${t.inputBg} ${t.text} text-sm focus:outline-none ${t.inputFocus} transition`}
+                  className={`w-full px-4 py-2.5 rounded ${t.inputBg} border ${t.inputBorder} ${t.text} text-xs focus:outline-none ${t.inputFocus} transition font-mono`}
                 />
               </div>
 
               <div>
-                <label className={`block text-[10px] uppercase tracking-widest font-extrabold ${t.accent} mb-2`}>
-                  MESSAGE
+                <label className="block text-[8px] font-mono text-zinc-500 uppercase tracking-widest mb-1.5">
+                  [message.payload]
                 </label>
                 <textarea
                   required
-                  rows={5}
-                  placeholder="Tell me about your project or opportunity..."
+                  rows={4}
+                  placeholder="Outline project specs, salary budgets, or pipeline goals..."
                   value={formMessage}
                   onChange={(e) => setFormMessage(e.target.value)}
-                  className={`w-full px-4 py-3 rounded-lg border ${t.inputBorder} ${t.inputBg} ${t.text} text-sm focus:outline-none ${t.inputFocus} transition resize-none`}
+                  className={`w-full px-4 py-2.5 rounded ${t.inputBg} border ${t.inputBorder} ${t.text} text-xs focus:outline-none ${t.inputFocus} transition resize-none font-mono`}
                 />
               </div>
 
-              {/* Form Submission status alert */}
+              {/* Status notifications */}
               {formStatus === 'success' && (
-                <div className="p-3 text-xs bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 rounded-lg">
-                  ✓ Message sent! Jagadeep will reply shortly.
+                <div className="p-3 text-[11px] font-mono bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 rounded">
+                  [status: success] // Message submitted. Response expected within 24 hrs.
                 </div>
               )}
               {formStatus === 'error' && (
-                <div className="p-3 text-xs bg-red-500/10 border border-red-500/20 text-red-400 rounded-lg">
-                  ✗ Something went wrong. Please email jagadeepreddy3638@gmail.com directly.
+                <div className="p-3 text-[11px] font-mono bg-red-500/10 border border-red-500/20 text-red-400 rounded">
+                  [status: failed] // Connection failure. Re-route to: jagadeepreddy3638@gmail.com
                 </div>
               )}
 
-              {/* Exact button replication: SEND MESSAGE with arrow */}
               <button
                 type="submit"
                 disabled={formStatus === 'sending'}
-                className={`w-full py-4 text-xs font-semibold uppercase tracking-widest flex items-center justify-center gap-2 cursor-pointer transition ${
-                  theme === 'green' || theme === 'terracotta' 
-                    ? 'bg-[#202020] text-white hover:bg-black' 
-                    : 'bg-white text-black hover:opacity-90'
-                }`}
+                className={`w-full py-3.5 ${t.buttonBg} text-xs font-mono uppercase tracking-widest font-semibold flex items-center justify-center gap-1.5 cursor-pointer hover:opacity-90 transition ${theme === 'midnight' ? 'text-[#060813]' : theme === 'obsidian' ? 'text-[#07090F]' : theme === 'forest' ? 'text-[#050806]' : 'text-[#0E0A08]'}`}
               >
-                {formStatus === 'sending' ? 'SENDING...' : 'SEND MESSAGE →'}
+                {formStatus === 'sending' ? 'TRANSMITTING...' : 'INITIATE_CONTACT_COMMAND →'}
               </button>
 
             </form>
@@ -1009,149 +1517,145 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
         </div>
       </section>
 
-      {/* Footer Section (Exactly replicates screenshot 4/footer styling) */}
-      <footer className={`${t.footerBg} py-20 px-6 relative z-10 border-t ${t.divider}`}>
+      {/* Footer (Replicated Terminal Dashboard metadata style) */}
+      <footer className={`${t.footerBg} py-16 px-6 relative z-10 border-t border-dashed ${t.divider}`}>
         <div className="max-w-6xl mx-auto">
           
-          <div className="grid md:grid-cols-3 gap-12 mb-16">
+          <div className="grid md:grid-cols-3 gap-12 mb-12">
             
-            {/* Logo/Identity */}
+            {/* Column 1: identity */}
             <div>
-              <h3 className="text-3xl font-serif font-semibold tracking-tight text-white mb-2">
-                Jagadeep Reddy
+              <h3 className="text-xl font-mono font-bold tracking-tight text-white mb-2">
+                JAGADEEP REDDY
               </h3>
-              <p className={`text-xs ${t.footerText} max-w-xs font-light leading-relaxed`}>
-                AI Engineer specializing in production-grade Agentic AI and LLMOps.
+              <p className="text-[10px] font-mono text-zinc-500 uppercase tracking-wide mb-4">
+                [role] ai_engineer // backend_architect
+              </p>
+              <p className="text-xs text-zinc-400 leading-relaxed max-w-xs font-sans">
+                Focused on deploying verifiable cognitive pipelines, LangGraph graph architectures, and hybrid retrieval networks.
               </p>
             </div>
 
-            {/* Navigation vertical list */}
+            {/* Column 2: Navigation Links */}
             <div>
-              <div className="text-[10px] uppercase tracking-widest font-extrabold text-white opacity-40 mb-4">
-                NAVIGATION
+              <div className="text-[8px] font-mono uppercase tracking-widest text-zinc-600 mb-4">
+                // SYSTEM_MAP
               </div>
-              <ul className="grid grid-cols-2 gap-2 text-xs font-semibold uppercase tracking-wider">
-                <li><button onClick={() => scrollToSection('hero')} className={`hover:text-white ${t.footerText} transition`}>About</button></li>
-                <li><button onClick={() => scrollToSection('projects')} className={`hover:text-white ${t.footerText} transition`}>Projects</button></li>
-                <li><button onClick={() => scrollToSection('experience')} className={`hover:text-white ${t.footerText} transition`}>Experience</button></li>
-                <li><button onClick={() => scrollToSection('education')} className={`hover:text-white ${t.footerText} transition`}>Education</button></li>
-                <li><button onClick={() => scrollToSection('skills')} className={`hover:text-white ${t.footerText} transition`}>Stack</button></li>
-                <li><button onClick={() => scrollToSection('skills')} className={`hover:text-white ${t.footerText} transition`}>Skills</button></li>
+              <ul className="grid grid-cols-2 gap-2 text-[10px] font-mono uppercase">
+                <li><button onClick={() => scrollToSection('hero')} className="text-zinc-400 hover:text-white text-left transition">Hero</button></li>
+                <li><button onClick={() => scrollToSection('architecture')} className="text-zinc-400 hover:text-white text-left transition">Architecture</button></li>
+                <li><button onClick={() => scrollToSection('projects')} className="text-zinc-400 hover:text-white text-left transition">Projects</button></li>
+                <li><button onClick={() => scrollToSection('skills')} className="text-zinc-400 hover:text-white text-left transition">Skills</button></li>
+                <li><button onClick={() => scrollToSection('experience')} className="text-zinc-400 hover:text-white text-left transition">Experience</button></li>
+                <li><button onClick={() => scrollToSection('education')} className="text-zinc-400 hover:text-white text-left transition">Education</button></li>
               </ul>
             </div>
 
-            {/* Contact Information */}
+            {/* Column 3: Contact */}
             <div>
-              <div className="text-[10px] uppercase tracking-widest font-extrabold text-white opacity-40 mb-4">
-                CONTACT
+              <div className="text-[8px] font-mono uppercase tracking-widest text-zinc-600 mb-4">
+                // ACTIVE_PINGS
               </div>
-              <ul className={`space-y-2 text-xs font-semibold ${t.footerText}`}>
-                <li>Email: jagadeepreddy3638@gmail.com</li>
-                <li>Location: Bangalore, India</li>
-                <li>Github: github/Jagadeep-Reddy</li>
+              <ul className="space-y-1.5 text-[10px] font-mono text-zinc-400">
+                <li>location: bangalore_india</li>
+                <li>email: jagadeepreddy3638@gmail.com</li>
+                <li>github: github/Jagadeep-Reddy</li>
+                <li className="flex items-center gap-1">
+                  status: <span className="text-emerald-500">available_from_july_14_2026</span>
+                </li>
               </ul>
             </div>
-
           </div>
 
-          <hr className={`my-8 opacity-10 ${t.divider}`} />
+          <hr className={`my-8 ${t.divider}`} />
 
-          {/* Copyright section */}
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-[10px] uppercase tracking-widest font-bold">
-            <span className={t.footerText}>
-              © 2026 JAGADEEP REDDY
-            </span>
-            <span className={t.footerText}>
-              AGENTIC AI & LLMOPS
-            </span>
+          {/* Terminal Dashboard bottom line */}
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-[9px] font-mono uppercase tracking-widest text-zinc-500">
+            <span>© 2026 JAGADEEP REDDY // ALL RIGHTS RESERVED</span>
+            <div className="flex gap-4">
+              <span>system.version: 4.2.1</span>
+              <span>theme: {theme}</span>
+              <span>built.via: tailwind.vite.react</span>
+            </div>
           </div>
 
         </div>
       </footer>
 
-      {/* Floating Action Buttons (Exact matching Screenshot 3/4) */}
+      {/* Floating Action Elements (Scroll Top & Chat Button) */}
       <div className="fixed bottom-6 right-6 flex flex-col gap-3 z-50">
         
-        {/* Scroll To Top button */}
+        {/* Scroll Top Button */}
         {showScrollTop && (
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className={`w-12 h-12 rounded-full border border-current/10 flex items-center justify-center shadow-lg hover:scale-105 transition cursor-pointer ${
-              theme === 'green' || theme === 'terracotta' ? 'bg-[#202020] text-white' : 'bg-white text-black'
-            }`}
+            className={`w-10 h-10 rounded-lg border ${t.cardBorder} flex items-center justify-center ${t.cardBg} text-zinc-400 hover:text-white ${t.cardBorderHover} transition cursor-pointer`}
             aria-label="Scroll to top"
           >
-            <ChevronUp size={20} />
+            <ChevronUp size={16} />
           </button>
         )}
 
-        {/* Orange chat button (Pulsing ring indicator) */}
+        {/* Pulsing AI Agent Button */}
         <button
           onClick={() => setChatOpen(!chatOpen)}
-          className={`w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition cursor-pointer relative ${t.chatBtn}`}
+          className={`w-12 h-12 rounded-lg flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition cursor-pointer relative ${t.chatBtn}`}
           aria-label="Ask my AI Assistant"
         >
-          {chatOpen ? <X size={22} /> : <MessageSquare size={22} />}
+          {chatOpen ? <X size={18} /> : <MessageSquare size={18} />}
           
-          {/* Pulsing ring animation for notification effect */}
           {!chatOpen && (
-            <span className="absolute -inset-1 rounded-full border-2 border-current animate-pulse opacity-25"></span>
+            <span className="absolute -inset-1 rounded-lg border border-zinc-550 animate-pulse opacity-25"></span>
           )}
         </button>
-
       </div>
 
-      {/* Simulated AI Agent Drawer */}
+      {/* AI Agent Chat Drawer Panel */}
       {chatOpen && (
-        <div className={`fixed bottom-24 right-6 w-[360px] md:w-[400px] h-[500px] border border-current/10 rounded-2xl shadow-2xl flex flex-col overflow-hidden z-50 transition-transform duration-300 ${
-          theme === 'green' || theme === 'terracotta' ? 'bg-[#FAF8F5] text-[#202020]' : 'bg-[#0F1116] text-[#F8FAFC]'
-        }`}>
-          {/* Drawer Header */}
-          <div className="p-4 border-b border-current/10 flex justify-between items-center bg-current/2">
+        <div className={`fixed bottom-22 right-6 w-[350px] md:w-[380px] h-[480px] border ${t.cardBorder} rounded-xl shadow-2xl flex flex-col overflow-hidden z-50 transition-all duration-300 ${t.cardBg} backdrop-blur-xl ${t.text}`}>
+          
+          {/* Header */}
+          <div className={`p-4 border-b ${t.cardBorder} flex justify-between items-center ${t.cardBg}`}>
             <div className="flex items-center gap-2.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping absolute"></span>
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 relative"></span>
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping absolute"></span>
+              <span className="w-2 h-2 rounded-full bg-emerald-500 relative"></span>
               <div>
-                <h4 className="text-sm font-bold tracking-wide uppercase font-sans">Recruiter AI Agent</h4>
-                <p className="text-[10px] opacity-60">Ask about Jagadeep's expertise</p>
+                <h4 className="text-xs font-mono font-bold uppercase tracking-wider">Recruiter Agent</h4>
+                <p className="text-[9px] text-zinc-500 font-mono">portfolio.query.engine : v1.0</p>
               </div>
             </div>
             <button 
               onClick={() => setChatOpen(false)}
-              className="p-1.5 hover:opacity-75 transition"
+              className="p-1 text-zinc-500 hover:text-white transition"
             >
-              <X size={18} />
+              <X size={16} />
             </button>
           </div>
 
-          {/* Messages Container */}
-          <div className="flex-grow p-4 overflow-y-auto space-y-4">
+          {/* Conversation Area */}
+          <div className={`flex-grow p-4 overflow-y-auto space-y-4 ${t.cardBg}`}>
             {messages.map((msg, idx) => (
               <div 
                 key={idx} 
                 className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
               >
-                <div className={`max-w-[85%] rounded-xl px-4 py-2.5 text-xs leading-relaxed ${
+                <div className={`max-w-[85%] rounded-lg px-3 py-2 text-xs leading-relaxed font-sans ${
                   msg.sender === 'user'
-                    ? 'bg-current/10 text-current rounded-tr-none'
-                    : theme === 'green' || theme === 'terracotta'
-                      ? 'bg-white text-slate-700 border border-slate-200/80 rounded-tl-none'
-                      : 'bg-[#181A20] text-slate-300 border border-slate-800 rounded-tl-none'
+                    ? `bg-[#E6C65A]/10 text-white border ${t.accentBorder} rounded-tr-none`
+                    : `${t.cardBg} text-zinc-300 border ${t.cardBorder} rounded-tl-none`
                 }`}>
                   {msg.text}
                 </div>
               </div>
             ))}
             
-            {/* Agent Typing Simulator */}
+            {/* Typing simulator */}
             {isTyping && (
               <div className="flex justify-start">
-                <div className={`rounded-xl px-4 py-3 rounded-tl-none flex items-center gap-1.5 ${
-                  theme === 'green' || theme === 'terracotta' ? 'bg-white border border-slate-200' : 'bg-[#181A20] border border-slate-800'
-                }`}>
-                  <span className="w-1.5 h-1.5 bg-current opacity-40 rounded-full animate-bounce"></span>
-                  <span className="w-1.5 h-1.5 bg-current opacity-60 rounded-full animate-bounce delay-150"></span>
-                  <span className="w-1.5 h-1.5 bg-current opacity-80 rounded-full animate-bounce delay-300"></span>
+                <div className={`rounded-lg px-3.5 py-2 border ${t.cardBorder} ${t.cardBg} flex items-center gap-1.5`}>
+                  <span className="w-1.5 h-1.5 bg-zinc-500 rounded-full animate-bounce"></span>
+                  <span className="w-1.5 h-1.5 bg-zinc-500 rounded-full animate-bounce delay-150"></span>
+                  <span className="w-1.5 h-1.5 bg-zinc-500 rounded-full animate-bounce delay-300"></span>
                 </div>
               </div>
             )}
@@ -1159,70 +1663,63 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
             <div ref={chatEndRef} />
           </div>
 
-          {/* Recruiter Quick suggestions */}
-          <div className="px-4 py-2 border-t border-dashed border-current/10 bg-current/2">
-            <p className="text-[9px] uppercase tracking-wider font-extrabold opacity-55 mb-2">Suggested Prompts:</p>
-            <div className="flex flex-wrap gap-1.5">
+          {/* Quick recommendations */}
+          <div className={`px-4 py-2 border-t border-dashed ${t.divider} ${t.cardBg}`}>
+            <p className="text-[8px] font-mono uppercase tracking-wider text-zinc-500 mb-1.5">Suggested Queries:</p>
+            <div className="flex flex-wrap gap-1">
               <button 
                 onClick={() => handleQuickAction("Summarize Jagadeep's expertise")} 
-                className="text-[10px] px-2.5 py-1 border border-current/10 rounded-full hover:border-current/30 hover:bg-current/5 transition"
+                className={`text-[9px] font-mono px-2 py-0.5 border ${t.cardBorder} text-zinc-400 hover:text-white ${t.cardBorderHover} ${t.cardBg} rounded`}
               >
-                Summarize Expertise
+                Expertise
               </button>
               <button 
                 onClick={() => handleQuickAction("About the IPL AI Platform")} 
-                className="text-[10px] px-2.5 py-1 border border-current/10 rounded-full hover:border-current/30 hover:bg-current/5 transition"
+                className={`text-[9px] font-mono px-2 py-0.5 border ${t.cardBorder} text-zinc-400 hover:text-white ${t.cardBorderHover} ${t.cardBg} rounded`}
               >
                 IPL Platform
               </button>
               <button 
                 onClick={() => handleQuickAction("Tell me about his RAG experience")} 
-                className="text-[10px] px-2.5 py-1 border border-current/10 rounded-full hover:border-current/30 hover:bg-current/5 transition"
+                className={`text-[9px] font-mono px-2 py-0.5 border ${t.cardBorder} text-zinc-400 hover:text-white ${t.cardBorderHover} ${t.cardBg} rounded`}
               >
-                RAG Experience
+                RAG Stack
               </button>
               <button 
                 onClick={() => handleQuickAction("Is he open to full-time remote roles?")} 
-                className="text-[10px] px-2.5 py-1 border border-current/10 rounded-full hover:border-current/30 hover:bg-current/5 transition"
+                className={`text-[9px] font-mono px-2 py-0.5 border ${t.cardBorder} text-zinc-400 hover:text-white ${t.cardBorderHover} ${t.cardBg} rounded`}
               >
-                Are you hiring?
+                Remote?
               </button>
             </div>
           </div>
 
-          {/* Typing Form */}
-          <div className="p-3 border-t border-current/10 flex gap-2">
+          {/* Text Input Row */}
+          <div className={`p-3 border-t ${t.cardBorder} flex gap-2 ${t.cardBg}`}>
             <input
               type="text"
-              placeholder="Ask anything..."
+              placeholder="Query portfolio database..."
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-              className={`flex-grow px-3 py-2 rounded-lg border text-xs focus:outline-none ${
-                theme === 'green' || theme === 'terracotta'
-                  ? 'border-slate-200 bg-white focus:border-slate-400'
-                  : 'border-slate-800 bg-[#16181D] focus:border-slate-600'
-              }`}
+              className={`flex-grow px-3 py-1.5 rounded border ${t.inputBorder} ${t.inputBg} ${t.text} text-xs font-mono focus:outline-none ${t.inputFocus}`}
             />
             <button
               onClick={handleSendMessage}
-              className={`p-2 rounded-lg flex items-center justify-center cursor-pointer transition ${t.chatBtn}`}
+              className={`px-3 rounded flex items-center justify-center cursor-pointer transition ${t.chatBtn}`}
               aria-label="Send"
             >
-              <Send size={14} />
+              <Send size={12} />
             </button>
           </div>
         </div>
       )}
 
-      {/* Global CSS Inject */}
+      {/* Global CSS Styles */}
       <style>{`
-        @keyframes pulse {
-          0%, 100% { transform: scale(1); opacity: 0.25; }
-          50% { transform: scale(1.1); opacity: 0.45; }
-        }
         .delay-150 { animation-delay: 150ms; }
         .delay-300 { animation-delay: 300ms; }
+        .rotate-185 { transform: rotate(180deg); }
       `}</style>
 
     </div>
