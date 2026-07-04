@@ -1,1988 +1,1474 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { 
-  ChevronDown, 
-  ChevronUp, 
-  ExternalLink, 
-  Github, 
-  Mail, 
-  Linkedin, 
-  MapPin, 
-  ArrowUpRight, 
-  MessageSquare, 
-  Send, 
-  X, 
-  Menu, 
-  FileText,
-  Terminal,
-  Activity,
-  Cpu,
-  Layers,
-  Database,
-  ArrowRight,
-  Sparkles,
-  Copy,
-  Check
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import {
+  Github, Linkedin, Mail, ArrowUpRight, Send, Check,
+  Copy, Menu, X, Download, ExternalLink, ChevronDown,
+  Zap, Brain, Database, Code2, Cloud, Award,
 } from 'lucide-react';
 
-// Design Theme Definitions - Technical Architect Canvas Style
-const themes = {
-  midnight: {
-    name: "Slate Bronze",
-    bg: "bg-[#080C14] text-[#F8FAFC]",
-    bgRaw: "#080C14",
-    text: "text-[#F8FAFC]",
-    textMuted: "text-[#7E8B9B]",
-    accent: "text-[#C5A880]", // Champagne Bronze
-    accentBg: "bg-[#C5A880]",
-    accentBorder: "border-[#C5A880]/20",
-    accentBorderActive: "border-[#C5A880]/60",
-    accentHover: "hover:border-[#C5A880]/80",
-    accentText: "text-[#C5A880]",
-    accentBgLight: "bg-[#C5A880]/5",
-    footerBg: "bg-[#04060A]",
-    divider: "border-[#1A2333]",
-    cardBg: "bg-[#0F1524]/50 backdrop-blur-md",
-    cardBorder: "border-[#1C2538]",
-    cardBorderHover: "hover:border-[#C5A880]/40",
-    inputBg: "bg-[#0F1524]/70",
-    inputBorder: "border-[#1C2538]",
-    inputFocus: "focus:border-[#C5A880]/60",
-    chatBtn: "bg-[#C5A880] text-[#080C14] shadow-[0_4px_20px_rgba(197,168,128,0.2)]",
-    buttonBg: "bg-[#C5A880] text-[#080C14] border border-[#C5A880]",
-    dotColor: "bg-[#C5A880]",
-    blob1: "bg-[#4F46E5]/10",
-    blob2: "bg-[#C5A880]/8",
-    blob3: "bg-[#7C3AED]/10",
-    buttonText: "text-[#080C14]",
-    userChatBg: "bg-[#C5A880]/10 text-white border border-[#C5A880]/20",
-    agentChatBg: "bg-[#0F1524]/60",
-    agentChatText: "text-zinc-300",
-    textBody: "text-zinc-300",
-    hoverText: "hover:text-white"
-  },
-  obsidian: {
-    name: "Obsidian Teal",
-    bg: "bg-[#050505] text-[#F1F5F9]",
-    bgRaw: "#050505",
-    text: "text-[#F1F5F9]",
-    textMuted: "text-[#718096]",
-    accent: "text-[#00F5D4]", // Vibrant Mint
-    accentBg: "bg-[#00F5D4]",
-    accentBorder: "border-[#00F5D4]/25",
-    accentBorderActive: "border-[#00F5D4]/60",
-    accentHover: "hover:border-[#00F5D4]/80",
-    accentText: "text-[#00F5D4]",
-    accentBgLight: "bg-[#00F5D4]/5",
-    footerBg: "bg-[#0A0A0A]",
-    divider: "border-[#1A1A1A]",
-    cardBg: "bg-[#0A0A0A]/50 backdrop-blur-md",
-    cardBorder: "border-[#222]",
-    cardBorderHover: "hover:border-[#00F5D4]/40",
-    inputBg: "bg-[#0A0A0A]/70",
-    inputBorder: "border-[#222]",
-    inputFocus: "focus:border-[#00F5D4]/60",
-    chatBtn: "bg-[#00F5D4] text-[#050505] shadow-[0_4px_20px_rgba(0,245,212,0.2)]",
-    buttonBg: "bg-[#00F5D4] text-[#050505] border border-[#00F5D4]",
-    dotColor: "bg-[#00F5D4]",
-    blob1: "bg-[#00F5D4]/10",
-    blob2: "bg-[#06B6D4]/8",
-    blob3: "bg-[#6366F1]/10",
-    buttonText: "text-[#050505]",
-    userChatBg: "bg-[#00F5D4]/10 text-white border border-[#00F5D4]/20",
-    agentChatBg: "bg-[#0A0A0A]/60",
-    agentChatText: "text-zinc-300",
-    textBody: "text-zinc-300",
-    hoverText: "hover:text-white"
-  },
-  forest: {
-    name: "Botanical Sage",
-    bg: "bg-[#F4F6F5] text-[#1E293B]",
-    bgRaw: "#F4F6F5",
-    text: "text-[#1E293B]",
-    textMuted: "text-[#5A6E65]",
-    accent: "text-[#15803D]", // Forest Green
-    accentBg: "bg-[#15803D]",
-    accentBorder: "border-[#15803D]/20",
-    accentBorderActive: "border-[#15803D]/60",
-    accentHover: "hover:border-[#15803D]/80",
-    accentText: "text-[#15803D]",
-    accentBgLight: "bg-[#15803D]/5",
-    footerBg: "bg-[#14211A]",
-    divider: "border-[#D1D8D5]",
-    cardBg: "bg-[#EAECEB]/60 backdrop-blur-md",
-    cardBorder: "border-[#D1D9D4]",
-    cardBorderHover: "hover:border-[#15803D]/50",
-    inputBg: "bg-[#DFE4E1]/80",
-    inputBorder: "border-[#CBD5C9]",
-    inputFocus: "focus:border-[#15803D]/60",
-    chatBtn: "bg-[#15803D] text-white shadow-[0_4px_20px_rgba(21,128,61,0.2)]",
-    buttonBg: "bg-[#15803D] text-white border border-[#15803D]",
-    dotColor: "bg-[#15803D]",
-    blob1: "bg-[#15803D]/5",
-    blob2: "bg-[#10B981]/5",
-    blob3: "bg-[#34D399]/4",
-    buttonText: "text-white",
-    userChatBg: "bg-[#15803D] text-white border border-[#15803D]/25",
-    agentChatBg: "bg-white/90",
-    agentChatText: "text-[#1E293B]",
-    textBody: "text-slate-700",
-    hoverText: "hover:text-black"
-  },
-  terracotta: {
-    name: "Warm Terracotta",
-    bg: "bg-[#FAF7F0] text-[#221F1B]",
-    bgRaw: "#FAF7F0",
-    text: "text-[#221F1B]",
-    textMuted: "text-[#6D6860]",
-    accent: "text-[#C2410C]", // Terracotta Orange
-    accentBg: "bg-[#C2410C]",
-    accentBorder: "border-[#C2410C]/20",
-    accentBorderActive: "border-[#C2410C]/60",
-    accentHover: "hover:border-[#C2410C]/80",
-    accentText: "text-[#C2410C]",
-    accentBgLight: "bg-[#C2410C]/5",
-    footerBg: "bg-[#1F1A17]",
-    divider: "border-[#E6E1D5]",
-    cardBg: "bg-[#F0EDE4]/60 backdrop-blur-md",
-    cardBorder: "border-[#E2DCCE]",
-    cardBorderHover: "hover:border-[#C2410C]/50",
-    inputBg: "bg-[#E5DFD4]/80",
-    inputBorder: "border-[#CFC8B7]",
-    inputFocus: "focus:border-[#C2410C]/60",
-    chatBtn: "bg-[#C2410C] text-white shadow-[0_4px_20px_rgba(194,65,12,0.2)]",
-    buttonBg: "bg-[#C2410C] text-white border border-[#C2410C]",
-    dotColor: "bg-[#C2410C]",
-    blob1: "bg-[#C2410C]/5",
-    blob2: "bg-[#EA580C]/5",
-    blob3: "bg-[#F59E0B]/4",
-    buttonText: "text-white",
-    userChatBg: "bg-[#C2410C] text-white border border-[#C2410C]/25",
-    agentChatBg: "bg-white/90",
-    agentChatText: "text-[#221F1B]",
-    textBody: "text-zinc-700",
-    hoverText: "hover:text-black"
-  }
-};;;
+/* ══════════════════════════════════════════════════════════════════════════════
+   DATA
+══════════════════════════════════════════════════════════════════════════════ */
 
-export default function App() {
-  const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('portfolio-theme') || 'midnight';
-  });
-  const [scrolled, setScrolled] = useState(false);
-  const [showScrollTop, setShowScrollTop] = useState(false);
-  const [chatOpen, setChatOpen] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  
-  // Tab selectors
-  const [activeArchTab, setActiveArchTab] = useState('ipl'); // 'ipl' or 'rag'
-  const [activeProjectTab, setActiveProjectTab] = useState('rag'); // 'ipl' or 'rag'
-  const [expandedSkillCat, setExpandedSkillCat] = useState(null); // Accordion logic for skills
-  
-  // Interactive UI UX States
-  const [activeTag, setActiveTag] = useState(null); // Highlight same tags on hover
-  const [activeLayer, setActiveLayer] = useState(null); // Highlight diagram nodes
-  const [copiedField, setCopiedField] = useState(null); // Copy link feedback
-  const [scrollProgress, setScrollProgress] = useState(0); // Progress bar percentage
+const PROJECTS = [
+  {
+    num: '01',
+    title: 'IPL AI Intelligence Platform',
+    category: 'Multi-Agent System',
+    year: '2024',
+    accent: '#7c3aed',
+    accentB: '#06b6d4',
+    emoji: '🏏',
+    description:
+      'A 5-agent LangGraph platform orchestrating hybrid search, XGBoost win-probability predictions, and real-time WebSocket pipelines — serving live cricket commentary in under 300 ms.',
+    highlights: [
+      '5-agent LangGraph orchestration with specialized agent routing',
+      'Sub-300 ms real-time WebSocket delivery pipeline',
+      'XGBoost match win-probability model trained on historical data',
+      'Hybrid BM25 + Qdrant vector search with cross-encoder reranking',
+    ],
+    tech: ['LangGraph', 'Qdrant', 'XGBoost', 'FastAPI', 'WebSocket', 'Python'],
+    github: 'https://github.com/Jagadeep-Reddy/IPL-AI-Platform',
+    live: null,
+    stat: { label: 'Latency', value: '<300ms' },
+  },
+  {
+    num: '02',
+    title: 'RAG Evaluation Framework',
+    category: 'Enterprise Q&A',
+    year: '2025',
+    accent: '#06b6d4',
+    accentB: '#10b981',
+    emoji: '🧠',
+    description:
+      'Production-grade RAG system with self-consistency hallucination filters, cross-encoder reranking, and automated RAGAS quality gates in CI/CD — achieving 0.981 faithfulness at Microsoft AI Skills Fest.',
+    highlights: [
+      '0.981 RAGAS faithfulness score at Microsoft AI Skills Fest Hackathon',
+      'Self-consistency hallucination filter applied at inference time',
+      'FAISS + MiniLM-L6 cross-encoder hierarchical reranking pipeline',
+      'Automated quality gates block merges below faithfulness thresholds',
+    ],
+    tech: ['LangChain', 'FAISS', 'RAGAS', 'Azure AI Foundry', 'LangSmith', 'Python'],
+    github: 'https://github.com/Jagadeep-Reddy/RAG-System-with-Evaluation-Framework',
+    live: 'https://huggingface.co/spaces/Jagadeep24/RAG-System-with-Evaluation-Framework',
+    stat: { label: 'Faithfulness', value: '98.1%' },
+  },
+];
 
-  // Command Center Diagnostic States
-  const [diagActive, setDiagActive] = useState(false);
-  const [diagLogs, setDiagLogs] = useState([]);
-  const [contactPayloadActive, setContactPayloadActive] = useState(false);
-  const [contactLogs, setContactLogs] = useState([]);
-  const [systemStats, setSystemStats] = useState({ cpu: 12, memory: 42, ping: 14 });
+const SKILL_GROUPS = [
+  {
+    icon: Brain,
+    label: 'AI Orchestration',
+    color: '#7c3aed',
+    items: ['LangGraph', 'LangChain', 'Multi-Agent Systems', 'RAG Architectures', 'Prompt Engineering', 'Agentic Workflows'],
+  },
+  {
+    icon: Zap,
+    label: 'ML & Evaluation',
+    color: '#f59e0b',
+    items: ['XGBoost', 'Scikit-learn', 'RAGAS', 'LangSmith', 'Hugging Face', 'Azure AI Foundry', 'Statistical Modeling'],
+  },
+  {
+    icon: Database,
+    label: 'Vector & Retrieval',
+    color: '#06b6d4',
+    items: ['Qdrant', 'FAISS', 'ChromaDB', 'BM25', 'Hybrid Search', 'Cross-Encoder Reranking', 'Semantic Chunking'],
+  },
+  {
+    icon: Code2,
+    label: 'Backend & APIs',
+    color: '#10b981',
+    items: ['Python', 'FastAPI', 'PostgreSQL', 'REST APIs', 'WebSocket', 'SQL', 'Pandas', 'NumPy'],
+  },
+  {
+    icon: Cloud,
+    label: 'Cloud & DevOps',
+    color: '#818cf8',
+    items: ['Azure ML', 'Azure AI Foundry', 'GitHub Actions', 'CI/CD Pipelines', 'Docker'],
+  },
+];
 
-  // System Stats interval simulation
+const EXPERIENCE = [
+  {
+    role: 'Freelance AI Engineer',
+    company: 'Independent Consulting',
+    period: 'July 2024 — Present',
+    current: true,
+    bullets: [
+      'Architected a 5-agent LangGraph platform (IPL AI Intelligence) with hybrid BM25/Qdrant retrieval and real-time WebSocket commentary pipelines achieving <300 ms latency',
+      'Built enterprise-grade financial statement RAG with hierarchical parent-child indexing, cross-encoder reranking, and self-consistency hallucination filtering at inference time',
+      'Implemented automated RAGAS quality gates in GitHub Actions CI — any merge that drops faithfulness below threshold is automatically blocked',
+      'Competed in Microsoft AI Skills Fest Hackathon, deploying Azure AI Foundry integrations with a final RAGAS faithfulness score of 0.981',
+    ],
+    tech: ['LangGraph', 'LangChain', 'Qdrant', 'FAISS', 'RAGAS', 'XGBoost', 'FastAPI', 'CI/CD'],
+  },
+  {
+    role: 'Software Engineer',
+    company: 'ANZ Bank',
+    period: 'June 2022 — June 2024',
+    current: false,
+    bullets: [
+      'Designed and maintained enterprise payment processing microservices handling high-volume transactions with 99.99% uptime SLAs',
+      'Reduced batch processing latency by 40% through SQL query optimization and strategic caching layers for reporting pipelines',
+      'Led cross-team API integration initiatives, aligning 4 backend services under a unified REST contract and improving developer experience',
+      'Mentored 2 junior engineers on coding standards, system design principles, and test-driven development practices',
+    ],
+    tech: ['Python', 'SQL', 'PostgreSQL', 'REST APIs', 'Microservices', 'Git'],
+  },
+];
+
+const EDUCATION = [
+  {
+    degree: 'PGP in Data Science',
+    institution: 'University of Texas at Austin',
+    period: '2024 — 2025',
+    detail: 'Specialized in machine learning systems, statistical modeling, and production ML engineering. Capstone focus on RAG architectures and evaluation frameworks.',
+    icon: '🎓',
+  },
+  {
+    degree: 'B.Tech — Information Science Engineering',
+    institution: 'BMS Institute of Management and Technology',
+    period: '2018 — 2022',
+    detail: 'Core CS and IS fundamentals covering algorithms, data structures, database systems, operating systems, and software engineering principles.',
+    icon: '💻',
+  },
+];
+
+const CERTS = [
+  { name: 'AWS Solutions Architect', org: 'Amazon Web Services', code: 'SAA-C03', done: false },
+  { name: 'Azure AI Apps and Agents Developer Associate', org: 'Microsoft', code: 'AI-103', done: false },
+];
+
+const MARQUEE_ITEMS = [
+  'AI Engineer', 'RAG Systems', 'LangGraph', 'Multi-Agent', 'XGBoost',
+  'Vector Search', 'RAGAS', 'FastAPI', 'Production ML', 'Azure AI', 'Python',
+];
+
+const STATS = [
+  { value: '2+', label: 'Years Engineering', color: '#7c3aed' },
+  { value: '5+', label: 'AI Projects', color: '#06b6d4' },
+  { value: '98.1%', label: 'RAG Faithfulness', color: '#10b981' },
+  { value: '300ms', label: 'Latency Target', color: '#f59e0b' },
+];
+
+const TYPEWRITER_PHRASES = [
+  'Multi-Agent LangGraph Systems',
+  'Enterprise RAG Pipelines',
+  'Real-time ML Architecture',
+  'XGBoost Win Predictions',
+  'Vector Search Engineering',
+];
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   HOOKS
+══════════════════════════════════════════════════════════════════════════════ */
+
+function useReveal(threshold = 0.1) {
+  const ref = useRef(null);
+  const [visible, setVisible] = useState(false);
   useEffect(() => {
-    const interval = setInterval(() => {
-      setSystemStats(prev => ({
-        cpu: Math.floor(Math.random() * 15) + 8,
-        memory: Math.floor(Math.random() * 5) + 40,
-        ping: Math.floor(Math.random() * 8) + 12
-      }));
-    }, 4500);
-    return () => clearInterval(interval);
-  }, []);
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.disconnect(); } },
+      { threshold, rootMargin: '0px 0px -50px 0px' }
+    );
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [threshold]);
+  return [ref, visible];
+}
 
-  const runDiagnostics = () => {
-    if (diagActive) return;
-    setDiagActive(true);
-    setDiagLogs(["[sys] initializing diagnostics...", "[sys] loading context & model weights..."]);
-    
-    const messagesList = [
-      "[sys] checking intent classifier layers... OK",
-      "[sys] verifying qdrant HNSW vector store... OK",
-      "[sys] validation check: FAISS sparse index... OK",
-      "[sys] evaluating cross-encoder rerank... PASS",
-      "[sys] RAGAS CI/CD deployment threshold... PASS (0.88)",
-      "[sys] live web socket commentary push... READY (14ms)",
-      "[sys] active models: gpt-4o-mini & xgboost... ONLINE",
-      "[sys] metrics verified. system status: normal"
-    ];
-    
-    messagesList.forEach((log, index) => {
-      setTimeout(() => {
-        setDiagLogs(prev => [...prev, log]);
-        if (index === messagesList.length - 1) {
-          setTimeout(() => setDiagActive(false), 3000);
-        }
-      }, (index + 1) * 450);
-    });
-  };
+function useTypewriter(phrases, speed = 60, pause = 1800) {
+  const [display, setDisplay] = useState('');
+  const [phraseIdx, setPhraseIdx] = useState(0);
+  const [charIdx, setCharIdx] = useState(0);
+  const [deleting, setDeleting] = useState(false);
 
-  // Form submission state
-  const [formEmail, setFormEmail] = useState('');
-  const [formSubject, setFormSubject] = useState('');
-  const [formMessage, setFormMessage] = useState('');
-  const [formStatus, setFormStatus] = useState(''); // 'sending', 'success', 'error'
-  
-  // AI Chat Agent states
-  const [messages, setMessages] = useState([
-    { 
-      sender: 'agent', 
-      text: "Hi! I'm Jagadeep's AI assistant shell. You can query me about his projects, ANZ backend engineering, ML/RAG skills, or availability!",
-      timestamp: new Date() 
+  useEffect(() => {
+    const current = phrases[phraseIdx];
+    let timeout;
+    if (!deleting && charIdx < current.length) {
+      timeout = setTimeout(() => setCharIdx(c => c + 1), speed);
+    } else if (!deleting && charIdx === current.length) {
+      timeout = setTimeout(() => setDeleting(true), pause);
+    } else if (deleting && charIdx > 0) {
+      timeout = setTimeout(() => setCharIdx(c => c - 1), speed / 2.2);
+    } else if (deleting && charIdx === 0) {
+      setDeleting(false);
+      setPhraseIdx(p => (p + 1) % phrases.length);
     }
-  ]);
-  const [inputText, setInputText] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
-  const chatEndRef = useRef(null);
+    setDisplay(current.slice(0, charIdx));
+    return () => clearTimeout(timeout);
+  }, [charIdx, deleting, phraseIdx, phrases, speed, pause]);
 
-  // Active theme styles shorthand
-  const t = themes[theme] || themes.midnight;
+  return display;
+}
 
-  const handleCopyToClipboard = (text, fieldName) => {
-    navigator.clipboard.writeText(text).then(() => {
-      setCopiedField(fieldName);
-      setTimeout(() => setCopiedField(null), 2000);
-    });
-  };
+/* ══════════════════════════════════════════════════════════════════════════════
+   PARTICLE CANVAS
+══════════════════════════════════════════════════════════════════════════════ */
 
+function ParticleCanvas() {
+  const canvasRef = useRef(null);
   useEffect(() => {
-    localStorage.setItem('portfolio-theme', theme);
-  }, [theme]);
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let W = canvas.width = window.innerWidth;
+    let H = canvas.height = window.innerHeight;
+    let mouse = { x: W / 2, y: H / 2 };
+    let animId;
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 40);
-      setShowScrollTop(window.scrollY > 400);
-      
-      const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
-      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const scrolledPercent = height > 0 ? (winScroll / height) * 100 : 0;
-      setScrollProgress(scrolledPercent);
+    const NUM = Math.min(Math.floor((W * H) / 14000), 80);
+    const particles = Array.from({ length: NUM }, () => ({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      vx: (Math.random() - 0.5) * 0.4,
+      vy: (Math.random() - 0.5) * 0.4,
+      r: Math.random() * 1.5 + 0.5,
+      alpha: Math.random() * 0.4 + 0.1,
+      hue: Math.random() < 0.6 ? 270 : (Math.random() < 0.5 ? 200 : 160),
+    }));
+
+    const onResize = () => {
+      W = canvas.width = window.innerWidth;
+      H = canvas.height = window.innerHeight;
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const onMove = e => { mouse.x = e.clientX; mouse.y = e.clientY; };
+    window.addEventListener('resize', onResize);
+    window.addEventListener('mousemove', onMove, { passive: true });
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      // connections
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 140) {
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(124,58,237,${0.08 * (1 - dist / 140)})`;
+            ctx.lineWidth = 0.6;
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.stroke();
+          }
+        }
+        // mouse interaction
+        const mdx = particles[i].x - mouse.x;
+        const mdy = particles[i].y - mouse.y;
+        const md = Math.sqrt(mdx * mdx + mdy * mdy);
+        if (md < 120) {
+          const force = (120 - md) / 120 * 0.008;
+          particles[i].vx += (mdx / md) * force;
+          particles[i].vy += (mdy / md) * force;
+        }
+      }
+      // draw particles
+      for (const p of particles) {
+        p.x += p.vx; p.y += p.vy;
+        p.vx *= 0.998; p.vy *= 0.998;
+        if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+        if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(${p.hue},80%,70%,${p.alpha})`;
+        ctx.fill();
+      }
+      animId = requestAnimationFrame(draw);
+    }
+    draw();
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener('resize', onResize);
+      window.removeEventListener('mousemove', onMove);
+    };
   }, []);
-
-  // Auto-scroll chatbot window
-  useEffect(() => {
-    if (chatEndRef.current) {
-      chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [messages, isTyping]);
-
-  const projects = {
-    ipl: {
-      id: 1,
-      title: "IPL AI Intelligence Platform",
-      tagline: "Production-grade multi-agent analytics & commentary Engine",
-      link: "https://github.com/Jagadeep-Reddy/ipl-ai-platform",
-      githubLink: "https://github.com/Jagadeep-Reddy/ipl-ai-platform",
-      demoLink: "https://my-portfolio-six-smoky-75.vercel.app/",
-      problem: "Cricket analysts and managers needed instant, high-fidelity insights over 18 seasons (1.2M ball-by-ball deliveries) without waiting for manual database queries or facing LLM RAG context bloat.",
-      architecture: "A modular, multi-agent platform orchestrated via LangGraph. An intent classifier routes queries to specialized sub-agents, utilizing dense/sparse hybrid vector search (Qdrant) or statistical ML inference (XGBoost) for millisecond responses.",
-      systemDesign: "Built a 5-agent LangGraph system (StatsQA, NarrativeQA, Prediction, Matchup, TeamVsTeam). Ball events are streamed via WebSockets, triggering rapid XGBoost win-probability predictions with dynamic, contextual commentary generated under a 300ms budget.",
-      challenges: [
-        "Keeping latency below 300ms for WebSocket live events while invoking both machine learning models and semantic searches.",
-        "Managing dense-sparse retrieval accuracy over complex relational schemas (scores, wickets, overs) which naive vector embeddings often fail to grasp.",
-        "Preventing hallucinated commentaries on historically significant match scenarios."
-      ],
-      results: [
-        "Reduced typical development effort for custom cricket analysis tasks by ~60% through reusable workflow blocks.",
-        "Improved RAGAS Faithfulness score from 0.71 to 0.88 using dense (BGE-M3) + sparse (BM25) search with Cross-Encoder reranking.",
-        "Successfully load-tested to 200 concurrent users sustained via Locust under strict SLA budgets.",
-        "Achieved a RAGAS Faithfulness of 0.981 on golden test pairs using Azure AI Foundry (GPT-4.1-mini) integration."
-      ],
-      tech: ["LangGraph", "Hybrid RAG", "XGBoost", "FastAPI", "Qdrant", "PostgreSQL", "Redis", "RAGAS", "WebSocket"]
-    },
-    rag: {
-      id: 2,
-      title: "Enterprise RAG System & Evaluation",
-      tagline: "Self-correcting financial Q&A engine with automated evaluation",
-      link: "https://huggingface.co/spaces/Jagadeep24/RAG-System-with-Evaluation-Framework",
-      githubLink: "https://github.com/Jagadeep-Reddy/RAG-System-with-Evaluation-Framework",
-      demoLink: "https://huggingface.co/spaces/Jagadeep24/RAG-System-with-Evaluation-Framework",
-      problem: "Corporate compliance officers require precise Q&A answers from complex, multi-page financial statements with 100% auditable citation links, preventing hallucinations in regulatory reports.",
-      architecture: "An agentic self-correcting RAG pipeline that splits complex user queries into sub-problems, searches across multiple indexes, reranks target snippets, and validates generated answers via temperature-tuned consistency pathways.",
-      systemDesign: "Hierarchical parent-child document chunking linked to FAISS dense storage and Rank-BM25 sparse indexes. Employs a cross-encoder (ms-marco-MiniLM-L-6-v2) for relevance selection and a self-consistency checker running 3 parallel generation pathways. Integrated into a GitHub Actions CI gate.",
-      challenges: [
-        "Traditional chunking methods losing the wider context of complex financial tables.",
-        "High rates of naive LLM hallucination on tables, footnotes, and mathematical metrics.",
-        "Securing factual alignment without manual review bottlenecks before production deployment."
-      ],
-      results: [
-        "RAGAS CI/CD gate halts deployment if faithfulness falls below 0.75, ensuring safe pipelines.",
-        "Observed a 40% improvement in retrieval precision over the naive baseline on a 500-question evaluation set.",
-        "Robust multi-hop reasoning resolving queries that span multiple separate documents."
-      ],
-      tech: ["FAISS", "BM25", "LangChain", "RAGAS", "LangSmith", "Cross-encoders", "CI/CD", "Python"]
-    }
-  };
-
-  const skillCategories = [
-    { 
-      category: "Languages", 
-      summary: "Core programming & data querying",
-      items: ["Python", "Java", "SQL", "HTML/CSS", "JavaScript"] 
-    },
-    { 
-      category: "GenAI & LLMs", 
-      summary: "Orchestration & agent design frameworks",
-      items: ["RAG Systems", "LangChain", "LangGraph", "Prompt Engineering", "OpenAI API", "Azure AI Foundry"] 
-    },
-    { 
-      category: "Models & Embeddings", 
-      summary: "Sequence representation & semantic models",
-      items: ["BERT & RoBERTa", "HuggingFace Transformers", "BGE-M3"] 
-    },
-    { 
-      category: "Retrieval & Vector DBs", 
-      summary: "High-performance index structures",
-      items: ["FAISS", "Qdrant HNSW", "BM25 Search", "Reciprocal Rank Fusion (RRF)", "Cross-encoder Reranking", "pgvector"] 
-    },
-    { 
-      category: "ML & Data", 
-      summary: "Statistical modeling & feature search",
-      items: ["XGBoost", "SHAP", "Optuna (Hyperparameter tuning)", "scikit-learn", "pandas & NumPy", "Feature Engineering"] 
-    },
-    { 
-      category: "Cloud & Infra", 
-      summary: "Deployment, streaming, & hosting",
-      items: ["AWS (EC2, S3, Lambda, SQS)", "Docker & Kubernetes", "FastAPI", "WebSocket", "Redis", "PostgreSQL"] 
-    },
-    { 
-      category: "Backend Systems", 
-      summary: "Enterprise transaction architecture",
-      items: ["Spring Boot", "Kafka Event Streaming", "Oracle SQL", "REST APIs", "JDBC & JPA"] 
-    },
-    { 
-      category: "Monitoring & Evals", 
-      summary: "Operational pipelines & validation gates",
-      items: ["RAGAS Evaluation", "LangSmith Tracing", "Locust (Load testing)", "GitHub Actions CI/CD"] 
-    }
-  ];
-
-  const experiences = [
-    {
-      stage: "Stage 3",
-      version: "v3.0",
-      role: "Independent AI Engineer",
-      company: "Self-Directed Portfolio Projects",
-      period: "July 2024 – Present",
-      context: "Transitioned from traditional backend engineering into full-time GenAI and Machine Learning systems. Completed UT Austin PGP in Data Science.",
-      highlights: [
-        "Architected a 5-agent LangGraph platform (IPL AI Intelligence) supporting hybrid search, XGBoost commentary, and real-time WebSocket pipelines serving live commentaries in <300ms.",
-        "Built enterprise-ready financial statement RAG pipelines with hierarchical parent-child indexing, cross-encoder reranking, and self-consistency hallucination filters.",
-        "Implemented automated quality gates in GitHub Actions CI using RAGAS, asserting correctness thresholds before code merges.",
-        "Competed in the Microsoft AI Skills Fest Hackathon, deploying Azure AI Foundry (GPT-4.1-mini) integrations with a RAGAS faithfulness of 0.981."
-      ],
-      techStack: ["LangGraph", "LangChain", "RAGAS", "XGBoost", "FastAPI", "Qdrant", "FAISS", "Azure AI Foundry", "Python", "CI/CD"]
-    },
-    {
-      stage: "Stage 2",
-      version: "v2.0",
-      role: "Software Engineer",
-      company: "ANZ (Australia and New Zealand Banking Group)",
-      period: "June 2022 - June 2024",
-      context: "Built transaction microservices and scaled batch pipelines for LoanIQ corporate banking platforms.",
-      highlights: [
-        "Designed high-throughput REST APIs in Spring Boot consumed by core downstream banking interfaces.",
-        "Implemented customer onboarding microservices using Apache Kafka event streams, achieving 90% unit test coverage.",
-        "Optimized complex Oracle SQL queries, indexes, and stored procedures, reducing execution times by up to 35%.",
-        "Engineered PII data masking libraries utilizing LoanIQ SDK to secure customer privacy at the database boundary."
-      ],
-      techStack: ["Java", "Spring Boot", "Oracle SQL", "Kafka", "REST API", "CI/CD Pipelines", "Git"]
-    }
-  ];
-
-  const education = [
-    {
-      degree: "Post Graduate Program in Data Science & Business Analytics",
-      institution: "The University of Texas at Austin",
-      period: "2025 - 2026",
-      details: "Focus Areas: Supervised Machine Learning, Business Analytics, and LLM Applications."
-    },
-    {
-      degree: "Bachelor of Engineering (BE), Information Science",
-      institution: "BMS Institute of Technology and Management",
-      period: "2018 - 2022",
-      details: "Grade: 8.50 CGPA. Focus: Database systems, Object Oriented Design, and Data Structures."
-    }
-  ];
-
-  const certifications = [
-    { title: "AWS Solutions Architect Associate", issuer: "Amazon Web Services", badge: "SAA-C03", status: "In Progress" },
-    { title: "Azure AI Engineer Associate", issuer: "Microsoft Azure", badge: "AI-102", status: "In Progress" },
-    { title: "Machine Learning Specialization", issuer: "Coursera", badge: "ML-SPEC", status: "Completed" },
-    { title: "Advanced Learning Algorithms", issuer: "Coursera", badge: "ALA-CR", status: "Completed" }
-  ];
-
-  // Formspree Contact Handling
-  const FORMSPREE_ID = 'xwvdqlwd';
-
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
-    if (!formEmail || !formSubject || !formMessage) return;
-    setContactPayloadActive(true);
-    setContactLogs(["[gateway] preparing payload packaging...", "[gateway] validation check: ok"]);
-
-    const steps = [
-      "[gateway] serializing text blobs...",
-      "[gateway] calling FastAPI proxy gateway...",
-      "[gateway] delivering payload to Formspree target..."
-    ];
-
-    steps.forEach((step, idx) => {
-      setTimeout(() => {
-        setContactLogs(prev => [...prev, step]);
-      }, (idx + 1) * 450);
-    });
-
-    setTimeout(async () => {
-      setFormStatus('sending');
-      try {
-        const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify({ email: formEmail, subject: formSubject, message: formMessage })
-        });
-        if (res.ok) {
-          setContactLogs(prev => [...prev, "[gateway] success: payload delivered (200 OK)"]);
-          setFormStatus('success');
-          setFormEmail('');
-          setFormSubject('');
-          setFormMessage('');
-        } else {
-          setContactLogs(prev => [...prev, "[gateway] error: formspree target rejected (500)"]);
-          setFormStatus('error');
-        }
-      } catch {
-        setContactLogs(prev => [...prev, "[gateway] error: network connection timeout"]);
-        setFormStatus('error');
-      } finally {
-        setTimeout(() => {
-          setContactPayloadActive(false);
-          setFormStatus('');
-        }, 3500);
-      }
-    }, 1800);
-  };
-
-  // AI Assistant Chat Config
-  const AGENT_SYSTEM_PROMPT = `You are Jagadeep Reddy's personal AI portfolio agent. Answer recruiter and hiring manager questions concisely and professionally. Here is his complete profile:
-
-IDENTITY: Jagadeep Reddy — AI Engineer transitioning from 2 years of production backend engineering at ANZ (Spring Boot, Kafka, Oracle SQL) into full-time AI/GenAI engineering. Based in Bengaluru, India. Targeting 20-25 LPA in India and Riyadh, Saudi Arabia.
-
-KEY PROJECTS:
-1. IPL AI Intelligence Platform — 5-agent LangGraph system (StatsQA, NarrativeQA, Prediction, Matchup, TeamVsTeam), hybrid RAG (BGE-M3 dense + BM25 sparse + RRF fusion + cross-encoder reranking top-8), XGBoost win-probability (AUC 0.72, Optuna-tuned), SHAP explanations, WebSocket real-time <300ms end-to-end, 200 concurrent users (Locust), RAGAS faithfulness 0.71→0.88 on 200-question golden eval set, CI gate blocks deploy below 0.75. Stack: LangGraph, FastAPI, Qdrant HNSW, PostgreSQL, Redis. GitHub: github.com/Jagadeep-Reddy/ipl-ai-platform
-2. Production RAG System — Enterprise financial document Q&A, three chunking strategies (fixed-size, semantic, hierarchical parent-child), hybrid FAISS + BM25 retrieval, RRF + cross-encoder reranking (ms-marco-MiniLM-L-6-v2), self-consistency hallucination detection (3 parallel LLM responses at temp 0.4), RAGAS CI/CD gate (faithfulness <0.75 blocks deploy), 40% improvement over naive baseline on 500-question eval set. GitHub: github.com/Jagadeep-Reddy/RAG-System-with-Evaluation-Framework Demo: huggingface.co/spaces/Jagadeep24/RAG-System-with-Evaluation-Framework
-3. Microsoft AI Skills Fest Hackathon (June 2026) — Integrated Azure AI Foundry (GPT-4.1-mini via AzureChatOpenAI) into IPL platform, RAGAS faithfulness 0.981 on 51 golden QA pairs.
-
-ANZ EXPERIENCE (June 2022 – June 2024): LoanIQ Inquiry APIs & Scripted Batch endpoints, Spring Boot REST APIs (IoC, JPA, Java Streams), Kafka Customer Onboarding microservice (90% test coverage, zero production incidents first 3 months), Oracle SQL optimization (35% query time reduction via indexing and view redesign), data-masking module for PII compliance.
-
-EDUCATION: PGP Data Science & Business Analytics, UT Austin × Great Learning (2025-2026). BE Information Science, BMS Institute of Technology (8.50 CGPA, 2018-2022).
-
-CERTIFICATIONS (In Progress): AWS Solutions Architect Associate (SAA-C03), Azure AI Engineer Associate (AI-102).
-
-SKILLS: Python, Java, SQL, LangGraph, LangChain, RAG Systems, XGBoost, FAISS, Qdrant, BM25, BGE-M3, BERT, HuggingFace Transformers, FastAPI, WebSocket, Docker, AWS (EC2/S3/Lambda/SQS), Azure AI Foundry, RAGAS, LangSmith, Locust, CI/CD, Spring Boot, Kafka, Oracle SQL.
-
-AVAILABILITY: Available from July 14, 2026. Open to full-time roles in India (Bengaluru) and Saudi Arabia (Riyadh). Also open to remote.
-
-CONTACT: jagadeepreddy3638@gmail.com | github.com/Jagadeep-Reddy | linkedin.com/in/buthuru-jagadeep-reddy
-
-Keep answers concise (2-4 sentences). Be professional. Do not make up anything not in this profile. If asked about salary say he targets 20-25 LPA for India roles.`;
-
-  const chatHistoryRef = useRef([]);
-
-  const getSimulatedResponse = (query) => {
-    const q = query.toLowerCase().trim();
-    const intents = [
-      {
-        keywords: ['expertise', 'summary', 'about', 'who is', 'background', 'profile', 'bio'],
-        reply: "Jagadeep is an AI Engineer transitioning from 2 years of production backend engineering at ANZ. He specializes in designing LangGraph multi-agent systems, fine-tuning hybrid RAG pipelines (evaluating via RAGAS), and deploying real-time ML inference models."
-      },
-      {
-        keywords: ['ipl', 'platform', 'cricket', 'deliveries', 'win probability', 'commentary'],
-        reply: "His flagship project is the IPL AI Intelligence Platform: a 5-agent LangGraph platform orchestrating stats, matchups, and real-time win probability (XGBoost) over 18 seasons (<300ms latency). It uses BGE-M3 and Qdrant for hybrid RAG, achieving 0.88 RAGAS faithfulness."
-      },
-      {
-        keywords: ['rag', 'retrieval', 'chunking', 'faiss', 'bm25', 'rerank', 'hybrid search', 'hallucination'],
-        reply: "Jagadeep built an Enterprise Financial RAG System utilizing FAISS dense + BM25 sparse hybrid retrieval, hierarchical parent-child chunking, and cross-encoder rerankers. It includes self-consistency hallucination detection and RAGAS CI/CD evaluation gates."
-      },
-      {
-        keywords: ['microsoft', 'hackathon', 'azure', 'skills fest', 'foundry'],
-        reply: "At the Microsoft AI Skills Fest Agents League Hackathon in June 2026, Jagadeep integrated Azure AI Foundry (GPT-4.1-mini) into his IPL platform, verifying performance via RAGAS with a faithfulness score of 0.981."
-      },
-      {
-        keywords: ['anz', 'software engineer', 'backend', 'spring boot', 'java', 'kafka', 'oracle', 'loaniq'],
-        reply: "At ANZ (June 2022 - June 2024), Jagadeep built Spring Boot REST APIs and optimized Oracle SQL queries for LoanIQ core banking platforms. He also engineered event-driven microservices with Kafka, achieving 90% unit test coverage."
-      },
-      {
-        keywords: ['education', 'university', 'college', 'degree', 'bmsit', 'ut austin', 'texas', 'pgp'],
-        reply: "Jagadeep completed a Post Graduate Program (PGP) in Data Science & Business Analytics from UT Austin × Great Learning (2025-2026) and holds a Bachelor of Engineering in Information Science from BMSIT (8.50 CGPA, 2018-2022)."
-      },
-      {
-        keywords: ['certification', 'certifications', 'aws', 'saa-c03', 'associate', 'azure ai', 'ai-102'],
-        reply: "He is currently pursuing two key industry certifications: AWS Solutions Architect Associate (SAA-C03) and Microsoft Azure AI Engineer Associate (AI-102)."
-      },
-      {
-        keywords: ['skills', 'stack', 'languages', 'databases', 'frameworks', 'tools'],
-        reply: "His core stack includes Python, Java, SQL, LangGraph, LangChain, Qdrant, FAISS, hybrid RAG, XGBoost, Spring Boot, Kafka, AWS, Azure AI Foundry, FastAPI, and RAGAS evaluation."
-      },
-      {
-        keywords: ['salary', 'ctc', 'package', 'compensation', 'expectation', 'lpa'],
-        reply: "Jagadeep is targeting a compensation package of 20-25 LPA (INR) for roles based in India or Riyadh, Saudi Arabia."
-      },
-      {
-        keywords: ['availability', 'start date', 'notice period', 'when can he start'],
-        reply: "Jagadeep is available to start new opportunities beginning July 14, 2026. He is open to full-time roles, hybrid, and remote contracts."
-      },
-      {
-        keywords: ['location', 'relocate', 'bangalore', 'bengaluru', 'riyadh', 'saudi arabia'],
-        reply: "Jagadeep is based in Bengaluru, India, and is open to local roles. He is also open to relocating to Riyadh, Saudi Arabia, or working remotely."
-      },
-      {
-        keywords: ['contact', 'email', 'phone', 'reach', 'linkedin', 'github', 'social'],
-        reply: "You can reach Jagadeep directly at jagadeepreddy3638@gmail.com. His profiles are: LinkedIn (linkedin.com/in/buthuru-jagadeep-reddy) and GitHub (github.com/Jagadeep-Reddy)."
-      }
-    ];
-
-    let bestIntent = null;
-    let maxScore = 0;
-
-    for (const intent of intents) {
-      let score = 0;
-      for (const keyword of intent.keywords) {
-        if (q.includes(keyword)) {
-          score += 1;
-        }
-      }
-      if (score > maxScore) {
-        maxScore = score;
-        bestIntent = intent;
-      }
-    }
-
-    if (maxScore > 0 && bestIntent) {
-      return bestIntent.reply;
-    }
-
-    return "I can answer questions about Jagadeep's portfolio projects (IPL platform, RAG system), work history at ANZ, education (UT Austin, BMSIT), certifications (AWS, Azure), skills, salary targets, availability, or contact details. What would you like to know?";
-  };
-
-  const sendToClaudeAPI = async (userText) => {
-    chatHistoryRef.current = [...chatHistoryRef.current, { role: 'user', content: userText }];
-    setIsTyping(true);
-    try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-6',
-          max_tokens: 1000,
-          system: AGENT_SYSTEM_PROMPT,
-          messages: chatHistoryRef.current
-        })
-      });
-      const data = await res.json();
-      const reply = data.content?.[0]?.text || "Sorry, I couldn't process that. Please email jagadeepreddy3638@gmail.com directly.";
-      chatHistoryRef.current = [...chatHistoryRef.current, { role: 'assistant', content: reply }];
-      setIsTyping(false);
-      setMessages(prev => [...prev, { sender: 'agent', text: reply, timestamp: new Date() }]);
-    } catch {
-      // Fallback to high-fidelity simulated response on connection issue (e.g. CORS/No API key in browser)
-      setTimeout(() => {
-        setIsTyping(false);
-        const reply = getSimulatedResponse(userText);
-        chatHistoryRef.current = [...chatHistoryRef.current, { role: 'assistant', content: reply }];
-        setMessages(prev => [...prev, { sender: 'agent', text: reply, timestamp: new Date() }]);
-      }, 800 + Math.random() * 600);
-    }
-  };
-
-  const handleSendMessage = () => {
-    if (!inputText.trim()) return;
-    const text = inputText.trim();
-    setMessages(prev => [...prev, { sender: 'user', text, timestamp: new Date() }]);
-    setInputText('');
-    sendToClaudeAPI(text);
-  };
-
-  const handleQuickAction = (text) => {
-    setMessages(prev => [...prev, { sender: 'user', text, timestamp: new Date() }]);
-    sendToClaudeAPI(text);
-  };
-
-  const scrollToSection = (id) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
-    setMobileMenuOpen(false);
-  };
 
   return (
-    <div className={`min-h-screen relative ${t.bg} transition-colors duration-500 font-sans antialiased selection:bg-current/10 overflow-x-clip`}>
-      
-      {/* Background Ambient Glows */}
-      <div className={`absolute top-[5%] left-[10%] w-[300px] md:w-[500px] h-[300px] md:h-[500px] rounded-full blur-[100px] md:blur-[150px] pointer-events-none z-0 opacity-70 transition-all duration-1000 mix-blend-screen ${t.blob1}`}></div>
-      <div className={`absolute top-[35%] right-[5%] w-[250px] md:w-[450px] h-[250px] md:h-[450px] rounded-full blur-[100px] md:blur-[150px] pointer-events-none z-0 opacity-60 transition-all duration-1000 mix-blend-screen ${t.blob2}`}></div>
-      <div className={`absolute top-[70%] left-[10%] w-[280px] md:w-[480px] h-[280px] md:h-[480px] rounded-full blur-[100px] md:blur-[150px] pointer-events-none z-0 opacity-50 transition-all duration-1000 mix-blend-screen ${t.blob3}`}></div>
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 w-full h-full pointer-events-none"
+      style={{ opacity: 0.55 }}
+      aria-hidden
+    />
+  );
+}
 
-      {/* Editorial Style Grid Lines */}
-      <div className="fixed inset-0 pointer-events-none grid grid-cols-4 max-w-7xl mx-auto px-6 opacity-[0.02] z-0">
-        <div className={`border-l border-r ${t.divider} h-full`}></div>
-        <div className={`border-r ${t.divider} h-full`}></div>
-        <div className={`border-r ${t.divider} h-full`}></div>
-        <div></div>
+/* ══════════════════════════════════════════════════════════════════════════════
+   REVEAL WRAPPER
+══════════════════════════════════════════════════════════════════════════════ */
+
+function Reveal({ children, className = '', delay = 0, direction = 'up' }) {
+  const [ref, visible] = useReveal();
+  const initial = {
+    up:    'translateY(36px)',
+    down:  'translateY(-36px)',
+    left:  'translateX(-36px)',
+    right: 'translateX(36px)',
+    none:  'translateY(0)',
+  }[direction];
+
+  return (
+    <div
+      ref={ref}
+      className={`reveal ${className}`}
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? 'translate(0)' : initial,
+        transition: `opacity 0.85s cubic-bezier(0.16,1,0.3,1) ${delay}ms, transform 0.85s cubic-bezier(0.16,1,0.3,1) ${delay}ms`,
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   SECTION HEADER
+══════════════════════════════════════════════════════════════════════════════ */
+
+function SectionHeader({ eyebrow, title, subtitle }) {
+  return (
+    <Reveal className="mb-20">
+      <span className="section-eyebrow">✦ {eyebrow}</span>
+      <h2
+        className="font-display font-bold text-white leading-[1.05] mb-4"
+        style={{ fontSize: 'clamp(40px, 6vw, 80px)' }}
+      >
+        {title}
+      </h2>
+      {subtitle && (
+        <p className="text-zinc-500 text-lg max-w-xl leading-relaxed">{subtitle}</p>
+      )}
+    </Reveal>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   PROJECT CARD
+══════════════════════════════════════════════════════════════════════════════ */
+
+function ProjectCard({ project, index }) {
+  const cardRef = useRef(null);
+  const [tilt, setTilt] = useState({ x: 0, y: 0, gx: 50, gy: 50 });
+  const [hovering, setHovering] = useState(false);
+
+  const onMouseMove = useCallback((e) => {
+    const rect = cardRef.current.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width;
+    const py = (e.clientY - rect.top)  / rect.height;
+    setTilt({
+      x: (px - 0.5) * 16,
+      y: -(py - 0.5) * 16,
+      gx: px * 100,
+      gy: py * 100,
+    });
+  }, []);
+
+  const onMouseLeave = useCallback(() => {
+    setHovering(false);
+    setTilt({ x: 0, y: 0, gx: 50, gy: 50 });
+  }, []);
+
+  return (
+    <div
+      ref={cardRef}
+      className="project-card"
+      onMouseMove={onMouseMove}
+      onMouseEnter={() => setHovering(true)}
+      onMouseLeave={onMouseLeave}
+      style={{
+        transform: hovering
+          ? `perspective(1000px) rotateY(${tilt.x}deg) rotateX(${tilt.y}deg) translateY(-6px)`
+          : 'perspective(1000px) rotateY(0) rotateX(0) translateY(0)',
+        transition: hovering ? 'transform 0.1s ease-out' : 'transform 0.6s cubic-bezier(0.23,1,0.32,1)',
+      }}
+    >
+      {/* Mouse-tracked gradient glow */}
+      <div
+        className="absolute inset-0 rounded-[20px] pointer-events-none transition-opacity duration-500"
+        style={{
+          opacity: hovering ? 1 : 0,
+          background: `radial-gradient(circle at ${tilt.gx}% ${tilt.gy}%, ${project.accent}18 0%, transparent 60%)`,
+        }}
+      />
+
+      {/* Accent top bar */}
+      <div
+        className="absolute top-0 left-0 right-0 h-[2px] rounded-t-[20px]"
+        style={{
+          background: `linear-gradient(90deg, ${project.accent}, ${project.accentB})`,
+          opacity: hovering ? 1 : 0.4,
+          transition: 'opacity 0.3s ease',
+        }}
+      />
+
+      <div className="relative p-8 md:p-10">
+        {/* Header row */}
+        <div className="flex items-start justify-between mb-6">
+          <div>
+            <div className="flex items-center gap-3 mb-3">
+              <span
+                className="text-[9px] font-mono uppercase tracking-[0.28em]"
+                style={{ color: project.accent }}
+              >
+                {project.category}
+              </span>
+              <span className="w-1 h-1 rounded-full bg-zinc-700" />
+              <span className="text-[9px] font-mono text-zinc-600 tracking-wider">{project.year}</span>
+            </div>
+            <h3 className="font-display font-bold text-white leading-tight" style={{ fontSize: 'clamp(20px,2.4vw,26px)' }}>
+              {project.emoji} {project.title}
+            </h3>
+          </div>
+
+          {/* Stat badge */}
+          <div
+            className="flex-shrink-0 ml-4 text-center px-4 py-2.5 rounded-xl hidden sm:block"
+            style={{
+              background: `${project.accent}14`,
+              border: `1px solid ${project.accent}30`,
+            }}
+          >
+            <div className="font-mono font-bold text-sm" style={{ color: project.accent }}>
+              {project.stat.value}
+            </div>
+            <div className="text-[9px] font-mono text-zinc-600 uppercase tracking-wider mt-0.5">
+              {project.stat.label}
+            </div>
+          </div>
+        </div>
+
+        {/* Description */}
+        <p className="text-zinc-400 text-sm leading-relaxed mb-6">{project.description}</p>
+
+        {/* Highlights */}
+        <ul className="space-y-2.5 mb-7">
+          {project.highlights.map((h, i) => (
+            <li key={i} className="flex items-start gap-3 text-xs text-zinc-500 leading-relaxed">
+              <span
+                className="w-1.5 h-1.5 rounded-full flex-shrink-0 mt-[5px]"
+                style={{ background: project.accent }}
+              />
+              {h}
+            </li>
+          ))}
+        </ul>
+
+        {/* Footer row */}
+        <div className="flex items-center justify-between flex-wrap gap-3">
+          <div className="flex flex-wrap gap-1.5">
+            {project.tech.map(t => (
+              <span key={t} className="tech-pill">{t}</span>
+            ))}
+          </div>
+          <div className="flex items-center gap-2 flex-shrink-0">
+            {project.github && (
+              <a
+                href={project.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="GitHub"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono text-zinc-500 hover:text-white border border-zinc-800 hover:border-zinc-600 transition-all"
+              >
+                <Github size={13} /> Code
+              </a>
+            )}
+            {project.live && (
+              <a
+                href={project.live}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Live"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono text-zinc-500 hover:text-white border border-zinc-800 hover:border-zinc-600 transition-all"
+              >
+                <ExternalLink size={13} /> Live
+              </a>
+            )}
+          </div>
+        </div>
       </div>
 
-      {/* Sticky Header */}
-      <header className={`fixed top-0 left-0 w-full z-40 transition-all duration-300 ${
-        scrolled 
-          ? `${t.bg} bg-opacity-95 backdrop-blur-md border-b ${t.divider}`
-          : 'bg-transparent'
-      }`}>
-        <div className={`absolute bottom-0 left-0 h-[1.5px] ${t.accentBg} transition-all duration-100 z-50`} style={{ width: `${scrollProgress}%` }}></div>
-        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center relative z-10">
-          <div>
-            <span 
-              onClick={() => scrollToSection('hero')} 
-              className="text-lg font-mono font-bold tracking-tight cursor-pointer hover:opacity-80 transition"
-            >
-              [~/jagadeep.reddy]
-            </span>
-            <div className="hidden sm:flex items-center gap-1.5 mt-0.5 text-[8px] uppercase tracking-widest font-mono text-zinc-500">
-              <span className={`w-1.5 h-1.5 rounded-full ${t.dotColor} animate-pulse`}></span>
-              system.status: active // ping: {systemStats.ping}ms // LLM: gpt-4o-mini
-            </div>
+      {/* Big number decoration */}
+      <div
+        className="absolute bottom-4 right-6 font-display font-bold leading-none select-none pointer-events-none"
+        style={{ fontSize: '120px', color: `${project.accent}08` }}
+      >
+        {project.num}
+      </div>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   SKILL GROUP
+══════════════════════════════════════════════════════════════════════════════ */
+
+function SkillGroup({ group, delay }) {
+  const [ref, visible] = useReveal();
+  const IconComponent = group.icon;
+
+  return (
+    <div
+      ref={ref}
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? 'translateY(0)' : 'translateY(24px)',
+        transition: `all 0.8s cubic-bezier(0.16,1,0.3,1) ${delay}ms`,
+      }}
+      className="group"
+    >
+      <div
+        className="relative rounded-2xl p-6 overflow-hidden border transition-colors duration-300"
+        style={{
+          background: `${group.color}06`,
+          borderColor: `${group.color}20`,
+        }}
+        onMouseEnter={e => {
+          e.currentTarget.style.borderColor = `${group.color}45`;
+          e.currentTarget.style.background = `${group.color}0b`;
+        }}
+        onMouseLeave={e => {
+          e.currentTarget.style.borderColor = `${group.color}20`;
+          e.currentTarget.style.background = `${group.color}06`;
+        }}
+      >
+        {/* Label row */}
+        <div className="flex items-center gap-3 mb-4">
+          <div
+            className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+            style={{ background: `${group.color}18`, color: group.color }}
+          >
+            <IconComponent size={16} />
           </div>
+          <span
+            className="text-[10px] font-mono uppercase tracking-[0.2em] font-semibold"
+            style={{ color: group.color }}
+          >
+            {group.label}
+          </span>
+        </div>
 
-          <div className="flex items-center gap-4">
-            {/* Desktop Navigation Links */}
-            <nav className="hidden md:flex gap-5 text-[9px] font-mono uppercase tracking-widest text-zinc-400">
-              <button onClick={() => scrollToSection('architecture')} className={`${t.hoverText} transition`}>Architecture</button>
-              <button onClick={() => scrollToSection('projects')} className={`${t.hoverText} transition`}>Projects</button>
-              <button onClick={() => scrollToSection('skills')} className={`${t.hoverText} transition`}>Skills</button>
-              <button onClick={() => scrollToSection('experience')} className={`${t.hoverText} transition`}>Experience</button>
-              <button onClick={() => scrollToSection('education')} className={`${t.hoverText} transition`}>Academics</button>
-              <button onClick={() => scrollToSection('chatbot-console')} className={`${t.hoverText} transition`}>Shell</button>
-            </nav>
+        {/* Pills */}
+        <div className="flex flex-wrap gap-2">
+          {group.items.map(item => (
+            <span
+              key={item}
+              className="text-xs text-zinc-300 px-3 py-1.5 rounded-lg border border-zinc-800/80 hover:border-zinc-600 hover:text-white bg-zinc-900/60 hover:bg-zinc-800/60 transition-all duration-200 cursor-default"
+            >
+              {item}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
 
-            <span className="hidden md:inline h-4 w-[1px] bg-zinc-800"></span>
+/* ══════════════════════════════════════════════════════════════════════════════
+   EXPERIENCE ITEM
+══════════════════════════════════════════════════════════════════════════════ */
 
-            {/* Dropdown theme switcher */}
-            <div className="relative">
-              <select
-                value={theme}
-                onChange={(e) => setTheme(e.target.value)}
-                className={`appearance-none bg-transparent border ${t.accentBorder} ${t.text} text-[9px] font-mono uppercase tracking-widest pl-3 pr-7 py-1 rounded focus:outline-none cursor-pointer hover:bg-white/5 transition`}
-              >
-                <option value="midnight" className="bg-[#080C14] text-[#F8FAFC]">Slate Bronze</option>
-                <option value="obsidian" className="bg-[#050505] text-[#F1F5F9]">Obsidian Teal</option>
-                <option value="forest" className="bg-[#F4F6F5] text-[#1E293B]">Botanical Sage</option>
-                <option value="terracotta" className="bg-[#FAF7F0] text-[#221F1B]">Warm Terracotta</option>
-              </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-1.5 text-zinc-500">
-                <ChevronDown size={10} />
+function ExperienceItem({ exp, index, isLast }) {
+  const [open, setOpen] = useState(index === 0);
+  const [ref, visible] = useReveal();
+
+  return (
+    <div
+      ref={ref}
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? 'translateX(0)' : 'translateX(-20px)',
+        transition: `all 0.85s cubic-bezier(0.16,1,0.3,1) ${index * 120}ms`,
+      }}
+      className="flex gap-6 md:gap-8"
+    >
+      {/* Timeline */}
+      <div className="flex flex-col items-center flex-shrink-0 pt-1">
+        <div className={`timeline-node ${exp.current ? 'active' : 'inactive'}`} />
+        {!isLast && (
+          <div
+            className="w-px flex-1 mt-3"
+            style={{
+              background: exp.current
+                ? 'linear-gradient(to bottom, rgba(124,58,237,0.4), rgba(124,58,237,0.05))'
+                : 'rgba(255,255,255,0.06)',
+              minHeight: '60px',
+            }}
+          />
+        )}
+      </div>
+
+      {/* Content */}
+      <div className={`flex-1 pb-12 ${isLast ? '' : ''}`}>
+        <button
+          className="w-full text-left group"
+          onClick={() => setOpen(o => !o)}
+        >
+          <div className="flex items-start justify-between gap-4 mb-3">
+            <div>
+              <div className="flex items-center flex-wrap gap-3 mb-1">
+                <h3 className="font-display font-bold text-white text-xl md:text-2xl">{exp.role}</h3>
+                {exp.current && (
+                  <span
+                    className="text-[9px] font-mono uppercase tracking-[0.18em] px-2.5 py-1 rounded-full"
+                    style={{
+                      background: 'rgba(124,58,237,0.12)',
+                      color: '#a78bfa',
+                      border: '1px solid rgba(124,58,237,0.3)',
+                    }}
+                  >
+                    Current
+                  </span>
+                )}
+              </div>
+              <div className="flex items-center gap-2 text-sm text-zinc-400">
+                <span>{exp.company}</span>
+                <span className="text-zinc-700 font-mono text-[11px]">· {exp.period}</span>
               </div>
             </div>
-
-            {/* Mobile menu trigger */}
-            <button 
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-1 hover:opacity-75 transition text-zinc-400"
-              aria-label="Toggle menu"
+            <div
+              className="w-7 h-7 rounded-lg border border-zinc-800 flex items-center justify-center text-zinc-600 group-hover:text-zinc-300 group-hover:border-zinc-600 transition-all flex-shrink-0 mt-1"
+              style={{ transform: open ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.35s ease' }}
             >
-              <Menu size={18} />
-            </button>
+              <ChevronDown size={14} />
+            </div>
           </div>
+        </button>
+
+        <div
+          style={{
+            maxHeight: open ? '600px' : '0',
+            overflow: 'hidden',
+            transition: 'max-height 0.55s cubic-bezier(0.16,1,0.3,1)',
+          }}
+        >
+          <ul className="space-y-3 mb-5 mt-2">
+            {exp.bullets.map((b, j) => (
+              <li key={j} className="flex items-start gap-3 text-sm text-zinc-400 leading-relaxed">
+                <span
+                  className="w-1.5 h-1.5 rounded-full flex-shrink-0 mt-[6px]"
+                  style={{ background: exp.current ? '#7c3aed' : '#3f3f5a' }}
+                />
+                {b}
+              </li>
+            ))}
+          </ul>
+          <div className="flex flex-wrap gap-1.5">
+            {exp.tech.map(t => (
+              <span key={t} className="tech-pill">{t}</span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   MAIN APP
+══════════════════════════════════════════════════════════════════════════════ */
+
+export default function App() {
+  const [scrolled,      setScrolled]      = useState(false);
+  const [scrollPct,     setScrollPct]     = useState(0);
+  const [menuOpen,      setMenuOpen]      = useState(false);
+  const [copied,        setCopied]        = useState(null);
+  const [formData,      setFormData]      = useState({ email: '', message: '' });
+  const [formStatus,    setFormStatus]    = useState('idle');
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const [activeSection, setActiveSection] = useState('hero');
+
+  const typed = useTypewriter(TYPEWRITER_PHRASES, 55, 1600);
+
+  /* ── scroll + cursor ── */
+  useEffect(() => {
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 60);
+      setShowScrollTop(y > 700);
+      const doc = document.documentElement;
+      setScrollPct(doc.scrollHeight > doc.clientHeight ? (y / (doc.scrollHeight - doc.clientHeight)) * 100 : 0);
+
+      // active section detection
+      const sections = ['hero','projects','skills','experience','education','contact'];
+      for (const id of [...sections].reverse()) {
+        const el = document.getElementById(id);
+        if (el && el.offsetTop - 140 <= y) { setActiveSection(id); break; }
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+
+  /* ── helpers ── */
+  const goto = useCallback((id) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setMenuOpen(false);
+  }, []);
+
+  const copyText = useCallback(async (text, key) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(key);
+      setTimeout(() => setCopied(null), 2200);
+    } catch (_) {}
+  }, []);
+
+  const submitForm = async (e) => {
+    e.preventDefault();
+    setFormStatus('sending');
+    try {
+      const res = await fetch('https://formspree.io/f/xwvdqlwd', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ email: formData.email, message: formData.message }),
+      });
+      setFormStatus(res.ok ? 'success' : 'error');
+    } catch { setFormStatus('error'); }
+  };
+
+  const navItems = ['projects','skills','experience','contact'];
+
+  /* ════════════════════════════════════════════════════════════════════════════
+     RENDER
+  ════════════════════════════════════════════════════════════════════════════ */
+  return (
+    <div className="min-h-screen text-white overflow-x-hidden" style={{ background: 'var(--c-bg)' }}>
+
+      {/* ── SCROLL PROGRESS ───────────────────────────────────────────────────── */}
+      <div className="scroll-progress" style={{ width: `${scrollPct}%` }} aria-hidden />
+
+      {/* ══════════════════════════════════════════════════════════════════════
+          NAVIGATION
+      ══════════════════════════════════════════════════════════════════════ */}
+      <header
+        className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
+          scrolled ? 'glass border-b border-white/[0.05]' : 'bg-transparent'
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+          {/* Logo */}
+          <button
+            id="nav-logo"
+            onClick={() => goto('hero')}
+            className="relative group flex items-center gap-2"
+            aria-label="Go to top"
+          >
+            <div
+              className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-xs font-mono font-bold transition-all duration-300"
+              style={{
+                background: 'linear-gradient(135deg, #7c3aed, #06b6d4)',
+                boxShadow: 'var(--glow-v) 0 4px 14px',
+              }}
+            >
+              JR
+            </div>
+            <span className="hidden sm:block text-sm font-display font-semibold text-zinc-400 group-hover:text-white transition-colors">
+              Jagadeep Reddy
+            </span>
+          </button>
+
+          {/* Desktop nav */}
+          <nav className="hidden md:flex items-center gap-1">
+            {navItems.map(s => (
+              <button
+                key={s}
+                id={`nav-${s}`}
+                onClick={() => goto(s)}
+                className="relative px-4 py-2 rounded-lg text-[11px] font-mono uppercase tracking-[0.18em] transition-all duration-200"
+                style={{
+                  color: activeSection === s ? '#a78bfa' : 'rgba(161,161,170,0.8)',
+                  background: activeSection === s ? 'rgba(124,58,237,0.1)' : 'transparent',
+                }}
+              >
+                {s}
+                {activeSection === s && (
+                  <span
+                    className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full"
+                    style={{ background: '#7c3aed' }}
+                  />
+                )}
+              </button>
+            ))}
+          </nav>
+
+          {/* CTA */}
+          <div className="hidden md:flex items-center gap-3">
+            <a
+              id="nav-resume"
+              href="/Jagadeep_Reddy_Resume.pdf"
+              download
+              className="btn-shine flex items-center gap-2 text-[11px] font-mono uppercase tracking-[0.15em] text-white px-4 py-2.5 rounded-xl transition-all duration-300"
+              style={{
+                background: 'linear-gradient(135deg, #7c3aed, #4338ca)',
+                boxShadow: '0 4px 16px rgba(124,58,237,0.35)',
+              }}
+            >
+              Resume <Download size={12} />
+            </a>
+          </div>
+
+          {/* Hamburger */}
+          <button
+            id="nav-menu-toggle"
+            className="md:hidden w-9 h-9 rounded-lg border border-zinc-800 flex items-center justify-center text-zinc-400 hover:text-white hover:border-zinc-600 transition-all"
+            onClick={() => setMenuOpen(v => !v)}
+            aria-label="Toggle menu"
+          >
+            {menuOpen ? <X size={18} /> : <Menu size={18} />}
+          </button>
         </div>
       </header>
 
-      {/* Mobile Drawer Overlay */}
-      {mobileMenuOpen && (
-        <div className={`fixed inset-0 z-50 md:hidden flex flex-col justify-center items-center gap-8 ${t.bg} bg-opacity-98 backdrop-blur-lg px-6`}>
-          <button 
-            onClick={() => setMobileMenuOpen(false)}
-            className="absolute top-6 right-6 p-2 hover:opacity-75 transition text-zinc-400"
-            aria-label="Close menu"
+      {/* Mobile menu */}
+      <div
+        className={`fixed inset-0 z-40 flex flex-col items-center justify-center gap-8 transition-all duration-400 ${
+          menuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+        style={{ background: 'rgba(3,3,8,0.97)', backdropFilter: 'blur(24px)' }}
+      >
+        <button
+          id="mobile-menu-close"
+          className="absolute top-6 right-6 w-9 h-9 rounded-lg border border-zinc-800 flex items-center justify-center text-zinc-400"
+          onClick={() => setMenuOpen(false)}
+        >
+          <X size={18} />
+        </button>
+        {navItems.map((s, i) => (
+          <button
+            key={s}
+            id={`mobile-nav-${s}`}
+            onClick={() => goto(s)}
+            className="text-4xl font-display font-bold capitalize text-zinc-300 hover:text-white transition-colors"
+            style={{
+              animation: menuOpen ? `fade-up 0.5s cubic-bezier(0.16,1,0.3,1) ${i * 70}ms both` : 'none',
+            }}
           >
-            <X size={22} />
+            {s}
           </button>
-          <nav className="flex flex-col gap-6 text-sm font-mono uppercase tracking-widest text-center">
-            <button onClick={() => scrollToSection('architecture')} className={`${t.hoverText} transition`}>Architecture</button>
-            <button onClick={() => scrollToSection('projects')} className={`${t.hoverText} transition`}>Projects</button>
-            <button onClick={() => scrollToSection('skills')} className={`${t.hoverText} transition`}>Skills</button>
-            <button onClick={() => scrollToSection('experience')} className={`${t.hoverText} transition`}>Experience</button>
-            <button onClick={() => scrollToSection('education')} className={`${t.hoverText} transition`}>Academics</button>
-            <button onClick={() => scrollToSection('chatbot-console')} className={`${t.hoverText} transition`}>Shell</button>
-            <button onClick={() => scrollToSection('contact')} className={`${t.hoverText} transition`}>Connect</button>
-          </nav>
-        </div>
-      )}
+        ))}
+        <a
+          href="/Jagadeep_Reddy_Resume.pdf"
+          download
+          className="flex items-center gap-2 text-sm font-mono text-zinc-400 border border-zinc-700 px-6 py-3 rounded-xl mt-4"
+        >
+          Resume <Download size={14} />
+        </a>
+      </div>
 
-      {/* Main Dashboard Grid Frame */}
-      <div className="max-w-7xl mx-auto px-4 md:px-6 pt-24 pb-6 lg:flex lg:gap-8 relative z-10">
-        
-        {/* Left Side: Systems Cockpit & Diagnostics (Sticky) */}
-        <aside className="lg:w-[340px] xl:w-[380px] flex-shrink-0 lg:sticky lg:top-24 lg:self-start lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto space-y-6 py-6 scrollbar-thin">
-          
-          {/* Section A: Profile ID */}
-          <div className={`p-6 border ${t.cardBorder} ${t.cardBg} rounded-2xl`}>
-            <div className="flex items-center gap-4">
-              <div className={`w-14 h-14 rounded-xl ${t.accentBg} ${t.buttonText} flex items-center justify-center font-serif text-2xl font-bold shadow-md`}>
-                JD
-              </div>
-              <div>
-                <h2 className="text-lg font-mono font-bold tracking-tight">JAGADEEP REDDY</h2>
-                <p className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest mt-0.5">
-                  [role] ai_engineer // backend_architect
-                </p>
-                <div className="flex items-center gap-1.5 mt-2">
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                  </span>
-                  <span className="text-[9px] font-mono uppercase text-zinc-400 tracking-wider">online_for_hire</span>
-                </div>
-              </div>
+      {/* ══════════════════════════════════════════════════════════════════════
+          HERO
+      ══════════════════════════════════════════════════════════════════════ */}
+      <section id="hero" className="relative min-h-screen flex flex-col justify-center overflow-hidden">
+        {/* Particle canvas */}
+        <ParticleCanvas />
+
+        {/* Grid background */}
+        <div className="absolute inset-0 grid-bg opacity-100" aria-hidden />
+
+        {/* Aurora blobs */}
+        <div
+          aria-hidden
+          className="aurora-1 absolute -top-40 -right-32 w-[700px] h-[700px] rounded-full pointer-events-none"
+          style={{ background: 'radial-gradient(circle, rgba(124,58,237,0.28) 0%, transparent 65%)' }}
+        />
+        <div
+          aria-hidden
+          className="aurora-2 absolute -bottom-40 -left-20 w-[600px] h-[600px] rounded-full pointer-events-none"
+          style={{ background: 'radial-gradient(circle, rgba(6,182,212,0.2) 0%, transparent 65%)' }}
+        />
+        <div
+          aria-hidden
+          className="aurora-3 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full pointer-events-none"
+          style={{ background: 'radial-gradient(circle, rgba(67,56,202,0.12) 0%, transparent 70%)' }}
+        />
+
+        {/* Content */}
+        <div className="relative max-w-7xl mx-auto px-6 pt-32 pb-24 z-10">
+
+          {/* Status + Location row */}
+          <div className="flex flex-wrap items-center gap-3 mb-10 animate-fade-up" style={{ animationDelay: '100ms' }}>
+            <div className="status-badge">
+              <span className="status-dot" />
+              Available for opportunities
             </div>
-            
-            <p className={`text-xs ${t.textBody} font-sans leading-relaxed mt-5 max-w-sm`}>
-              Specializing in self-correcting RAG frameworks, LangGraph multi-agent orchestration, and sub-300ms real-time ML commentary streams.
-            </p>
+            <div
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-[10px] font-mono uppercase tracking-[0.18em]"
+              style={{
+                background: 'rgba(255,255,255,0.04)',
+                border: '1px solid rgba(255,255,255,0.08)',
+                color: 'rgba(161,161,170,0.8)',
+              }}
+            >
+              📍 Bengaluru, India &nbsp;·&nbsp; Open to Relocation (US / Saudi Arabia)
+            </div>
           </div>
 
-          {/* Section B: Systems Diagnostics Widget */}
-          <div className={`p-6 border ${t.cardBorder} ${t.cardBg} rounded-2xl`}>
-            <div className="flex justify-between items-center mb-4">
-              <span className={`text-[10px] font-mono uppercase tracking-widest ${t.accentText}`}>
-                // COCKPIT_MONITOR
-              </span>
-              <span className="text-[9px] font-mono text-zinc-500">UPTIME: 99.98%</span>
-            </div>
+          {/* Name + Typewriter */}
+          <div className="animate-fade-up" style={{ animationDelay: '220ms' }}>
+            <h1
+              className="font-display font-bold leading-[0.88] mb-6 tracking-tight"
+              style={{ fontSize: 'clamp(56px, 10vw, 144px)' }}
+            >
+              <span className="block text-white">Jagadeep</span>
+              <span className="block gradient-text">Reddy</span>
+            </h1>
 
-            <div className="grid grid-cols-3 gap-2.5 mb-5 text-center font-mono">
-              <div className={`p-2.5 border ${t.cardBorder} rounded-lg bg-black/10`}>
-                <div className="text-[7px] text-zinc-500 uppercase">SYS CPU</div>
-                <div className={`text-xs font-bold ${t.text} mt-1`}>{systemStats.cpu}%</div>
-              </div>
-              <div className={`p-2.5 border ${t.cardBorder} rounded-lg bg-black/10`}>
-                <div className="text-[7px] text-zinc-500 uppercase">SYS MEM</div>
-                <div className={`text-xs font-bold ${t.text} mt-1`}>{systemStats.memory}%</div>
-              </div>
-              <div className={`p-2.5 border ${t.cardBorder} rounded-lg bg-black/10`}>
-                <div className="text-[7px] text-zinc-500 uppercase">SYS LATENCY</div>
-                <div className={`text-xs font-bold ${t.text} mt-1`}>{systemStats.ping}ms</div>
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              <button 
-                onClick={runDiagnostics}
-                disabled={diagActive}
-                className={`w-full py-2 ${t.buttonBg} ${t.buttonText} text-[10px] font-mono uppercase tracking-widest rounded-lg flex items-center justify-center gap-1.5 shadow-sm active:scale-[0.98] transition cursor-pointer disabled:opacity-50`}
+            <div
+              className="flex items-center gap-3 mb-2"
+              style={{ minHeight: '36px' }}
+            >
+              <span className="text-zinc-600 font-mono text-sm">&gt;_</span>
+              <span
+                className="text-lg md:text-xl font-mono text-zinc-300 typewriter-cursor"
+                aria-label="Current focus"
               >
-                <Activity size={12} className={diagActive ? "animate-spin" : ""} />
-                {diagActive ? "Running Tests..." : "Run System Self-Test"}
+                {typed}
+              </span>
+            </div>
+          </div>
+
+          {/* Tagline + CTAs */}
+          <div
+            className="flex flex-col md:flex-row md:items-end justify-between gap-10 mt-12 animate-fade-up"
+            style={{ animationDelay: '380ms' }}
+          >
+            <p className="text-lg text-zinc-400 leading-relaxed max-w-xl font-light">
+              AI Engineer building production-grade intelligent systems — from{' '}
+              <span className="text-zinc-200">multi-agent LangGraph orchestration</span> to{' '}
+              <span className="text-zinc-200">enterprise RAG pipelines</span> that actually pass evaluation.
+            </p>
+
+            <div className="flex items-center gap-3 flex-shrink-0">
+              <button
+                id="hero-cta-work"
+                onClick={() => goto('projects')}
+                className="btn-shine px-7 py-3.5 text-white text-sm font-medium rounded-xl flex items-center gap-2 transition-all duration-300"
+                style={{
+                  background: 'linear-gradient(135deg, #7c3aed, #4338ca)',
+                  boxShadow: '0 6px 20px rgba(124,58,237,0.4)',
+                }}
+              >
+                View Work <ArrowUpRight size={16} />
               </button>
+              <button
+                id="hero-cta-contact"
+                onClick={() => goto('contact')}
+                className="px-7 py-3.5 border text-zinc-300 hover:text-white text-sm font-medium rounded-xl transition-all duration-300 hover:border-zinc-500 hover:bg-white/[0.03]"
+                style={{ borderColor: 'rgba(255,255,255,0.1)' }}
+              >
+                Contact
+              </button>
+            </div>
+          </div>
 
-              {/* Diagnostics terminal outputs log */}
-              {(diagActive || diagLogs.length > 0) && (
-                <div className="p-3 border border-zinc-800/80 rounded-lg bg-zinc-950/80 text-[9px] font-mono text-zinc-400 space-y-1.5 h-[130px] overflow-y-auto scrollbar-thin">
-                  {diagLogs.map((log, index) => (
-                    <div key={index} className="flex gap-1.5 items-start">
-                      <span className="text-[#10B981] flex-shrink-0">&gt;</span>
-                      <span className="leading-normal">{log}</span>
-                    </div>
-                  ))}
+          {/* Stats */}
+          <div
+            className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-20 pt-14 animate-fade-up"
+            style={{
+              animationDelay: '520ms',
+              borderTop: '1px solid rgba(255,255,255,0.06)',
+            }}
+          >
+            {STATS.map(({ value, label, color }) => (
+              <div key={label} className="group">
+                <div
+                  className="font-display font-bold text-3xl md:text-4xl mb-1.5 transition-all duration-300"
+                  style={{ color }}
+                >
+                  {value}
                 </div>
-              )}
-            </div>
-          </div>
-
-          {/* Section C: Target Highlights & Active tag cockpit */}
-          <div className={`p-6 border ${t.cardBorder} ${t.cardBg} rounded-2xl`}>
-            <div className="text-[9px] font-mono uppercase text-zinc-500 mb-3">// ACTIVE_MONITOR_TAGS</div>
-            
-            {activeTag ? (
-              <div className="space-y-2">
-                <div className="text-xs font-mono">
-                  Active Filter: <span className={`${t.accentText} font-bold`}>{activeTag}</span>
-                </div>
-                <p className="text-[10px] text-zinc-500 font-sans leading-normal">
-                  All instances of this skill node are currently highlighted in the dashboard feed.
-                </p>
-                <button 
-                  onClick={() => setActiveTag(null)}
-                  className="text-[9px] font-mono uppercase text-zinc-400 hover:text-white underline"
-                >
-                  Clear Highlights
-                </button>
+                <div className="text-[10px] font-mono uppercase tracking-widest text-zinc-600">{label}</div>
               </div>
-            ) : (
-              <div className="text-[10px] font-mono text-zinc-500">
-                Hover over any tech badge in the feed below to query its application instances.
-              </div>
-            )}
-          </div>
-        </aside>
-
-        {/* Right Side: Main Dashboard Content Feed */}
-        <main className="flex-1 min-w-0 space-y-12 py-6">
-          
-          {/* 01 HERO NODE */}
-          <section id="hero" className={`p-6 md:p-10 border ${t.cardBorder} ${t.cardBg} rounded-2xl relative overflow-hidden`}>
-            {/* Grid overlay decoration */}
-            <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(#ffffff03_1px,transparent_1px)] [background-size:16px_16px] opacity-35 z-0"></div>
-            
-            <div className="relative z-10">
-              <div className="flex items-center gap-3 mb-6">
-                <span className={`text-[9px] font-mono uppercase tracking-widest ${t.accent} px-2.5 py-0.5 border ${t.accentBorder} rounded-full ${t.accentBgLight}`}>
-                  Sys: Mainframe Init
-                </span>
-                <span className="text-[9px] font-mono tracking-widest text-zinc-500">
-                  [target_roles // ai_engineer // ctc_20_25_lpa]
-                </span>
-              </div>
-
-              <h1 className="text-3xl sm:text-5xl md:text-6xl font-serif font-bold leading-tight mb-8">
-                Building AI systems that <span className={`italic ${t.accent}`}>scale beyond the demo.</span>
-              </h1>
-
-              <p className={`text-sm md:text-base ${t.textBody} font-sans leading-relaxed mb-8 max-w-2xl`}>
-                I am an AI Engineer transitioning from 2 years of enterprise backend engineering at ANZ.
-                I design production-grade GenAI pipelines: orchestrating specialized LangGraph agents, building hybrid RAG flows, 
-                shaping millisecond-budget XGBoost win predictions, and anchoring answer validity via automated RAGAS gates.
-              </p>
-
-              <div className="flex gap-3.5 flex-wrap">
-                <button 
-                  onClick={() => scrollToSection('projects')} 
-                  className={`px-5 py-2.5 ${t.buttonBg} ${t.buttonText} text-[10px] font-mono uppercase tracking-wider font-bold flex items-center gap-1.5 hover:opacity-90 active:scale-95 transition cursor-pointer`}
-                >
-                  Explore Repos <Terminal size={12} />
-                </button>
-                <button 
-                  onClick={() => scrollToSection('architecture')}
-                  className={`px-5 py-2.5 border ${t.cardBorder} hover:border-zinc-500 text-[10px] font-mono uppercase tracking-wider font-bold flex items-center gap-1.5 active:scale-95 transition cursor-pointer`}
-                >
-                  View Flowcharts
-                </button>
-                <a 
-                  href="/Jagadeep_Reddy_AI_Engineer_Resume.pdf" 
-                  download="Jagadeep_Reddy_AI_Engineer_Resume.pdf" 
-                  className={`px-5 py-2.5 border ${t.cardBorder} hover:border-zinc-500 text-[10px] font-mono uppercase tracking-wider font-bold flex items-center gap-1.5 active:scale-95 transition cursor-pointer`}
-                >
-                  Download CV <FileText size={12} />
-                </a>
-              </div>
-            </div>
-          </section>
-
-      {/* 02 ARCHITECTURE BLUEPRINTS */}
-      <section id="architecture" className={`p-6 md:p-8 border ${t.cardBorder} ${t.cardBg} rounded-2xl relative z-10`}>
-        <div className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-dashed border-zinc-800/80">
-          <div>
-            <div className={`text-[10px] font-mono uppercase tracking-widest mb-1.5 ${t.accent}`}>
-              01 // PLATFORM BLUEPRINTS
-            </div>
-            <h2 className="text-2xl md:text-3xl font-serif font-bold">Interactive Architectures</h2>
-          </div>
-          
-          <div className={`flex gap-2 p-1 border ${t.cardBorder} ${t.cardBg} rounded-lg`}>
-            <button
-              onClick={() => setActiveArchTab('ipl')}
-              className={`px-3 py-1.5 text-[9px] font-mono uppercase tracking-widest rounded-md transition-all ${
-                activeArchTab === 'ipl' 
-                  ? `${t.buttonBg} font-bold` 
-                  : 'text-zinc-400 hover:text-white'
-              }`}
-            >
-              ipl-intelligence-flow
-            </button>
-            <button
-              onClick={() => setActiveArchTab('rag')}
-              className={`px-3 py-1.5 text-[9px] font-mono uppercase tracking-widest rounded-md transition-all ${
-                activeArchTab === 'rag' 
-                  ? `${t.buttonBg} font-bold` 
-                  : 'text-zinc-400 hover:text-white'
-              }`}
-            >
-              financial-rag-evaluation
-            </button>
+            ))}
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-12 gap-8 items-start">
-          {/* Left explainer list */}
-          <div className="lg:col-span-7 space-y-4">
-            {activeArchTab === 'ipl' ? (
-              <>
-                <div 
-                  onMouseEnter={() => setActiveLayer(1)}
-                  onMouseLeave={() => setActiveLayer(null)}
-                  className={`group p-4 border rounded-xl transition duration-300 cursor-pointer ${
-                    activeLayer === 1 
-                      ? `${t.accentBorderActive} bg-emerald-500/5` 
-                      : `${t.cardBorder} ${t.cardBg} ${t.cardBorderHover}`
-                  }`}
-                >
-                  <div className="flex justify-between items-center mb-1.5">
-                    <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 01 // INGRESS</span>
-                    <span className={`w-1.5 h-1.5 rounded-full ${t.dotColor}`}></span>
-                  </div>
-                  <h4 className="text-xs font-mono font-bold tracking-tight">Ingress & Stream Router</h4>
-                  <p className="text-[11px] text-zinc-400 mt-1 leading-normal font-sans">
-                    Receives live WebSocket BallEvents or user natural language requests. Triggers downstream routing pipeline.
-                  </p>
-                </div>
-
-                <div 
-                  onMouseEnter={() => setActiveLayer(2)}
-                  onMouseLeave={() => setActiveLayer(null)}
-                  className={`group p-4 border rounded-xl transition duration-300 cursor-pointer ${
-                    activeLayer === 2 
-                      ? `${t.accentBorderActive} bg-emerald-500/5` 
-                      : `${t.cardBorder} ${t.cardBg} ${t.cardBorderHover}`
-                  }`}
-                >
-                  <div className="flex justify-between items-center mb-1.5">
-                    <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 02 // ORCHESTRATION</span>
-                    <span className={`w-1.5 h-1.5 rounded-full ${t.dotColor}`}></span>
-                  </div>
-                  <h4 className="text-xs font-mono font-bold tracking-tight">LangGraph Intent Classifier (~20ms)</h4>
-                  <p className="text-[11px] text-zinc-400 mt-1 leading-normal font-sans">
-                    Evaluates user intent (classification accuracy 71%) and routes traffic across a 5-node autonomous graph.
-                  </p>
-                </div>
-
-                <div 
-                  onMouseEnter={() => setActiveLayer(3)}
-                  onMouseLeave={() => setActiveLayer(null)}
-                  className={`group p-4 border rounded-xl transition duration-300 cursor-pointer ${
-                    activeLayer === 3 
-                      ? `${t.accentBorderActive} bg-emerald-500/5` 
-                      : `${t.cardBorder} ${t.cardBg} ${t.cardBorderHover}`
-                  }`}
-                >
-                  <div className="flex justify-between items-center mb-1.5">
-                    <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 03 // INTELLIGENT AGENTS</span>
-                    <span className={`w-1.5 h-1.5 rounded-full ${t.dotColor}`}></span>
-                  </div>
-                  <h4 className="text-xs font-mono font-bold tracking-tight">Specialized Agent Cluster</h4>
-                  <p className="text-[11px] text-zinc-400 mt-1 leading-normal font-sans">
-                    Delegates tasks to domain experts: StatsQA, NarrativeQA, Matchup, Prediction, or TeamVsTeam agents.
-                  </p>
-                </div>
-
-                <div 
-                  onMouseEnter={() => setActiveLayer(4)}
-                  onMouseLeave={() => setActiveLayer(null)}
-                  className={`group p-4 border rounded-xl transition duration-300 cursor-pointer ${
-                    activeLayer === 4 
-                      ? `${t.accentBorderActive} bg-emerald-500/5` 
-                      : `${t.cardBorder} ${t.cardBg} ${t.cardBorderHover}`
-                  }`}
-                >
-                  <div className="flex justify-between items-center mb-1.5">
-                    <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 04 // DATA & KNOWLEDGE RETRIEVAL</span>
-                    <span className={`w-1.5 h-1.5 rounded-full ${t.dotColor}`}></span>
-                  </div>
-                  <h4 className="text-xs font-mono font-bold tracking-tight">Hybrid RAG & Statistical Models</h4>
-                  <p className="text-[11px] text-zinc-400 mt-1 leading-normal font-sans">
-                    Performs BGE-M3 dense search (Qdrant) + BM25 sparse queries with RRF fusion. Runs XGBoost (AUC 0.72) win predictions with SHAP local explanations.
-                  </p>
-                </div>
-
-                <div 
-                  onMouseEnter={() => setActiveLayer(5)}
-                  onMouseLeave={() => setActiveLayer(null)}
-                  className={`group p-4 border rounded-xl transition duration-300 cursor-pointer ${
-                    activeLayer === 5 
-                      ? `${t.accentBorderActive} bg-emerald-500/5` 
-                      : `${t.cardBorder} ${t.cardBg} ${t.cardBorderHover}`
-                  }`}
-                >
-                  <div className="flex justify-between items-center mb-1.5">
-                    <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 05 // DELIVERY LAYER</span>
-                    <span className={`w-1.5 h-1.5 rounded-full ${t.dotColor}`}></span>
-                  </div>
-                  <h4 className="text-xs font-mono font-bold tracking-tight">Real-time WebSocket Push (&lt;300ms)</h4>
-                  <p className="text-[11px] text-zinc-400 mt-1 leading-normal font-sans">
-                    Synthesizes GPT-4o-mini commentary with ML outcomes and pushes the structured updates to users with minimal delay.
-                  </p>
-                </div>
-              </>
-            ) : (
-              <>
-                <div 
-                  onMouseEnter={() => setActiveLayer(1)}
-                  onMouseLeave={() => setActiveLayer(null)}
-                  className={`group p-4 border rounded-xl transition duration-300 cursor-pointer ${
-                    activeLayer === 1 
-                      ? `${t.accentBorderActive} bg-emerald-500/5` 
-                      : `${t.cardBorder} ${t.cardBg} ${t.cardBorderHover}`
-                  }`}
-                >
-                  <div className="flex justify-between items-center mb-1.5">
-                    <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 01 // QUERY ANALYSIS</span>
-                    <span className={`w-1.5 h-1.5 rounded-full ${t.dotColor}`}></span>
-                  </div>
-                  <h4 className="text-xs font-mono font-bold tracking-tight">Multi-Hop Query Decomposer</h4>
-                  <p className="text-[11px] text-zinc-400 mt-1 leading-normal font-sans">
-                    Breaks down complex compliance questions into parallel sub-queries to retrieve from distinct financial documents.
-                  </p>
-                </div>
-
-                <div 
-                  onMouseEnter={() => setActiveLayer(2)}
-                  onMouseLeave={() => setActiveLayer(null)}
-                  className={`group p-4 border rounded-xl transition duration-300 cursor-pointer ${
-                    activeLayer === 2 
-                      ? `${t.accentBorderActive} bg-emerald-500/5` 
-                      : `${t.cardBorder} ${t.cardBg} ${t.cardBorderHover}`
-                  }`}
-                >
-                  <div className="flex justify-between items-center mb-1.5">
-                    <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 02 // SEARCH RETRIEVAL</span>
-                    <span className={`w-1.5 h-1.5 rounded-full ${t.dotColor}`}></span>
-                  </div>
-                  <h4 className="text-xs font-mono font-bold tracking-tight">Hybrid FAISS & BM25 Retrieval</h4>
-                  <p className="text-[11px] text-zinc-400 mt-1 leading-normal font-sans">
-                    Queries FAISS dense vectors and Rank-BM25 indexes. Merges score ranks using Reciprocal Rank Fusion.
-                  </p>
-                </div>
-
-                <div 
-                  onMouseEnter={() => setActiveLayer(3)}
-                  onMouseLeave={() => setActiveLayer(null)}
-                  className={`group p-4 border rounded-xl transition duration-300 cursor-pointer ${
-                    activeLayer === 3 
-                      ? `${t.accentBorderActive} bg-emerald-500/5` 
-                      : `${t.cardBorder} ${t.cardBg} ${t.cardBorderHover}`
-                  }`}
-                >
-                  <div className="flex justify-between items-center mb-1.5">
-                    <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 03 // EXTRACTION & RERANK</span>
-                    <span className={`w-1.5 h-1.5 rounded-full ${t.dotColor}`}></span>
-                  </div>
-                  <h4 className="text-xs font-mono font-bold tracking-tight">MiniLM Cross-Encoder & Hierarchical Chunking</h4>
-                  <p className="text-[11px] text-zinc-400 mt-1 leading-normal font-sans">
-                    Applies parent-child aggregators to retain global document contexts. Reranks retrieved blocks using a cross-encoder model.
-                  </p>
-                </div>
-
-                <div 
-                  onMouseEnter={() => setActiveLayer(4)}
-                  onMouseLeave={() => setActiveLayer(null)}
-                  className={`group p-4 border rounded-xl transition duration-300 cursor-pointer ${
-                    activeLayer === 4 
-                      ? `${t.accentBorderActive} bg-emerald-500/5` 
-                      : `${t.cardBorder} ${t.cardBg} ${t.cardBorderHover}`
-                  }`}
-                >
-                  <div className="flex justify-between items-center mb-1.5">
-                    <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 04 // SYNTHESIS & SAFEGUARD</span>
-                    <span className={`w-1.5 h-1.5 rounded-full ${t.dotColor}`}></span>
-                  </div>
-                  <h4 className="text-xs font-mono font-bold tracking-tight">Self-Consistency Fact Validation</h4>
-                  <p className="text-[11px] text-zinc-400 mt-1 leading-normal font-sans">
-                    Evaluates answer accuracy through 3 parallel generation chains, flagging factual anomalies before formatting output.
-                  </p>
-                </div>
-
-                <div 
-                  onMouseEnter={() => setActiveLayer(5)}
-                  onMouseLeave={() => setActiveLayer(null)}
-                  className={`group p-4 border rounded-xl transition duration-300 cursor-pointer ${
-                    activeLayer === 5 
-                      ? `${t.accentBorderActive} bg-emerald-500/5` 
-                      : `${t.cardBorder} ${t.cardBg} ${t.cardBorderHover}`
-                  }`}
-                >
-                  <div className="flex justify-between items-center mb-1.5">
-                    <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 05 // DELIVERY GATEWAY</span>
-                    <span className={`w-1.5 h-1.5 rounded-full ${t.dotColor}`}></span>
-                  </div>
-                  <h4 className="text-xs font-mono font-bold tracking-tight">RAGAS-Gated GitHub Actions CI/CD</h4>
-                  <p className="text-[11px] text-zinc-400 mt-1 leading-normal font-sans">
-                    Triggers automated validation scores. Halts deployment if RAGAS Faithfulness drops below 0.75.
-                  </p>
-                </div>
-              </>
-            )}
-          </div>
-
-          {/* Right flowchart canvas */}
-          <div className="lg:col-span-5 space-y-6">
-            <div>
-              <h4 className="text-[8px] font-mono uppercase tracking-widest text-zinc-500 mb-2">Live System Blueprint</h4>
-              <div className={`relative border border-dashed ${t.cardBorder} rounded-xl p-4 overflow-hidden bg-black/10 backdrop-blur-sm min-h-[360px] flex flex-col justify-between`}>
-                <div className="absolute top-2 left-2 text-[7px] font-mono text-zinc-500 uppercase tracking-widest flex items-center gap-1">
-                  <Activity size={8} className="animate-pulse text-[#10B981]" /> LIVE_SYSTEM_BLUEPRINT
-                </div>
-                
-                {activeArchTab === 'ipl' ? (
-                  <div className="relative flex-grow flex flex-col justify-between py-6">
-                    {/* Connection Line */}
-                    <div className="absolute left-1/2 top-0 bottom-0 w-[1px] border-l border-dashed border-zinc-700/80 -translate-x-1/2 z-0">
-                      <div className={`absolute w-1.5 h-1.5 rounded-full ${t.dotColor} left-[-3px] top-0 animate-bounce`}></div>
-                    </div>
-
-                    {/* Node 1 */}
-                    <div 
-                      onMouseEnter={() => setActiveLayer(1)}
-                      onMouseLeave={() => setActiveLayer(null)}
-                      className={`relative z-10 mx-auto px-4 py-1.5 border rounded-md text-[10px] font-mono transition duration-300 cursor-pointer ${
-                        activeLayer === 1 
-                          ? `${t.accentBg} ${t.buttonText} scale-105 shadow-md` 
-                          : `${t.cardBg} ${t.cardBorder} ${t.text} hover:border-[#10B981]/50`
-                      }`}
-                    >
-                      WebSocket Router
-                    </div>
-
-                    {/* Node 2 */}
-                    <div 
-                      onMouseEnter={() => setActiveLayer(2)}
-                      onMouseLeave={() => setActiveLayer(null)}
-                      className={`relative z-10 mx-auto px-4 py-1.5 border rounded-md text-[10px] font-mono transition duration-300 cursor-pointer ${
-                        activeLayer === 2 
-                          ? `${t.accentBg} ${t.buttonText} scale-105 shadow-md` 
-                          : `${t.cardBg} ${t.cardBorder} ${t.text} hover:border-[#10B981]/50`
-                      }`}
-                    >
-                      LangGraph intent Router
-                    </div>
-
-                    {/* Node 3 */}
-                    <div className="relative z-10 flex justify-center gap-2">
-                      <div className="absolute top-1/2 -translate-y-1/2 w-4/5 h-[1px] border-t border-dashed border-zinc-700/80 z-0"></div>
-                      {['StatsQA', 'Prediction'].map((agent, i) => (
-                        <div 
-                          key={i}
-                          onMouseEnter={() => setActiveLayer(3)}
-                          onMouseLeave={() => setActiveLayer(null)}
-                          className={`relative z-10 px-2 py-1 border rounded-full text-[8px] font-mono transition duration-300 cursor-pointer ${
-                            activeLayer === 3 
-                              ? `${t.accentBg} ${t.buttonText} scale-105 shadow-md` 
-                              : `${t.cardBg} ${t.cardBorder} ${t.text} hover:border-[#10B981]/50`
-                          }`}
-                        >
-                          {agent}
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Node 4 */}
-                    <div 
-                      onMouseEnter={() => setActiveLayer(4)}
-                      onMouseLeave={() => setActiveLayer(null)}
-                      className={`relative z-10 mx-auto px-4 py-1.5 border rounded-md text-[10px] font-mono transition duration-300 cursor-pointer ${
-                        activeLayer === 4 
-                          ? `${t.accentBg} ${t.buttonText} scale-105 shadow-md` 
-                          : `${t.cardBg} ${t.cardBorder} ${t.text} hover:border-[#10B981]/50`
-                      }`}
-                    >
-                      Qdrant HNSW Fusion
-                    </div>
-
-                    {/* Node 5 */}
-                    <div 
-                      onMouseEnter={() => setActiveLayer(5)}
-                      onMouseLeave={() => setActiveLayer(null)}
-                      className={`relative z-10 mx-auto px-4 py-1.5 border rounded-md text-[10px] font-mono transition duration-300 cursor-pointer ${
-                        activeLayer === 5 
-                          ? `${t.accentBg} ${t.buttonText} scale-105 shadow-md` 
-                          : `${t.cardBg} ${t.cardBorder} ${t.text} hover:border-[#10B981]/50`
-                      }`}
-                    >
-                      WS Push &lt;300ms
-                    </div>
-                  </div>
-                ) : (
-                  <div className="relative flex-grow flex flex-col justify-between py-6">
-                    {/* Connection Line */}
-                    <div className="absolute left-1/2 top-0 bottom-0 w-[1px] border-l border-dashed border-zinc-700/80 -translate-x-1/2 z-0">
-                      <div className={`absolute w-1.5 h-1.5 rounded-full ${t.dotColor} left-[-3px] top-0 animate-bounce`}></div>
-                    </div>
-
-                    {/* Node 1 */}
-                    <div 
-                      onMouseEnter={() => setActiveLayer(1)}
-                      onMouseLeave={() => setActiveLayer(null)}
-                      className={`relative z-10 mx-auto px-4 py-1.5 border rounded-md text-[10px] font-mono transition duration-300 cursor-pointer ${
-                        activeLayer === 1 
-                          ? `${t.accentBg} ${t.buttonText} scale-105 shadow-md` 
-                          : `${t.cardBg} ${t.cardBorder} ${t.text} hover:border-[#10B981]/50`
-                      }`}
-                    >
-                      Query Decomposer
-                    </div>
-
-                    {/* Node 2 */}
-                    <div 
-                      onMouseEnter={() => setActiveLayer(2)}
-                      onMouseLeave={() => setActiveLayer(null)}
-                      className={`relative z-10 mx-auto px-4 py-1.5 border rounded-md text-[10px] font-mono transition duration-300 cursor-pointer ${
-                        activeLayer === 2 
-                          ? `${t.accentBg} ${t.buttonText} scale-105 shadow-md` 
-                          : `${t.cardBg} ${t.cardBorder} ${t.text} hover:border-[#10B981]/50`
-                      }`}
-                    >
-                      FAISS & BM25 index
-                    </div>
-
-                    {/* Node 3 */}
-                    <div 
-                      onMouseEnter={() => setActiveLayer(3)}
-                      onMouseLeave={() => setActiveLayer(null)}
-                      className={`relative z-10 mx-auto px-4 py-1.5 border rounded-md text-[10px] font-mono transition duration-300 cursor-pointer ${
-                        activeLayer === 3 
-                          ? `${t.accentBg} ${t.buttonText} scale-105 shadow-md` 
-                          : `${t.cardBg} ${t.cardBorder} ${t.text} hover:border-[#10B981]/50`
-                      }`}
-                    >
-                      MiniLM Cross-Encoder
-                    </div>
-
-                    {/* Node 4 */}
-                    <div 
-                      onMouseEnter={() => setActiveLayer(4)}
-                      onMouseLeave={() => setActiveLayer(null)}
-                      className={`relative z-10 mx-auto px-4 py-1.5 border rounded-md text-[10px] font-mono transition duration-300 cursor-pointer ${
-                        activeLayer === 4 
-                          ? `${t.accentBg} ${t.buttonText} scale-105 shadow-md` 
-                          : `${t.cardBg} ${t.cardBorder} ${t.text} hover:border-[#10B981]/50`
-                      }`}
-                    >
-                      3x Self-Consistency check
-                    </div>
-
-                    {/* Node 5 */}
-                    <div 
-                      onMouseEnter={() => setActiveLayer(5)}
-                      onMouseLeave={() => setActiveLayer(null)}
-                      className={`relative z-10 mx-auto px-4 py-1.5 border rounded-md text-[10px] font-mono transition duration-300 cursor-pointer ${
-                        activeLayer === 5 
-                          ? `${t.accentBg} ${t.buttonText} scale-105 shadow-md` 
-                          : `${t.cardBg} ${t.cardBorder} ${t.text} hover:border-[#10B981]/50`
-                      }`}
-                    >
-                      RAGAS CI/CD Gate
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div>
-              <h4 className="text-[8px] font-mono uppercase tracking-widest text-zinc-500 mb-2">Core Metrics</h4>
-              <div className="grid grid-cols-2 gap-2 text-[10px] font-mono">
-                {activeArchTab === 'ipl' ? (
-                  <>
-                    <div className={`p-2 border ${t.cardBorder} ${t.cardBg} rounded-lg`}>
-                      <div className="text-zinc-500 text-[8px] uppercase">Latency</div>
-                      <div className={`text-xs font-bold ${t.text} mt-0.5`}>&lt;300ms</div>
-                    </div>
-                    <div className={`p-2 border ${t.cardBorder} ${t.cardBg} rounded-lg`}>
-                      <div className="text-zinc-500 text-[8px] uppercase">Faithfulness</div>
-                      <div className={`text-xs font-bold ${t.text} mt-0.5`}>0.88 / 0.98</div>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className={`p-2 border ${t.cardBorder} ${t.cardBg} rounded-lg`}>
-                      <div className="text-zinc-500 text-[8px] uppercase">Retrieval Gain</div>
-                      <div className={`text-xs font-bold ${t.text} mt-0.5`}>+40% vs Naive</div>
-                    </div>
-                    <div className={`p-2 border ${t.cardBorder} ${t.cardBg} rounded-lg`}>
-                      <div className="text-zinc-500 text-[8px] uppercase">CI threshold</div>
-                      <div className={`text-xs font-bold ${t.text} mt-0.5`}>0.75 score</div>
-                    </div>
-                  </>
-                )}
-              </div>
-            </div>
-
-            <div>
-              <h4 className="text-[8px] font-mono uppercase tracking-widest text-zinc-500 mb-2">Target Stack</h4>
-              <div className="flex flex-wrap gap-1">
-                {(activeArchTab === 'ipl' 
-                  ? ["LangGraph", "Qdrant", "XGBoost", "FastAPI", "Redis"] 
-                  : ["FAISS", "LangChain", "RAGAS", "Cross-encoders", "Python"]
-                ).map((item, idx) => (
-                  <span 
-                    key={idx} 
-                    onMouseEnter={() => setActiveTag(item)}
-                    onMouseLeave={() => setActiveTag(null)}
-                    className={`text-[8px] font-mono uppercase px-2 py-0.5 border rounded cursor-pointer transition ${
-                      activeTag === item 
-                        ? `${t.accentBg} ${t.buttonText} scale-105` 
-                        : `${t.cardBorder} text-zinc-400 ${t.cardBg}`
-                    }`}
-                  >
-                    {item}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
+        {/* Scroll cue */}
+        <div
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-zinc-700 animate-fade-up z-10"
+          style={{ animationDelay: '900ms' }}
+          aria-hidden
+        >
+          <div className="w-px h-10 bg-gradient-to-b from-transparent via-zinc-600 to-transparent" />
+          <span className="text-[8px] font-mono uppercase tracking-[0.4em]">Scroll</span>
         </div>
       </section>
 
-      {/* 03 REPOSITORIES & SYSTEMS */}
-      <section id="projects" className={`p-6 md:p-8 border ${t.cardBorder} ${t.cardBg} rounded-2xl relative z-10`}>
-        <div className="mb-8 pb-4 border-b border-dashed border-zinc-800/80 flex flex-col sm:flex-row justify-between sm:items-end gap-4">
-          <div>
-            <div className={`text-[10px] font-mono uppercase tracking-widest mb-1.5 ${t.accent}`}>
-              02 // REPOSITORIES & SYSTEMS
-            </div>
-            <h2 className="text-2xl md:text-3xl font-serif font-bold">Featured Projects</h2>
-          </div>
-          
-          <div className={`flex gap-1.5 p-1 border ${t.cardBorder} ${t.cardBg} rounded-lg`}>
-            <button
-              onClick={() => setActiveProjectTab('ipl')}
-              className={`px-2.5 py-1 text-[8px] font-mono uppercase tracking-widest rounded transition ${
-                activeProjectTab === 'ipl' 
-                  ? `${t.buttonBg} font-semibold` 
-                  : 'text-zinc-400 hover:text-white'
-              }`}
+      {/* ══════════════════════════════════════════════════════════════════════
+          MARQUEE STRIP
+      ══════════════════════════════════════════════════════════════════════ */}
+      <div
+        className="overflow-hidden py-4 relative z-10"
+        style={{ borderTop: '1px solid rgba(255,255,255,0.04)', borderBottom: '1px solid rgba(255,255,255,0.04)', background: 'rgba(10,10,20,0.6)' }}
+        aria-hidden
+      >
+        <div className="marquee-track">
+          {[...MARQUEE_ITEMS, ...MARQUEE_ITEMS].map((item, i) => (
+            <span
+              key={i}
+              className="inline-flex items-center gap-5 px-6 text-[10px] font-mono uppercase tracking-[0.22em] whitespace-nowrap"
+              style={{ color: 'rgba(124,58,237,0.55)' }}
             >
-              ipl-ai-commentary
-            </button>
-            <button
-              onClick={() => setActiveProjectTab('rag')}
-              className={`px-2.5 py-1 text-[8px] font-mono uppercase tracking-widest rounded transition ${
-                activeProjectTab === 'rag' 
-                  ? `${t.buttonBg} font-semibold` 
-                  : 'text-zinc-400 hover:text-white'
-              }`}
-            >
-              financial-qa-rag
-            </button>
-          </div>
-        </div>
-
-        {(() => {
-          const proj = projects[activeProjectTab];
-          return (
-            <div className="space-y-6">
-              <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
-                <div>
-                  <span className={`text-[8px] font-mono uppercase px-2 py-0.5 border ${t.accentBorder} ${t.accentText} ${t.cardBg} rounded`}>
-                    system.id // 0{proj.id}
-                  </span>
-                  <h3 className="text-xl font-serif font-bold mt-2">{proj.title}</h3>
-                  <p className="text-xs text-zinc-400 font-mono mt-0.5">{proj.tagline}</p>
-                </div>
-
-                <div className="flex gap-2">
-                  <a
-                    href={proj.githubLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`flex items-center gap-1.5 px-3 py-1.5 border ${t.cardBorder} ${t.accentHover} rounded text-[8px] font-mono uppercase tracking-widest transition`}
-                  >
-                    <Github size={11} /> GitHub
-                  </a>
-                  <a
-                    href={proj.demoLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`flex items-center gap-1.5 px-3 py-1.5 ${t.buttonBg} ${t.buttonText} text-[8px] font-mono uppercase tracking-widest rounded hover:opacity-90 transition`}
-                  >
-                    <ExternalLink size={11} /> Live Demo
-                  </a>
-                </div>
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-6 text-xs">
-                <div className="space-y-4">
-                  <div>
-                    <h4 className="text-[9px] font-mono uppercase tracking-widest text-zinc-500 mb-1">01 // Problem</h4>
-                    <p className={`${t.textBody} leading-relaxed font-sans`}>{proj.problem}</p>
-                  </div>
-                  <div>
-                    <h4 className="text-[9px] font-mono uppercase tracking-widest text-zinc-500 mb-1">02 // Architecture</h4>
-                    <p className={`${t.textBody} leading-relaxed font-sans`}>{proj.architecture}</p>
-                  </div>
-                  <div>
-                    <h4 className="text-[9px] font-mono uppercase tracking-widest text-zinc-500 mb-1">03 // Details</h4>
-                    <p className={`${t.textBody} leading-relaxed font-sans`}>{proj.systemDesign}</p>
-                  </div>
-                </div>
-
-                <div className={`space-y-4 md:border-l md:border-dashed ${t.divider} md:pl-6`}>
-                  <div>
-                    <h4 className="text-[9px] font-mono uppercase tracking-widest text-zinc-500 mb-2">04 // Challenges (△)</h4>
-                    <ul className="space-y-2 font-sans">
-                      {proj.challenges.map((c, i) => (
-                        <li key={i} className="flex items-start gap-2">
-                          <span className="text-orange-500 mt-0.5 flex-shrink-0">△</span>
-                          <span className={`${t.textBody} leading-normal text-[11px]`}>{c}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div>
-                    <h4 className="text-[9px] font-mono uppercase tracking-widest text-zinc-500 mb-2">05 // Quantitative (✓)</h4>
-                    <ul className="space-y-2 font-sans">
-                      {proj.results.map((r, i) => (
-                        <li key={i} className="flex items-start gap-2">
-                          <span className="text-emerald-500 mt-0.5 flex-shrink-0">✓</span>
-                          <span className={`${t.textBody} leading-normal text-[11px]`}>{r}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-
-              <div className={`flex flex-wrap gap-1.5 mt-6 pt-4 border-t ${t.divider}`}>
-                <span className="text-[8px] font-mono uppercase text-zinc-500 py-1">Tech Stack:</span>
-                {proj.tech.map((tech, idx) => (
-                  <span 
-                    key={idx} 
-                    onMouseEnter={() => setActiveTag(tech)}
-                    onMouseLeave={() => setActiveTag(null)}
-                    className={`text-[8px] font-mono uppercase px-2 py-0.5 border rounded cursor-pointer transition duration-150 ${
-                      activeTag === tech 
-                        ? `${t.accentBg} ${t.buttonText} scale-105` 
-                        : `${t.cardBorder} text-zinc-400 ${t.cardBg}`
-                    }`}
-                  >
-                    {tech}
-                  </span>
-                ))}
-              </div>
-            </div>
-          );
-        })()}
-      </section>
-
-      {/* Skills Section */}
-      <section id="skills" className={`py-24 px-6 max-w-6xl mx-auto relative z-10 border-t border-dashed ${t.divider}`}>
-        <div className="mb-16">
-          <div className={`text-[10px] font-mono uppercase tracking-widest mb-2 ${t.accent}`}>
-            03 // TECHNICAL STACK
-          </div>
-          <h2 className="text-3xl md:text-5xl font-serif font-bold">
-            Skills & Abilities
-          </h2>
-          <p className="text-zinc-400 text-sm mt-2 max-w-xl">
-            Expanded index of technical competencies spanning machine learning, architectures, and operations.
-          </p>
-        </div>
-
-        {/* Grid Container */}
-        <div className="grid md:grid-cols-2 gap-4">
-          {skillCategories.map((cat, idx) => (
-            <div 
-              key={idx}
-              className={`border ${t.cardBorder} ${t.cardBg} rounded-xl overflow-hidden ${t.cardBorderHover} transition duration-300`}
-            >
-              <div className="p-5">
-                <h3 className="text-sm font-mono font-bold tracking-tight uppercase flex items-center gap-2">
-                  <span className="text-[10px] text-zinc-500">0{idx + 1}.</span>
-                  {cat.category}
-                </h3>
-                <p className="text-[11px] text-zinc-500 mt-1 mb-4 font-sans font-light">{cat.summary}</p>
-                <div className="flex flex-wrap gap-2">
-                  {cat.items.map((skill, i) => (
-                    <span 
-                      key={i} 
-                      onMouseEnter={() => setActiveTag(skill)}
-                      onMouseLeave={() => setActiveTag(null)}
-                      className={`text-[10px] font-mono px-2.5 py-1 border transition duration-200 cursor-pointer rounded flex items-center gap-1.5 ${
-                        activeTag === skill 
-                          ? `${t.accentBg} ${t.buttonText} scale-105 shadow-sm` 
-                          : `${t.cardBorder} ${t.textBody} ${t.cardBg}`
-                      }`}
-                    >
-                      <span className={`w-1 h-1 rounded-full ${t.dotColor}`}></span>
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
+              {item}
+              <span style={{ color: 'rgba(6,182,212,0.4)' }}>✦</span>
+            </span>
           ))}
         </div>
-      </section>
+      </div>
 
-      {/* Experience Section (Stages & Version numbers) */}
-      <section id="experience" className={`py-24 px-6 max-w-6xl mx-auto relative z-10 border-t border-dashed ${t.divider}`}>
-        <div className="mb-16">
-          <div className={`text-[10px] font-mono uppercase tracking-widest mb-2 ${t.accent}`}>
-            04 // PROFESSIONAL LOG
-          </div>
-          <h2 className="text-3xl md:text-5xl font-serif font-bold">
-            Work Experience
-          </h2>
-          <p className="text-zinc-400 text-sm mt-2 max-w-xl">
-            Stage-by-stage engineering timeline documenting my evolution into production AI systems.
-          </p>
+      {/* ══════════════════════════════════════════════════════════════════════
+          PROJECTS
+      ══════════════════════════════════════════════════════════════════════ */}
+      <section id="projects" className="py-32 max-w-7xl mx-auto px-6">
+        <div className="flex items-end justify-between mb-20">
+          <Reveal>
+            <span className="section-eyebrow">✦ Selected Work</span>
+            <h2
+              className="font-display font-bold text-white leading-tight"
+              style={{ fontSize: 'clamp(40px, 6vw, 80px)' }}
+            >
+              Projects
+            </h2>
+          </Reveal>
+          <Reveal delay={100}>
+            <a
+              id="projects-github-link"
+              href="https://github.com/Jagadeep-Reddy"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden md:flex items-center gap-2 text-sm text-zinc-400 hover:text-white border border-zinc-800 hover:border-zinc-600 px-4 py-2.5 rounded-xl transition-all"
+            >
+              All on GitHub <ArrowUpRight size={14} />
+            </a>
+          </Reveal>
         </div>
 
-        {/* Timeline loop */}
-        <div className="space-y-8">
-          {experiences.map((exp, idx) => (
-            <div 
-              key={idx} 
-              className={`border ${t.cardBorder} ${t.cardBg} rounded-xl p-6 md:p-8 ${t.cardBorderHover} transition duration-300`}
-            >
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className={`text-[9px] font-mono uppercase px-2.5 py-0.5 border ${t.accentBorder} ${t.accentText} ${t.cardBg} rounded-full font-bold`}>
-                      {exp.stage} // {exp.version}
-                    </span>
-                    <span className="text-[10px] font-mono text-zinc-500">{exp.period}</span>
-                  </div>
-                  <h3 className="text-xl md:text-2xl font-serif font-bold mt-2">{exp.role}</h3>
-                  <div className={`text-xs font-mono uppercase tracking-widest text-zinc-400 mt-1`}>
-                    @ {exp.company}
-                  </div>
-                </div>
-              </div>
-
-              {exp.context && (
-                <p className={`text-xs italic text-zinc-400 font-sans pl-3 border-l ${t.divider} mb-5 leading-relaxed`}>
-                  {exp.context}
-                </p>
-              )}
-
-              <ul className="space-y-2.5 mb-6">
-                {exp.highlights.map((bullet, i) => (
-                  <li key={i} className={`text-xs ${t.textBody} font-sans flex items-start gap-2.5`}>
-                    <span className={`w-1.5 h-1.5 rounded-full mt-1.5 ${t.dotColor} flex-shrink-0`}></span>
-                    <span className="leading-relaxed">{bullet}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <div className={`flex flex-wrap gap-1.5 pt-4 border-t border-dashed ${t.divider}`}>
-                <span className="text-[8px] font-mono uppercase text-zinc-500 py-0.5 pr-2">Stack:</span>
-                {exp.techStack.map((tech, i) => (
-                  <span 
-                    key={i} 
-                    onMouseEnter={() => setActiveTag(tech)}
-                    onMouseLeave={() => setActiveTag(null)}
-                    className={`text-[8px] font-mono uppercase px-2 py-0.5 border rounded transition duration-200 cursor-pointer ${
-                      activeTag === tech 
-                        ? `${t.accentBg} ${t.buttonText} scale-105 shadow-sm` 
-                        : `${t.cardBorder} text-zinc-400 ${t.cardBg}`
-                    }`}
-                  >
-                    {tech}
-                  </span>
-                ))}
-              </div>
-            </div>
+        <div className="grid md:grid-cols-2 gap-6">
+          {PROJECTS.map((proj, i) => (
+            <Reveal key={proj.num} delay={i * 150}>
+              <ProjectCard project={proj} index={i} />
+            </Reveal>
           ))}
         </div>
+
+        {/* Quote */}
+        <Reveal delay={200} className="mt-20">
+          <div
+            className="rounded-2xl p-8 md:p-12 relative overflow-hidden"
+            style={{
+              background: 'linear-gradient(135deg, rgba(124,58,237,0.07), rgba(6,182,212,0.04))',
+              border: '1px solid rgba(124,58,237,0.15)',
+            }}
+          >
+            <div
+              className="absolute top-4 left-6 font-display text-[120px] leading-none text-zinc-800 select-none"
+              aria-hidden
+            >
+              "
+            </div>
+            <blockquote className="relative text-2xl md:text-3xl font-display italic text-zinc-400 leading-relaxed max-w-2xl">
+              Every system I build is designed to{' '}
+              <span className="text-white not-italic">survive production</span>,
+              not just impress a demo.
+            </blockquote>
+          </div>
+        </Reveal>
       </section>
 
-      {/* 06 EDUCATION & CERTIFICATIONS */}
-      <section id="education" className={`p-6 md:p-8 border ${t.cardBorder} ${t.cardBg} rounded-2xl relative z-10`}>
-        <div className="grid md:grid-cols-2 gap-8">
-          
-          {/* Academics */}
-          <div className="space-y-4">
-            <div className="mb-6">
-              <div className={`text-[10px] font-mono uppercase tracking-widest mb-1 ${t.accent}`}>
-                05.A // ACADEMICS
-              </div>
-              <h3 className="text-xl font-serif font-bold">Education</h3>
-            </div>
+      {/* ══════════════════════════════════════════════════════════════════════
+          SKILLS
+      ══════════════════════════════════════════════════════════════════════ */}
+      <section
+        id="skills"
+        className="py-32"
+        style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}
+      >
+        <div className="max-w-7xl mx-auto px-6">
+          <SectionHeader
+            eyebrow="Technical Expertise"
+            title="Skills"
+            subtitle="A full-stack AI engineering toolkit — from orchestration layers to cloud deployment."
+          />
 
-            {education.map((edu, idx) => (
-              <div key={idx} className={`p-4 border ${t.cardBorder} ${t.cardBg} rounded-xl`}>
-                <div className="flex justify-between items-start gap-3 mb-2">
-                  <div>
-                    <h4 className="text-xs font-serif font-bold">{edu.institution}</h4>
-                    <p className={`text-[9px] font-mono uppercase tracking-widest ${t.accentText} mt-0.5`}>
-                      {edu.degree}
-                    </p>
-                  </div>
-                  <span className={`text-[8px] font-mono text-zinc-500 px-2 py-0.5 border ${t.cardBorder} ${t.cardBg} rounded`}>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {SKILL_GROUPS.map((group, i) => (
+              <SkillGroup key={group.label} group={group} delay={i * 80} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════════════════
+          EXPERIENCE
+      ══════════════════════════════════════════════════════════════════════ */}
+      <section
+        id="experience"
+        className="py-32"
+        style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}
+      >
+        <div className="max-w-5xl mx-auto px-6">
+          <SectionHeader
+            eyebrow="Work History"
+            title="Experience"
+            subtitle="From enterprise banking systems to cutting-edge AI orchestration."
+          />
+
+          <div>
+            {EXPERIENCE.map((exp, i) => (
+              <ExperienceItem
+                key={i}
+                exp={exp}
+                index={i}
+                isLast={i === EXPERIENCE.length - 1}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════════════════
+          EDUCATION + CERTS
+      ══════════════════════════════════════════════════════════════════════ */}
+      <section
+        id="education"
+        className="py-32"
+        style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}
+      >
+        <div className="max-w-7xl mx-auto px-6">
+          <SectionHeader
+            eyebrow="Academic Background"
+            title="Education"
+          />
+
+          <div className="grid md:grid-cols-2 gap-6 mb-12">
+            {EDUCATION.map((edu, i) => (
+              <Reveal key={i} delay={i * 120}>
+                <div
+                  id={`edu-card-${i}`}
+                  className="relative rounded-2xl p-8 overflow-hidden group transition-all duration-300"
+                  style={{
+                    background: 'var(--c-elevated)',
+                    border: '1px solid rgba(255,255,255,0.06)',
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(124,58,237,0.3)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'; }}
+                >
+                  <div
+                    className="absolute top-0 left-0 right-0 h-[1px] opacity-0 group-hover:opacity-100 transition-opacity duration-400"
+                    style={{ background: 'linear-gradient(90deg, transparent, rgba(124,58,237,0.6), transparent)' }}
+                  />
+                  <div className="text-4xl mb-5">{edu.icon}</div>
+                  <div className="text-[10px] font-mono uppercase tracking-[0.22em] text-violet-400/70 mb-3">
                     {edu.period}
-                  </span>
+                  </div>
+                  <h3 className="font-display font-bold text-white text-xl mb-2">{edu.degree}</h3>
+                  <div className="text-zinc-400 text-sm mb-4">{edu.institution}</div>
+                  <p className="text-zinc-500 text-sm leading-relaxed">{edu.detail}</p>
                 </div>
-                <p className="text-[10px] text-zinc-400 font-sans leading-normal mt-2">{edu.details}</p>
-              </div>
+              </Reveal>
             ))}
           </div>
 
           {/* Certifications */}
-          <div className="space-y-4">
-            <div className="mb-6">
-              <div className={`text-[10px] font-mono uppercase tracking-widest mb-1 ${t.accent}`}>
-                05.B // VERIFICATIONS
-              </div>
-              <h3 className="text-xl font-serif font-bold">Certifications</h3>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              {certifications.map((cert, idx) => {
-                const isInProgress = cert.status === 'In Progress';
-                return (
-                  <div 
-                    key={idx} 
-                    className={`p-3 border ${t.cardBg} rounded-xl flex flex-col justify-between ${
-                      isInProgress ? `${t.accentBorder} bg-opacity-25` : t.cardBorder
-                    }`}
-                  >
-                    <div>
-                      <span className="text-[7px] font-mono text-zinc-500 uppercase tracking-widest">
-                        {cert.badge}
-                      </span>
-                      <h4 className="text-[10px] font-mono font-bold text-white mt-0.5 leading-snug">
-                        {cert.title}
-                      </h4>
-                      <p className="text-[8px] font-sans text-zinc-500 mt-0.5">{cert.issuer}</p>
-                    </div>
-                    <div className={`mt-3 pt-2 border-t ${t.divider} flex justify-between items-center text-[7px] font-mono`}>
-                      <span className={isInProgress ? 'text-amber-500' : 'text-emerald-500'}>
-                        {cert.status}
-                      </span>
-                      {isInProgress && <span className="w-1 h-1 rounded-full bg-amber-500 animate-pulse"></span>}
-                    </div>
+          <Reveal delay={200}>
+            <h3 className="text-[10px] font-mono uppercase tracking-[0.25em] text-zinc-600 mb-5 flex items-center gap-3">
+              <Award size={13} className="text-zinc-700" />
+              Certifications
+            </h3>
+            <div className="grid sm:grid-cols-2 gap-4">
+              {CERTS.map((cert, i) => (
+                <div key={i} id={`cert-${i}`} className={`cert-card ${cert.done ? 'done' : ''}`}>
+                  <div
+                    className="w-2.5 h-2.5 rounded-full flex-shrink-0"
+                    style={{
+                      background: cert.done ? '#10b981' : '#f59e0b',
+                      boxShadow: cert.done ? '0 0 8px rgba(16,185,129,0.5)' : '0 0 8px rgba(245,158,11,0.5)',
+                      animation: 'pulse-glow 2.5s ease infinite',
+                      '--glow-v': cert.done ? 'rgba(16,185,129,0.4)' : 'rgba(245,158,11,0.4)',
+                    }}
+                  />
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-medium text-white truncate">{cert.name}</div>
+                    <div className="text-[11px] font-mono text-zinc-500 mt-0.5">{cert.org} · {cert.code}</div>
                   </div>
-                );
-              })}
+                  <span className="text-[9px] font-mono uppercase tracking-wider flex-shrink-0"
+                    style={{ color: cert.done ? '#34d399' : '#fbbf24' }}>
+                    {cert.done ? 'Certified' : 'In Progress'}
+                  </span>
+                </div>
+              ))}
             </div>
-          </div>
+          </Reveal>
         </div>
       </section>
 
-      {/* 07 ENGINEERING PHILOSOPHY */}
-      <section className={`p-6 md:p-8 border ${t.cardBorder} ${t.cardBg} rounded-2xl relative z-10`}>
-        <div className="mb-10 text-center max-w-lg mx-auto">
-          <div className={`text-[10px] font-mono uppercase tracking-widest mb-1 ${t.accent}`}>
-            06 // ENGINEERING BELIEFS
-          </div>
-          <h2 className="text-xl md:text-2xl font-serif font-bold">Development Philosophy</h2>
-          <p className="text-zinc-500 text-[8px] font-mono uppercase mt-1">
-            [principles.config : values guiding implementation]
-          </p>
-        </div>
+      {/* ══════════════════════════════════════════════════════════════════════
+          CONTACT
+      ══════════════════════════════════════════════════════════════════════ */}
+      <section
+        id="contact"
+        className="py-32 relative overflow-hidden"
+        style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}
+      >
+        {/* Background blobs */}
+        <div
+          aria-hidden
+          className="absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full pointer-events-none"
+          style={{ background: 'radial-gradient(circle, rgba(6,182,212,0.1) 0%, transparent 65%)' }}
+        />
+        <div
+          aria-hidden
+          className="absolute top-0 left-0 w-[400px] h-[400px] rounded-full pointer-events-none"
+          style={{ background: 'radial-gradient(circle, rgba(124,58,237,0.1) 0%, transparent 65%)' }}
+        />
 
-        <div className="grid sm:grid-cols-2 gap-4 text-xs">
-          {[
-            { label: "01 / DESIGN FIRST", title: "System blueprints", desc: "Every implementation begins with schema models, data diagrams, and latencies. Code ships only after pipelines are established." },
-            { label: "02 / SPECIALIZATION", title: "Agents with purpose", desc: "Multi-agent systems demand clear scopes—routing, predicting, and formatting. Naive chains yield unpredictable outcomes." },
-            { label: "03 / RETRIEVAL QUALITY", title: "Asserting context", desc: "In cognitive pipelines, context rules. Hybrid vector search, parent-child trees, and reranking are essential for production." },
-            { label: "04 / MEASURED DEPLOY", title: "Automated eval gates", desc: "Deployments require automated tests. RAGAS scores tied to CI gates block deviations before they reach production." }
-          ].map((phi, i) => (
-            <div key={i} className={`p-4 border ${t.cardBorder} ${t.cardBg} rounded-xl hover:border-zinc-550 transition`}>
-              <span className={`text-[9px] font-mono ${t.accentText}`}>{phi.label}</span>
-              <h3 className="text-xs font-serif font-bold mt-1 text-white">{phi.title}</h3>
-              <p className="text-[10px] text-zinc-400 mt-2 leading-relaxed">{phi.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* 08 INTEGRATION PORT (CONTACT) */}
-      <section id="contact" className={`p-6 md:p-8 border ${t.cardBorder} ${t.cardBg} rounded-2xl relative z-10`}>
-        <div className="mb-8 pb-4 border-b border-dashed border-zinc-800/80">
-          <div className={`text-[10px] font-mono uppercase tracking-widest mb-1.5 ${t.accent}`}>
-            07 // INTEGRATION PORT
-          </div>
-          <h2 className="text-2xl md:text-3xl font-serif font-bold">Secure Connection</h2>
-        </div>
-
-        <div className="grid md:grid-cols-12 gap-8 items-start">
-          <div className="md:col-span-5 space-y-4">
-            <p className="text-zinc-400 text-xs leading-relaxed font-sans">
-              Open to full-time roles in Bangalore & Riyadh, remote collaborations, and ML/RAG pipelines integration consultancies.
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          {/* Headline */}
+          <Reveal className="mb-16">
+            <span className="section-eyebrow">✦ Get In Touch</span>
+            <h2
+              className="font-display font-bold text-white leading-tight mb-6"
+              style={{ fontSize: 'clamp(38px, 6vw, 88px)' }}
+            >
+              Let's build something<br />
+              <span className="gradient-text">extraordinary.</span>
+            </h2>
+            <p className="text-zinc-400 text-lg max-w-lg leading-relaxed">
+              Open to full-time AI Engineering roles, ML consulting, and remote collaboration.
+              Based in Bengaluru, India — happy to work across time zones.
             </p>
+          </Reveal>
 
-            {/* Handles list with click to copy icons */}
-            <div className="space-y-3.5 pt-3">
-              <div className="flex gap-3 group">
-                <div className={`w-7 h-7 border ${t.cardBorder} rounded flex items-center justify-center text-zinc-500`}>
-                  <Mail size={12} />
-                </div>
-                <div className="flex-grow flex justify-between items-center">
-                  <div>
-                    <div className="text-[7px] font-mono text-zinc-500 uppercase">EMAIL</div>
-                    <a href="mailto:jagadeepreddy3638@gmail.com" className={`text-[10px] font-mono ${t.textBody} ${t.hoverText} transition`}>
-                      jagadeepreddy.email
-                    </a>
-                  </div>
-                  <button 
-                    onClick={() => handleCopyToClipboard('jagadeepreddy3638@gmail.com', 'email')}
-                    className="p-1 opacity-0 group-hover:opacity-100 transition rounded hover:bg-zinc-500/10 text-zinc-500 hover:text-zinc-300 cursor-pointer"
-                  >
-                    {copiedField === 'email' ? <Check size={10} className="text-emerald-500" /> : <Copy size={10} />}
-                  </button>
-                </div>
-              </div>
+          <div className="grid md:grid-cols-2 gap-12 items-start">
 
-              <div className="flex gap-3 group">
-                <div className={`w-7 h-7 border ${t.cardBorder} rounded flex items-center justify-center text-zinc-500`}>
-                  <Linkedin size={12} />
-                </div>
-                <div className="flex-grow flex justify-between items-center">
-                  <div>
-                    <div className="text-[7px] font-mono text-zinc-500 uppercase">LINKEDIN</div>
-                    <a href="https://www.linkedin.com/in/buthuru-jagadeep-reddy-a522961a1/" target="_blank" rel="noopener noreferrer" className={`text-[10px] font-mono ${t.textBody} ${t.hoverText} transition`}>
-                      jagadeepreddy.linkedin
-                    </a>
-                  </div>
-                  <button 
-                    onClick={() => handleCopyToClipboard('https://www.linkedin.com/in/buthuru-jagadeep-reddy-a522961a1/', 'linkedin')}
-                    className="p-1 opacity-0 group-hover:opacity-100 transition rounded hover:bg-zinc-500/10 text-zinc-500 hover:text-zinc-300 cursor-pointer"
-                  >
-                    {copiedField === 'linkedin' ? <Check size={10} className="text-emerald-500" /> : <Copy size={10} />}
-                  </button>
-                </div>
-              </div>
-
-              <div className="flex gap-3 group">
-                <div className={`w-7 h-7 border ${t.cardBorder} rounded flex items-center justify-center text-zinc-500`}>
-                  <Github size={12} />
-                </div>
-                <div className="flex-grow flex justify-between items-center">
-                  <div>
-                    <div className="text-[7px] font-mono text-zinc-500 uppercase">GITHUB</div>
-                    <a href="https://github.com/Jagadeep-Reddy" target="_blank" rel="noopener noreferrer" className={`text-[10px] font-mono ${t.textBody} ${t.hoverText} transition`}>
-                      jagadeepreddy.github
-                    </a>
-                  </div>
-                  <button 
-                    onClick={() => handleCopyToClipboard('https://github.com/Jagadeep-Reddy', 'github')}
-                    className="p-1 opacity-0 group-hover:opacity-100 transition rounded hover:bg-zinc-500/10 text-zinc-500 hover:text-zinc-300 cursor-pointer"
-                  >
-                    {copiedField === 'github' ? <Check size={10} className="text-emerald-500" /> : <Copy size={10} />}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Form Input fields */}
-          <div className="md:col-span-7">
-            {contactPayloadActive ? (
-              <div className="p-4 border border-zinc-800 rounded-xl bg-zinc-950/90 text-[10px] font-mono text-zinc-400 space-y-2 min-h-[220px] flex flex-col justify-center">
-                <div className="text-zinc-500 text-[8px] tracking-widest border-b border-zinc-900 pb-2 flex items-center gap-1.5">
-                  <Activity size={10} className="animate-spin text-[#10B981]" /> PAYLOAD_TRANSMISSION_LOG
-                </div>
-                {contactLogs.map((log, idx) => (
-                  <div key={idx} className="flex gap-1.5">
-                    <span className="text-[#10B981]">&gt;&gt;</span>
-                    <span>{log}</span>
+            {/* Left: channels */}
+            <Reveal delay={120}>
+              <div className="space-y-3 mb-8">
+                {[
+                  {
+                    id: 'contact-email', icon: Mail, label: 'Email',
+                    display: 'jagadeepreddy3638@gmail.com',
+                    href: 'mailto:jagadeepreddy3638@gmail.com',
+                    copyValue: 'jagadeepreddy3638@gmail.com', key: 'email',
+                  },
+                  {
+                    id: 'contact-linkedin', icon: Linkedin, label: 'LinkedIn',
+                    display: '/buthuru-jagadeep-reddy',
+                    href: 'https://www.linkedin.com/in/buthuru-jagadeep-reddy-a522961a1/',
+                    copyValue: 'https://www.linkedin.com/in/buthuru-jagadeep-reddy-a522961a1/', key: 'linkedin',
+                  },
+                  {
+                    id: 'contact-github', icon: Github, label: 'GitHub',
+                    display: '/Jagadeep-Reddy',
+                    href: 'https://github.com/Jagadeep-Reddy',
+                    copyValue: 'https://github.com/Jagadeep-Reddy', key: 'github',
+                  },
+                ].map(({ id, icon: Icon, label, display, href, copyValue, key }) => (
+                  <div key={key} id={id} className="contact-channel group">
+                    <div
+                      className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:scale-110"
+                      style={{ background: 'rgba(124,58,237,0.12)', color: '#a78bfa' }}
+                    >
+                      <Icon size={18} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-[9px] font-mono uppercase tracking-[0.2em] text-zinc-600 mb-0.5">{label}</div>
+                      <a
+                        href={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm text-zinc-300 hover:text-white transition-colors truncate block"
+                      >
+                        {display}
+                      </a>
+                    </div>
+                    <button
+                      id={`copy-${key}`}
+                      onClick={() => copyText(copyValue, key)}
+                      aria-label={`Copy ${label}`}
+                      className="p-2 rounded-lg text-zinc-700 hover:text-zinc-300 transition-all opacity-0 group-hover:opacity-100"
+                    >
+                      {copied === key
+                        ? <Check size={14} className="text-emerald-400" />
+                        : <Copy size={14} />
+                      }
+                    </button>
                   </div>
                 ))}
               </div>
-            ) : (
-              <form onSubmit={handleFormSubmit} className="space-y-4">
-                <div>
-                  <label className="block text-[7px] font-mono text-zinc-500 uppercase tracking-widest mb-1">
-                    [client.email]
-                  </label>
-                  <input
-                    type="email"
-                    required
-                    placeholder="name@organization.com"
-                    value={formEmail}
-                    onChange={(e) => setFormEmail(e.target.value)}
-                    className={`w-full px-3 py-2 rounded ${t.inputBg} border ${t.inputBorder} ${t.text} text-[11px] focus:outline-none ${t.inputFocus} transition font-mono`}
-                  />
-                </div>
-                <div>
-                  <label className="block text-[7px] font-mono text-zinc-500 uppercase tracking-widest mb-1">
-                    [message.subject]
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="Project recruitment, or ML pipelines"
-                    value={formSubject}
-                    onChange={(e) => setFormSubject(e.target.value)}
-                    className={`w-full px-3 py-2 rounded ${t.inputBg} border ${t.inputBorder} ${t.text} text-[11px] focus:outline-none ${t.inputFocus} transition font-mono`}
-                  />
-                </div>
-                <div>
-                  <label className="block text-[7px] font-mono text-zinc-500 uppercase tracking-widest mb-1">
-                    [message.payload]
-                  </label>
-                  <textarea
-                    required
-                    rows={3}
-                    placeholder="Include scope details or job specifications..."
-                    value={formMessage}
-                    onChange={(e) => setFormMessage(e.target.value)}
-                    className={`w-full px-3 py-2 rounded ${t.inputBg} border ${t.inputBorder} ${t.text} text-[11px] focus:outline-none ${t.inputFocus} transition font-mono`}
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className={`w-full py-2.5 ${t.buttonBg} ${t.buttonText} text-[10px] font-mono uppercase tracking-widest rounded flex items-center justify-center gap-1.5 hover:opacity-90 active:scale-95 transition cursor-pointer`}
+
+              <p className="text-xs font-mono text-zinc-700 pl-1 flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                Typical response time: &lt; 24 hours
+              </p>
+            </Reveal>
+
+            {/* Right: form */}
+            <Reveal delay={260}>
+              {formStatus === 'success' ? (
+                <div
+                  id="form-success"
+                  className="rounded-2xl p-14 text-center"
+                  style={{
+                    background: 'rgba(16,185,129,0.06)',
+                    border: '1px solid rgba(16,185,129,0.2)',
+                  }}
                 >
-                  <Send size={11} /> Deliver Message Payload
-                </button>
-              </form>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* 09 INTEGRATED RECRUITER SHELL TERMINAL CHATBOT */}
-      <section id="chatbot-console" className={`p-6 md:p-8 border ${t.cardBorder} ${t.cardBg} rounded-2xl relative z-10`}>
-        <div className="mb-6 pb-4 border-b border-dashed border-zinc-800/80">
-          <div className={`text-[10px] font-mono uppercase tracking-widest mb-1.5 ${t.accent}`}>
-            08 // RECRUITER SHELL TERMINAL
-          </div>
-          <h2 className="text-2xl md:text-3xl font-serif font-bold">Query AI assistant</h2>
-        </div>
-
-        <div className={`border ${t.cardBorder} rounded-xl overflow-hidden shadow-2xl flex flex-col min-h-[380px] bg-zinc-950`}>
-          {/* Terminal header */}
-          <div className="p-3 bg-zinc-900 border-b border-zinc-800 flex justify-between items-center text-zinc-400">
-            <div className="flex items-center gap-2 text-xs font-mono">
-              <Terminal size={12} className="text-[#10B981]" />
-              <span>guest@jagadeepreddy.sh</span>
-            </div>
-            <div className="flex gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-zinc-850"></span>
-              <span className="w-2.5 h-2.5 rounded-full bg-zinc-850"></span>
-              <span className="w-2.5 h-2.5 rounded-full bg-zinc-850"></span>
-            </div>
-          </div>
-
-          {/* Chat conversations */}
-          <div className="flex-grow p-4 space-y-4 overflow-y-auto h-[260px] scrollbar-thin text-xs text-zinc-300">
-            {messages.map((msg, idx) => (
-              <div key={idx} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-                {msg.sender === 'user' ? (
-                  <div className="font-mono text-[11px] leading-relaxed text-zinc-300">
-                    <span className="text-zinc-500">guest@portfolio:~$</span> {msg.text}
+                  <div
+                    className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6"
+                    style={{ background: 'rgba(16,185,129,0.15)', border: '1px solid rgba(16,185,129,0.3)' }}
+                  >
+                    <Check size={30} className="text-emerald-400" />
                   </div>
-                ) : (
-                  <div className="w-full text-left font-mono text-[11px] leading-relaxed bg-[#0a0f1d]/60 border border-zinc-900 p-3 rounded-lg">
-                    <div className="text-[7px] text-zinc-600 uppercase tracking-wider mb-1 flex items-center gap-1">
-                      <Sparkles size={8} className="text-[#10B981] animate-pulse" /> // OUTPUT FROM PORTFOLIO_DB
-                    </div>
-                    {msg.text}
-                  </div>
-                )}
-              </div>
-            ))}
-            
-            {isTyping && (
-              <div className="flex justify-start">
-                <div className="p-2 border border-zinc-800 rounded bg-[#0a0f1d]/60 flex items-center gap-1 font-mono text-[10px] text-zinc-500">
-                  <span className="w-1.5 h-1.5 bg-zinc-500 rounded-full animate-bounce"></span>
-                  <span className="w-1.5 h-1.5 bg-zinc-500 rounded-full animate-bounce delay-150"></span>
-                  <span className="w-1.5 h-1.5 bg-zinc-500 rounded-full animate-bounce delay-300"></span>
-                  <span>running query...</span>
+                  <h3 className="font-display font-bold text-white text-2xl mb-2">Message sent!</h3>
+                  <p className="text-zinc-400 text-sm">I'll get back to you within 24 hours.</p>
                 </div>
-              </div>
-            )}
-            <div ref={chatEndRef} />
-          </div>
-
-          {/* Suggestions row */}
-          <div className="px-4 py-2 border-t border-zinc-900 bg-zinc-900/40 text-[9px] font-mono flex flex-wrap gap-1.5 items-center">
-            <span className="text-zinc-600 uppercase">Suggested Flags:</span>
-            <button onClick={() => handleQuickAction("Summarize Jagadeep's expertise")} className="px-2 py-0.5 border border-zinc-850 rounded hover:border-zinc-550 text-zinc-400 hover:text-white transition cursor-pointer">--expertise</button>
-            <button onClick={() => handleQuickAction("About the IPL AI Platform")} className="px-2 py-0.5 border border-zinc-850 rounded hover:border-zinc-550 text-zinc-400 hover:text-white transition cursor-pointer">--ipl-platform</button>
-            <button onClick={() => handleQuickAction("Tell me about his RAG experience")} className="px-2 py-0.5 border border-zinc-850 rounded hover:border-zinc-550 text-zinc-400 hover:text-white transition cursor-pointer">--rag-stack</button>
-            <button onClick={() => handleQuickAction("Is he open to full-time remote roles?")} className="px-2 py-0.5 border border-zinc-850 rounded hover:border-zinc-550 text-zinc-400 hover:text-white transition cursor-pointer">--remote</button>
-          </div>
-
-          {/* Chat input line */}
-          <div className="p-3 bg-zinc-950 border-t border-zinc-900 flex items-center gap-1.5">
-            <span className="text-[10px] font-mono text-zinc-500 flex-shrink-0">guest@portfolio:~$</span>
-            <input
-              type="text"
-              placeholder="help or run command..."
-              value={inputText}
-              onChange={(e) => setInputText(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-              className="flex-grow px-1 py-1 rounded bg-transparent border-none text-zinc-300 text-xs font-mono focus:outline-none"
-            />
-            <button
-              onClick={handleSendMessage}
-              className={`px-3 py-1.5 rounded flex items-center justify-center cursor-pointer transition ${t.chatBtn}`}
-              aria-label="Send"
-            >
-              <Send size={11} />
-            </button>
+              ) : (
+                <form
+                  id="contact-form"
+                  onSubmit={submitForm}
+                  className="space-y-4"
+                  style={{
+                    background: 'rgba(10,10,22,0.6)',
+                    border: '1px solid rgba(255,255,255,0.07)',
+                    borderRadius: '20px',
+                    padding: '32px',
+                  }}
+                >
+                  <div>
+                    <label
+                      htmlFor="form-email"
+                      className="block text-[10px] font-mono uppercase tracking-[0.22em] text-zinc-500 mb-2"
+                    >
+                      Your Email
+                    </label>
+                    <input
+                      id="form-email"
+                      type="email"
+                      required
+                      value={formData.email}
+                      onChange={e => setFormData(p => ({ ...p, email: e.target.value }))}
+                      placeholder="you@company.com"
+                      className="form-input"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="form-message"
+                      className="block text-[10px] font-mono uppercase tracking-[0.22em] text-zinc-500 mb-2"
+                    >
+                      Message
+                    </label>
+                    <textarea
+                      id="form-message"
+                      required
+                      rows={5}
+                      value={formData.message}
+                      onChange={e => setFormData(p => ({ ...p, message: e.target.value }))}
+                      placeholder="Tell me about your project, role, or idea..."
+                      className="form-input resize-none"
+                    />
+                  </div>
+                  {formStatus === 'error' && (
+                    <p className="text-xs text-red-400 font-mono">
+                      Something went wrong. Please email me directly.
+                    </p>
+                  )}
+                  <button
+                    id="form-submit"
+                    type="submit"
+                    disabled={formStatus === 'sending'}
+                    className="btn-shine w-full py-4 text-white text-sm font-semibold rounded-xl flex items-center justify-center gap-2 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                    style={{
+                      background: 'linear-gradient(135deg, #7c3aed, #4338ca)',
+                      boxShadow: '0 6px 20px rgba(124,58,237,0.35)',
+                    }}
+                  >
+                    {formStatus === 'sending' ? (
+                      <>
+                        <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        Sending…
+                      </>
+                    ) : (
+                      <>
+                        <Send size={16} />
+                        Send Message
+                      </>
+                    )}
+                  </button>
+                </form>
+              )}
+            </Reveal>
           </div>
         </div>
       </section>
 
-        </main>
-      </div>
+      {/* ══════════════════════════════════════════════════════════════════════
+          FOOTER
+      ══════════════════════════════════════════════════════════════════════ */}
+      <footer
+        className="py-10"
+        style={{ borderTop: '1px solid rgba(255,255,255,0.05)', background: 'rgba(3,3,8,0.8)' }}
+      >
+        <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-5">
+          <div className="flex items-center gap-3">
+            <div
+              className="w-7 h-7 rounded-md flex items-center justify-center text-[10px] font-mono font-bold text-white"
+              style={{ background: 'linear-gradient(135deg, #7c3aed, #06b6d4)' }}
+            >
+              JR
+            </div>
+            <span className="text-xs font-mono text-zinc-600">© 2026 Jagadeep Reddy</span>
+          </div>
 
-      {/* Footer */}
-      <footer className={`py-12 border-t border-dashed ${t.divider} mt-24 relative z-10 ${t.cardBg}`}>
-        <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-8">
-          <div>
-            <h3 className="text-lg font-mono font-bold tracking-tight text-white mb-2">JAGADEEP REDDY</h3>
-            <p className="text-[8px] font-mono text-zinc-500 uppercase tracking-wide mb-4">[role] ai_engineer // backend_architect</p>
-            <p className="text-xs text-zinc-400 leading-relaxed max-w-xs font-sans">
-              Focused on deploying verifiable cognitive pipelines, LangGraph graph architectures, and hybrid retrieval networks.
-            </p>
+          <div className="flex items-center gap-2 text-xs font-mono text-zinc-700">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="ml-1">All systems operational</span>
           </div>
-          <div>
-            <div className="text-[8px] font-mono uppercase tracking-widest text-zinc-650 mb-4">// SYSTEM_MAP</div>
-            <ul className="grid grid-cols-2 gap-2 text-[9px] font-mono uppercase">
-              <li><button onClick={() => scrollToSection('hero')} className="text-zinc-400 hover:text-white text-left transition">Hero</button></li>
-              <li><button onClick={() => scrollToSection('architecture')} className="text-zinc-400 hover:text-white text-left transition">Architecture</button></li>
-              <li><button onClick={() => scrollToSection('projects')} className="text-zinc-400 hover:text-white text-left transition">Projects</button></li>
-              <li><button onClick={() => scrollToSection('skills')} className="text-zinc-400 hover:text-white text-left transition">Skills</button></li>
-              <li><button onClick={() => scrollToSection('experience')} className="text-zinc-400 hover:text-white text-left transition">Experience</button></li>
-              <li><button onClick={() => scrollToSection('education')} className="text-zinc-400 hover:text-white text-left transition">Education</button></li>
-            </ul>
-          </div>
-          <div>
-            <div className="text-[8px] font-mono uppercase tracking-widest text-zinc-650 mb-4">// ENGINE_LOG</div>
-            <p className="text-[10px] font-mono text-zinc-500 leading-normal">
-              Compiled using Vite & React.<br />
-              Vercel Deployment: production_ready.<br />
-              Status Code: 200 OK.
-            </p>
+
+          <div className="flex items-center gap-5">
+            {[
+              { href: 'https://github.com/Jagadeep-Reddy', icon: Github, label: 'GitHub' },
+              { href: 'https://www.linkedin.com/in/buthuru-jagadeep-reddy-a522961a1/', icon: Linkedin, label: 'LinkedIn' },
+              { href: 'mailto:jagadeepreddy3638@gmail.com', icon: Mail, label: 'Email' },
+            ].map(({ href, icon: Icon, label }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={label}
+                className="text-zinc-600 hover:text-white transition-colors hover:scale-110 inline-flex"
+                style={{ transition: 'color 0.2s ease, transform 0.2s ease' }}
+              >
+                <Icon size={17} />
+              </a>
+            ))}
           </div>
         </div>
       </footer>
 
-      {/* Floating Scroll Top Trigger */}
-      {showScrollTop && (
-        <button
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className={`fixed bottom-6 right-6 w-9 h-9 rounded-lg border ${t.cardBorder} flex items-center justify-center ${t.cardBg} text-zinc-400 hover:text-white ${t.cardBorderHover} transition cursor-pointer z-50`}
-          aria-label="Scroll to top"
-        >
-          <ChevronUp size={15} />
-        </button>
-      )}
+      {/* ── SCROLL TO TOP ───────────────────────────────────────────────────── */}
+      <button
+        id="scroll-to-top"
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        aria-label="Scroll to top"
+        className={`fixed bottom-8 right-8 w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-400 z-50 ${
+          showScrollTop ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-4 pointer-events-none'
+        }`}
+        style={{
+          background: 'rgba(15,15,30,0.85)',
+          border: '1px solid rgba(124,58,237,0.3)',
+          backdropFilter: 'blur(12px)',
+          boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
+        }}
+      >
+        <ChevronDown size={16} className="rotate-180 text-violet-400" />
+      </button>
 
-      {/* Global CSS Styles */}
-      <style>{`
-        .delay-150 { animation-delay: 150ms; }
-        .delay-300 { animation-delay: 300ms; }
-      `}</style>
     </div>
   );
 }
