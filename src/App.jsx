@@ -107,11 +107,11 @@ const themes = {
     accentBgLight: "bg-[#15803D]/5",
     footerBg: "bg-[#14211A]",
     divider: "border-[#D1D8D5]",
-    cardBg: "bg-white/60 backdrop-blur-md",
-    cardBorder: "border-[#E2E8F0]",
+    cardBg: "bg-[#EAECEB]/60 backdrop-blur-md",
+    cardBorder: "border-[#D1D9D4]",
     cardBorderHover: "hover:border-[#15803D]/50",
-    inputBg: "bg-white/80",
-    inputBorder: "border-[#CBD5E1]",
+    inputBg: "bg-[#DFE4E1]/80",
+    inputBorder: "border-[#CBD5C9]",
     inputFocus: "focus:border-[#15803D]/60",
     chatBtn: "bg-[#15803D] text-white shadow-[0_4px_20px_rgba(21,128,61,0.2)]",
     buttonBg: "bg-[#15803D] text-white border border-[#15803D]",
@@ -141,11 +141,11 @@ const themes = {
     accentBgLight: "bg-[#C2410C]/5",
     footerBg: "bg-[#1F1A17]",
     divider: "border-[#E6E1D5]",
-    cardBg: "bg-white/60 backdrop-blur-md",
-    cardBorder: "border-[#EBE6DA]",
+    cardBg: "bg-[#F0EDE4]/60 backdrop-blur-md",
+    cardBorder: "border-[#E2DCCE]",
     cardBorderHover: "hover:border-[#C2410C]/50",
-    inputBg: "bg-white/80",
-    inputBorder: "border-[#D6D0C2]",
+    inputBg: "bg-[#E5DFD4]/80",
+    inputBorder: "border-[#CFC8B7]",
     inputFocus: "focus:border-[#C2410C]/60",
     chatBtn: "bg-[#C2410C] text-white shadow-[0_4px_20px_rgba(194,65,12,0.2)]",
     buttonBg: "bg-[#C2410C] text-white border border-[#C2410C]",
@@ -602,9 +602,9 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
                   className={`appearance-none bg-transparent border ${t.accentBorder} ${t.text} text-[9px] font-mono uppercase tracking-widest pl-3 pr-7 py-1 rounded focus:outline-none cursor-pointer hover:bg-white/5 transition`}
                 >
                   <option value="midnight" className="bg-[#080C14] text-[#F8FAFC]">Slate Bronze</option>
-                  <option value="obsidian" className="bg-[#070A13] text-[#F1F5F9]">Obsidian Mint</option>
-                  <option value="forest" className="bg-[#050B08] text-[#F1F5F9]">Botanical Sage</option>
-                  <option value="terracotta" className="bg-[#0A0612] text-[#FAF8F5]">Velvet Orchid</option>
+                  <option value="obsidian" className="bg-[#050505] text-[#F1F5F9]">Obsidian Teal</option>
+                  <option value="forest" className="bg-[#F4F6F5] text-[#1E293B]">Botanical Sage</option>
+                  <option value="terracotta" className="bg-[#FAF7F0] text-[#221F1B]">Warm Terracotta</option>
                 </select>
                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-1.5 text-zinc-500">
                   <ChevronDown size={10} />
@@ -628,9 +628,9 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
               className={`bg-transparent border ${t.accentBorder} ${t.text} text-[8px] font-mono uppercase tracking-widest px-2 py-0.5 rounded focus:outline-none`}
             >
               <option value="midnight" className="bg-[#080C14] text-white">Slate Bronze</option>
-              <option value="obsidian" className="bg-[#070A13] text-white">Obsidian Mint</option>
-              <option value="forest" className="bg-[#050B08] text-white">Botanical Sage</option>
-              <option value="terracotta" className="bg-[#0A0612] text-white">Velvet Orchid</option>
+              <option value="obsidian" className="bg-[#050505] text-white">Obsidian Teal</option>
+              <option value="forest" className="bg-[#F4F6F5] text-black">Botanical Sage</option>
+              <option value="terracotta" className="bg-[#FAF7F0] text-black">Warm Terracotta</option>
             </select>
             <button 
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
