@@ -184,6 +184,51 @@ export default function App() {
   const [copiedField, setCopiedField] = useState(null); // Copy link feedback
   const [scrollProgress, setScrollProgress] = useState(0); // Progress bar percentage
 
+  // Command Center Diagnostic States
+  const [diagActive, setDiagActive] = useState(false);
+  const [diagLogs, setDiagLogs] = useState([]);
+  const [contactPayloadActive, setContactPayloadActive] = useState(false);
+  const [contactLogs, setContactLogs] = useState([]);
+  const [systemStats, setSystemStats] = useState({ cpu: 12, memory: 42, ping: 14 });
+
+  // System Stats interval simulation
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSystemStats(prev => ({
+        cpu: Math.floor(Math.random() * 15) + 8,
+        memory: Math.floor(Math.random() * 5) + 40,
+        ping: Math.floor(Math.random() * 8) + 12
+      }));
+    }, 4500);
+    return () => clearInterval(interval);
+  }, []);
+
+  const runDiagnostics = () => {
+    if (diagActive) return;
+    setDiagActive(true);
+    setDiagLogs(["[sys] initializing diagnostics...", "[sys] loading context & model weights..."]);
+    
+    const messagesList = [
+      "[sys] checking intent classifier layers... OK",
+      "[sys] verifying qdrant HNSW vector store... OK",
+      "[sys] validation check: FAISS sparse index... OK",
+      "[sys] evaluating cross-encoder rerank... PASS",
+      "[sys] RAGAS CI/CD deployment threshold... PASS (0.88)",
+      "[sys] live web socket commentary push... READY (14ms)",
+      "[sys] active models: gpt-4o-mini & xgboost... ONLINE",
+      "[sys] metrics verified. system status: normal"
+    ];
+    
+    messagesList.forEach((log, index) => {
+      setTimeout(() => {
+        setDiagLogs(prev => [...prev, log]);
+        if (index === messagesList.length - 1) {
+          setTimeout(() => setDiagActive(false), 3000);
+        }
+      }, (index + 1) * 450);
+    });
+  };
+
   // Form submission state
   const [formEmail, setFormEmail] = useState('');
   const [formSubject, setFormSubject] = useState('');
@@ -194,7 +239,7 @@ export default function App() {
   const [messages, setMessages] = useState([
     { 
       sender: 'agent', 
-      text: "Hi! I'm Jagadeep's AI agent. Ask me anything about his skills, experience, projects, or availability!",
+      text: "Hi! I'm Jagadeep's AI assistant shell. You can query me about his projects, ANZ backend engineering, ML/RAG skills, or availability!",
       timestamp: new Date() 
     }
   ]);
@@ -389,27 +434,49 @@ export default function App() {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     if (!formEmail || !formSubject || !formMessage) return;
-    setFormStatus('sending');
-    try {
-      const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({ email: formEmail, subject: formSubject, message: formMessage })
-      });
-      if (res.ok) {
-        setFormStatus('success');
-        setFormEmail('');
-        setFormSubject('');
-        setFormMessage('');
-        setTimeout(() => setFormStatus(''), 5000);
-      } else {
+    setContactPayloadActive(true);
+    setContactLogs(["[gateway] preparing payload packaging...", "[gateway] validation check: ok"]);
+
+    const steps = [
+      "[gateway] serializing text blobs...",
+      "[gateway] calling FastAPI proxy gateway...",
+      "[gateway] delivering payload to Formspree target..."
+    ];
+
+    steps.forEach((step, idx) => {
+      setTimeout(() => {
+        setContactLogs(prev => [...prev, step]);
+      }, (idx + 1) * 450);
+    });
+
+    setTimeout(async () => {
+      setFormStatus('sending');
+      try {
+        const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ email: formEmail, subject: formSubject, message: formMessage })
+        });
+        if (res.ok) {
+          setContactLogs(prev => [...prev, "[gateway] success: payload delivered (200 OK)"]);
+          setFormStatus('success');
+          setFormEmail('');
+          setFormSubject('');
+          setFormMessage('');
+        } else {
+          setContactLogs(prev => [...prev, "[gateway] error: formspree target rejected (500)"]);
+          setFormStatus('error');
+        }
+      } catch {
+        setContactLogs(prev => [...prev, "[gateway] error: network connection timeout"]);
         setFormStatus('error');
-        setTimeout(() => setFormStatus(''), 4000);
+      } finally {
+        setTimeout(() => {
+          setContactPayloadActive(false);
+          setFormStatus('');
+        }, 3500);
       }
-    } catch {
-      setFormStatus('error');
-      setTimeout(() => setFormStatus(''), 4000);
-    }
+    }, 1800);
   };
 
   // AI Assistant Chat Config
@@ -548,7 +615,7 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
     if (!inputText.trim()) return;
     const text = inputText.trim();
     setMessages(prev => [...prev, { sender: 'user', text, timestamp: new Date() }]);
-    inputText('');
+    setInputText('');
     sendToClaudeAPI(text);
   };
 
@@ -573,90 +640,69 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
       <div className={`absolute top-[35%] right-[5%] w-[250px] md:w-[450px] h-[250px] md:h-[450px] rounded-full blur-[100px] md:blur-[150px] pointer-events-none z-0 opacity-60 transition-all duration-1000 mix-blend-screen ${t.blob2}`}></div>
       <div className={`absolute top-[70%] left-[10%] w-[280px] md:w-[480px] h-[280px] md:h-[480px] rounded-full blur-[100px] md:blur-[150px] pointer-events-none z-0 opacity-50 transition-all duration-1000 mix-blend-screen ${t.blob3}`}></div>
 
-      {/* Editorial Style Grid Lines (Background blueprint canvas decoration) */}
-      <div className="fixed inset-0 pointer-events-none grid grid-cols-4 max-w-6xl mx-auto px-6 opacity-[0.03] z-0">
+      {/* Editorial Style Grid Lines */}
+      <div className="fixed inset-0 pointer-events-none grid grid-cols-4 max-w-7xl mx-auto px-6 opacity-[0.02] z-0">
         <div className={`border-l border-r ${t.divider} h-full`}></div>
         <div className={`border-r ${t.divider} h-full`}></div>
         <div className={`border-r ${t.divider} h-full`}></div>
         <div></div>
       </div>
 
-      {/* Header / Sticky Navbar */}
+      {/* Sticky Header */}
       <header className={`fixed top-0 left-0 w-full z-40 transition-all duration-300 ${
         scrolled 
-          ? `${t.bg} bg-opacity-90 backdrop-blur-md border-b ${t.divider}`
+          ? `${t.bg} bg-opacity-95 backdrop-blur-md border-b ${t.divider}`
           : 'bg-transparent'
       }`}>
-        {/* Scroll Progress Indicator */}
         <div className={`absolute bottom-0 left-0 h-[1.5px] ${t.accentBg} transition-all duration-100 z-50`} style={{ width: `${scrollProgress}%` }}></div>
-        <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center relative z-10">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center relative z-10">
           <div>
             <span 
               onClick={() => scrollToSection('hero')} 
-              className="text-lg md:text-xl font-mono font-bold tracking-tight cursor-pointer hover:opacity-80 transition"
+              className="text-lg font-mono font-bold tracking-tight cursor-pointer hover:opacity-80 transition"
             >
               [~/jagadeep.reddy]
             </span>
-            <div className="flex items-center gap-1.5 mt-0.5 text-[9px] uppercase tracking-widest font-mono text-zinc-500">
+            <div className="hidden sm:flex items-center gap-1.5 mt-0.5 text-[8px] uppercase tracking-widest font-mono text-zinc-500">
               <span className={`w-1.5 h-1.5 rounded-full ${t.dotColor} animate-pulse`}></span>
-              system.status: active
+              system.status: active // ping: {systemStats.ping}ms // LLM: gpt-4o-mini
             </div>
           </div>
 
-          {/* Desktop Navigation Links */}
-          <div className="hidden md:flex items-center gap-6">
-            <nav className="flex gap-6 text-[10px] font-mono uppercase tracking-widest text-zinc-400">
+          <div className="flex items-center gap-4">
+            {/* Desktop Navigation Links */}
+            <nav className="hidden md:flex gap-5 text-[9px] font-mono uppercase tracking-widest text-zinc-400">
               <button onClick={() => scrollToSection('architecture')} className={`${t.hoverText} transition`}>Architecture</button>
               <button onClick={() => scrollToSection('projects')} className={`${t.hoverText} transition`}>Projects</button>
               <button onClick={() => scrollToSection('skills')} className={`${t.hoverText} transition`}>Skills</button>
               <button onClick={() => scrollToSection('experience')} className={`${t.hoverText} transition`}>Experience</button>
               <button onClick={() => scrollToSection('education')} className={`${t.hoverText} transition`}>Academics</button>
+              <button onClick={() => scrollToSection('chatbot-console')} className={`${t.hoverText} transition`}>Shell</button>
             </nav>
 
-            <span className="h-4 w-[1px] bg-zinc-800"></span>
+            <span className="hidden md:inline h-4 w-[1px] bg-zinc-800"></span>
 
             {/* Dropdown theme switcher */}
-            <div className="flex items-center gap-2">
-              <div className="relative">
-                <select
-                  value={theme}
-                  onChange={(e) => setTheme(e.target.value)}
-                  className={`appearance-none bg-transparent border ${t.accentBorder} ${t.text} text-[9px] font-mono uppercase tracking-widest pl-3 pr-7 py-1 rounded focus:outline-none cursor-pointer hover:bg-white/5 transition`}
-                >
-                  <option value="midnight" className="bg-[#080C14] text-[#F8FAFC]">Slate Bronze</option>
-                  <option value="obsidian" className="bg-[#050505] text-[#F1F5F9]">Obsidian Teal</option>
-                  <option value="forest" className="bg-[#F4F6F5] text-[#1E293B]">Botanical Sage</option>
-                  <option value="terracotta" className="bg-[#FAF7F0] text-[#221F1B]">Warm Terracotta</option>
-                </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-1.5 text-zinc-500">
-                  <ChevronDown size={10} />
-                </div>
+            <div className="relative">
+              <select
+                value={theme}
+                onChange={(e) => setTheme(e.target.value)}
+                className={`appearance-none bg-transparent border ${t.accentBorder} ${t.text} text-[9px] font-mono uppercase tracking-widest pl-3 pr-7 py-1 rounded focus:outline-none cursor-pointer hover:bg-white/5 transition`}
+              >
+                <option value="midnight" className="bg-[#080C14] text-[#F8FAFC]">Slate Bronze</option>
+                <option value="obsidian" className="bg-[#050505] text-[#F1F5F9]">Obsidian Teal</option>
+                <option value="forest" className="bg-[#F4F6F5] text-[#1E293B]">Botanical Sage</option>
+                <option value="terracotta" className="bg-[#FAF7F0] text-[#221F1B]">Warm Terracotta</option>
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-1.5 text-zinc-500">
+                <ChevronDown size={10} />
               </div>
             </div>
 
-            <button 
-              onClick={() => scrollToSection('contact')}
-              className={`px-3 py-1 text-[9px] font-mono uppercase tracking-widest border border-zinc-850 hover:border-zinc-500 rounded transition duration-300`}
-            >
-              Connect
-            </button>
-          </div>
-
-          {/* Mobile Toggler */}
-          <div className="flex md:hidden items-center gap-3">
-            <select
-              value={theme}
-              onChange={(e) => setTheme(e.target.value)}
-              className={`bg-transparent border ${t.accentBorder} ${t.text} text-[8px] font-mono uppercase tracking-widest px-2 py-0.5 rounded focus:outline-none`}
-            >
-              <option value="midnight" className="bg-[#080C14] text-white">Slate Bronze</option>
-              <option value="obsidian" className="bg-[#050505] text-white">Obsidian Teal</option>
-              <option value="forest" className="bg-[#F4F6F5] text-black">Botanical Sage</option>
-              <option value="terracotta" className="bg-[#FAF7F0] text-black">Warm Terracotta</option>
-            </select>
+            {/* Mobile menu trigger */}
             <button 
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-1 hover:opacity-75 transition text-zinc-400"
+              className="md:hidden p-1 hover:opacity-75 transition text-zinc-400"
               aria-label="Toggle menu"
             >
               <Menu size={18} />
@@ -667,7 +713,7 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
 
       {/* Mobile Drawer Overlay */}
       {mobileMenuOpen && (
-        <div className={`fixed inset-0 z-50 md:hidden flex flex-col justify-center items-center gap-8 ${t.bg} bg-opacity-95 backdrop-blur-lg px-6`}>
+        <div className={`fixed inset-0 z-50 md:hidden flex flex-col justify-center items-center gap-8 ${t.bg} bg-opacity-98 backdrop-blur-lg px-6`}>
           <button 
             onClick={() => setMobileMenuOpen(false)}
             className="absolute top-6 right-6 p-2 hover:opacity-75 transition text-zinc-400"
@@ -681,89 +727,187 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
             <button onClick={() => scrollToSection('skills')} className={`${t.hoverText} transition`}>Skills</button>
             <button onClick={() => scrollToSection('experience')} className={`${t.hoverText} transition`}>Experience</button>
             <button onClick={() => scrollToSection('education')} className={`${t.hoverText} transition`}>Academics</button>
+            <button onClick={() => scrollToSection('chatbot-console')} className={`${t.hoverText} transition`}>Shell</button>
             <button onClick={() => scrollToSection('contact')} className={`${t.hoverText} transition`}>Connect</button>
           </nav>
         </div>
       )}
 
-      {/* Hero Section */}
-      <section id="hero" className="min-h-screen flex flex-col justify-center px-6 pt-24 max-w-6xl mx-auto relative z-10">
-        <div className="max-w-4xl">
-          <div className="flex items-center gap-3 mb-6">
-            <span className={`text-[10px] font-mono uppercase tracking-widest ${t.accent} px-2.5 py-0.5 border ${t.accentBorder} rounded-full ${t.accentBgLight}`}>
-              System: Production Ready
-            </span>
-            <span className="text-[10px] font-mono tracking-widest text-zinc-500">
-              [ping: 14ms // latency: low]
-            </span>
-          </div>
-
-          <h1 className="text-4xl sm:text-6xl md:text-8xl font-serif leading-[1.05] tracking-tight mb-8">
-            Building AI systems that <span className={`italic ${t.accent}`}>scale beyond the demo.</span>
-          </h1>
-
-          <p className="text-base md:text-xl text-zinc-400 font-sans font-light leading-relaxed mb-10 max-w-3xl">
-            I am an AI Engineer transitioning from 2 years of enterprise backend engineering at ANZ.
-            I design production-grade GenAI pipelines: orchestrating specialized LangGraph agents, building hybrid RAG flows, 
-            shaping millisecond-budget XGBoost win predictions, and anchoring answer validity via automated RAGAS gates.
-          </p>
-
-          <div className="flex gap-4 flex-wrap">
-            <button 
-              onClick={() => scrollToSection('projects')} 
-              className={`px-6 py-3 ${t.buttonBg} text-xs font-mono uppercase tracking-wider font-semibold flex items-center gap-2 hover:opacity-90 transition`}
-            >
-              Explore Logs <Terminal size={12} />
-            </button>
-            <button 
-              onClick={() => scrollToSection('architecture')}
-              className={`px-6 py-3 border border-zinc-800 hover:border-zinc-500 text-xs font-mono uppercase tracking-wider font-semibold flex items-center gap-2 transition`}
-            >
-              View System Flow
-            </button>
-            <a 
-              href="/Jagadeep_Reddy_AI_Engineer_Resume.pdf" 
-              download="Jagadeep_Reddy_AI_Engineer_Resume.pdf" 
-              className="px-6 py-3 border border-zinc-800 hover:border-zinc-500 text-xs font-mono uppercase tracking-wider font-semibold flex items-center gap-2 transition text-zinc-400 hover:text-white"
-            >
-              Download CV <FileText size={12} />
-            </a>
-          </div>
-        </div>
-
-        {/* Hero Bottom Banner */}
-        <div className={`mt-24 pt-6 border-t ${t.divider} flex flex-wrap justify-between gap-6 text-[9px] font-mono uppercase tracking-widest text-zinc-500`}>
-          <div>[location] bangalore, india</div>
-          <div>[focus] agentic orchestration & hybrid search</div>
-          <div>[experience] software engineer at anz (2 yrs)</div>
-          <div className="animate-bounce cursor-pointer" onClick={() => scrollToSection('architecture')}>
-            [scroll.to.evolve.architecture ↓]
-          </div>
-        </div>
-      </section>
-
-      {/* System Architecture Section (NEW Interactive Layout) */}
-      <section id="architecture" className={`py-24 px-6 max-w-6xl mx-auto relative z-10 border-t border-dashed ${t.divider}`}>
-        <div className="mb-16 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
-          <div>
-            <div className={`text-[10px] font-mono uppercase tracking-widest mb-2 ${t.accent}`}>
-              01 // PLATFORM BLUEPRINTS
+      {/* Main Dashboard Grid Frame */}
+      <div className="max-w-7xl mx-auto px-4 md:px-6 py-6 pt-24 grid lg:grid-cols-12 gap-8 items-start relative z-10">
+        
+        {/* Left Side: Systems Cockpit & Diagnostics (Sticky) */}
+        <aside className="lg:col-span-4 lg:sticky lg:top-24 space-y-6">
+          
+          {/* Section A: Profile ID */}
+          <div className={`p-6 border ${t.cardBorder} ${t.cardBg} rounded-2xl`}>
+            <div className="flex items-center gap-4">
+              <div className={`w-14 h-14 rounded-xl ${t.accentBg} ${t.buttonText} flex items-center justify-center font-serif text-2xl font-bold shadow-md`}>
+                JD
+              </div>
+              <div>
+                <h2 className="text-lg font-mono font-bold tracking-tight">JAGADEEP REDDY</h2>
+                <p className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest mt-0.5">
+                  [role] ai_engineer // backend_architect
+                </p>
+                <div className="flex items-center gap-1.5 mt-2">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                  </span>
+                  <span className="text-[9px] font-mono uppercase text-zinc-400 tracking-wider">online_for_hire</span>
+                </div>
+              </div>
             </div>
-            <h2 className="text-3xl md:text-5xl font-serif font-bold">
-              System Architecture
-            </h2>
-            <p className="text-zinc-400 text-sm mt-2 max-w-xl">
-              Layered architectures representing production-grade AI platforms I've designed and validated.
+            
+            <p className={`text-xs ${t.textBody} font-sans leading-relaxed mt-5 max-w-sm`}>
+              Specializing in self-correcting RAG frameworks, LangGraph multi-agent orchestration, and sub-300ms real-time ML commentary streams.
             </p>
           </div>
 
-          {/* Interactive Platform Tabs */}
+          {/* Section B: Systems Diagnostics Widget */}
+          <div className={`p-6 border ${t.cardBorder} ${t.cardBg} rounded-2xl`}>
+            <div className="flex justify-between items-center mb-4">
+              <span className={`text-[10px] font-mono uppercase tracking-widest ${t.accentText}`}>
+                // COCKPIT_MONITOR
+              </span>
+              <span className="text-[9px] font-mono text-zinc-500">UPTIME: 99.98%</span>
+            </div>
+
+            <div className="grid grid-cols-3 gap-2.5 mb-5 text-center font-mono">
+              <div className={`p-2.5 border ${t.cardBorder} rounded-lg bg-black/10`}>
+                <div className="text-[7px] text-zinc-500 uppercase">SYS CPU</div>
+                <div className={`text-xs font-bold ${t.text} mt-1`}>{systemStats.cpu}%</div>
+              </div>
+              <div className={`p-2.5 border ${t.cardBorder} rounded-lg bg-black/10`}>
+                <div className="text-[7px] text-zinc-500 uppercase">SYS MEM</div>
+                <div className={`text-xs font-bold ${t.text} mt-1`}>{systemStats.memory}%</div>
+              </div>
+              <div className={`p-2.5 border ${t.cardBorder} rounded-lg bg-black/10`}>
+                <div className="text-[7px] text-zinc-500 uppercase">SYS LATENCY</div>
+                <div className={`text-xs font-bold ${t.text} mt-1`}>{systemStats.ping}ms</div>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <button 
+                onClick={runDiagnostics}
+                disabled={diagActive}
+                className={`w-full py-2 ${t.buttonBg} ${t.buttonText} text-[10px] font-mono uppercase tracking-widest rounded-lg flex items-center justify-center gap-1.5 shadow-sm active:scale-[0.98] transition cursor-pointer disabled:opacity-50`}
+              >
+                <Activity size={12} className={diagActive ? "animate-spin" : ""} />
+                {diagActive ? "Running Tests..." : "Run System Self-Test"}
+              </button>
+
+              {/* Diagnostics terminal outputs log */}
+              {(diagActive || diagLogs.length > 0) && (
+                <div className="p-3 border border-zinc-800/80 rounded-lg bg-zinc-950/80 text-[9px] font-mono text-zinc-400 space-y-1.5 h-[130px] overflow-y-auto scrollbar-thin">
+                  {diagLogs.map((log, index) => (
+                    <div key={index} className="flex gap-1.5 items-start">
+                      <span className="text-[#10B981] flex-shrink-0">&gt;</span>
+                      <span className="leading-normal">{log}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Section C: Target Highlights & Active tag cockpit */}
+          <div className={`p-6 border ${t.cardBorder} ${t.cardBg} rounded-2xl`}>
+            <div className="text-[9px] font-mono uppercase text-zinc-500 mb-3">// ACTIVE_MONITOR_TAGS</div>
+            
+            {activeTag ? (
+              <div className="space-y-2">
+                <div className="text-xs font-mono">
+                  Active Filter: <span className={`${t.accentText} font-bold`}>{activeTag}</span>
+                </div>
+                <p className="text-[10px] text-zinc-500 font-sans leading-normal">
+                  All instances of this skill node are currently highlighted in the dashboard feed.
+                </p>
+                <button 
+                  onClick={() => setActiveTag(null)}
+                  className="text-[9px] font-mono uppercase text-zinc-400 hover:text-white underline"
+                >
+                  Clear Highlights
+                </button>
+              </div>
+            ) : (
+              <div className="text-[10px] font-mono text-zinc-500">
+                Hover over any tech badge in the feed below to query its application instances.
+              </div>
+            )}
+          </div>
+        </aside>
+
+        {/* Right Side: Main Dashboard Content Feed */}
+        <main className="lg:col-span-8 space-y-12">
+          
+          {/* 01 HERO NODE */}
+          <section id="hero" className={`p-6 md:p-10 border ${t.cardBorder} ${t.cardBg} rounded-2xl relative overflow-hidden`}>
+            {/* Grid overlay decoration */}
+            <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(#ffffff03_1px,transparent_1px)] [background-size:16px_16px] opacity-35 z-0"></div>
+            
+            <div className="relative z-10">
+              <div className="flex items-center gap-3 mb-6">
+                <span className={`text-[9px] font-mono uppercase tracking-widest ${t.accent} px-2.5 py-0.5 border ${t.accentBorder} rounded-full ${t.accentBgLight}`}>
+                  Sys: Mainframe Init
+                </span>
+                <span className="text-[9px] font-mono tracking-widest text-zinc-500">
+                  [target_roles // ai_engineer // ctc_20_25_lpa]
+                </span>
+              </div>
+
+              <h1 className="text-3xl sm:text-5xl md:text-6xl font-serif font-bold leading-tight mb-8">
+                Building AI systems that <span className={`italic ${t.accent}`}>scale beyond the demo.</span>
+              </h1>
+
+              <p className={`text-sm md:text-base ${t.textBody} font-sans leading-relaxed mb-8 max-w-2xl`}>
+                I am an AI Engineer transitioning from 2 years of enterprise backend engineering at ANZ.
+                I design production-grade GenAI pipelines: orchestrating specialized LangGraph agents, building hybrid RAG flows, 
+                shaping millisecond-budget XGBoost win predictions, and anchoring answer validity via automated RAGAS gates.
+              </p>
+
+              <div className="flex gap-3.5 flex-wrap">
+                <button 
+                  onClick={() => scrollToSection('projects')} 
+                  className={`px-5 py-2.5 ${t.buttonBg} ${t.buttonText} text-[10px] font-mono uppercase tracking-wider font-bold flex items-center gap-1.5 hover:opacity-90 active:scale-95 transition cursor-pointer`}
+                >
+                  Explore Repos <Terminal size={12} />
+                </button>
+                <button 
+                  onClick={() => scrollToSection('architecture')}
+                  className={`px-5 py-2.5 border ${t.cardBorder} hover:border-zinc-500 text-[10px] font-mono uppercase tracking-wider font-bold flex items-center gap-1.5 active:scale-95 transition cursor-pointer`}
+                >
+                  View Flowcharts
+                </button>
+                <a 
+                  href="/Jagadeep_Reddy_AI_Engineer_Resume.pdf" 
+                  download="Jagadeep_Reddy_AI_Engineer_Resume.pdf" 
+                  className={`px-5 py-2.5 border ${t.cardBorder} hover:border-zinc-500 text-[10px] font-mono uppercase tracking-wider font-bold flex items-center gap-1.5 active:scale-95 transition cursor-pointer`}
+                >
+                  Download CV <FileText size={12} />
+                </a>
+              </div>
+            </div>
+          </section>
+
+      {/* 02 ARCHITECTURE BLUEPRINTS */}
+      <section id="architecture" className={`p-6 md:p-8 border ${t.cardBorder} ${t.cardBg} rounded-2xl relative z-10`}>
+        <div className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-dashed border-zinc-800/80">
+          <div>
+            <div className={`text-[10px] font-mono uppercase tracking-widest mb-1.5 ${t.accent}`}>
+              01 // PLATFORM BLUEPRINTS
+            </div>
+            <h2 className="text-2xl md:text-3xl font-serif font-bold">Interactive Architectures</h2>
+          </div>
+          
           <div className={`flex gap-2 p-1 border ${t.cardBorder} ${t.cardBg} rounded-lg`}>
             <button
               onClick={() => setActiveArchTab('ipl')}
               className={`px-3 py-1.5 text-[9px] font-mono uppercase tracking-widest rounded-md transition-all ${
                 activeArchTab === 'ipl' 
-                  ? `${t.buttonBg} font-semibold` 
+                  ? `${t.buttonBg} font-bold` 
                   : 'text-zinc-400 hover:text-white'
               }`}
             >
@@ -773,7 +917,7 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
               onClick={() => setActiveArchTab('rag')}
               className={`px-3 py-1.5 text-[9px] font-mono uppercase tracking-widest rounded-md transition-all ${
                 activeArchTab === 'rag' 
-                  ? `${t.buttonBg} font-semibold` 
+                  ? `${t.buttonBg} font-bold` 
                   : 'text-zinc-400 hover:text-white'
               }`}
             >
@@ -782,237 +926,199 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-12 gap-12 items-start">
-          {/* Left Column: Vertical Diagram Blocks */}
+        <div className="grid lg:grid-cols-12 gap-8 items-start">
+          {/* Left explainer list */}
           <div className="lg:col-span-7 space-y-4">
-            <div className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest mb-2">
-              layered.system.view // top down flow
-            </div>
-
             {activeArchTab === 'ipl' ? (
-              // IPL Platform Layers
               <>
                 <div 
                   onMouseEnter={() => setActiveLayer(1)}
                   onMouseLeave={() => setActiveLayer(null)}
-                  className={`group p-5 border rounded-xl transition duration-300 cursor-pointer ${
+                  className={`group p-4 border rounded-xl transition duration-300 cursor-pointer ${
                     activeLayer === 1 
-                      ? `${t.accentBorderActive} shadow-sm shadow-[#10B981]/5 bg-[#10B981]/5` 
+                      ? `${t.accentBorderActive} bg-emerald-500/5` 
                       : `${t.cardBorder} ${t.cardBg} ${t.cardBorderHover}`
                   }`}
                 >
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 01 // INGRESS</span>
-                    <span className={`w-2 h-2 rounded-full ${t.dotColor}`}></span>
+                  <div className="flex justify-between items-center mb-1.5">
+                    <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 01 // INGRESS</span>
+                    <span className={`w-1.5 h-1.5 rounded-full ${t.dotColor}`}></span>
                   </div>
-                  <h4 className="text-sm font-mono font-bold tracking-tight">Ingress & Stream Router</h4>
-                  <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
+                  <h4 className="text-xs font-mono font-bold tracking-tight">Ingress & Stream Router</h4>
+                  <p className="text-[11px] text-zinc-400 mt-1 leading-normal font-sans">
                     Receives live WebSocket BallEvents or user natural language requests. Triggers downstream routing pipeline.
                   </p>
-                </div>
-
-                <div className="flex justify-center my-1">
-                  <div className="h-4 w-[1px] border-l border-dashed border-zinc-700"></div>
                 </div>
 
                 <div 
                   onMouseEnter={() => setActiveLayer(2)}
                   onMouseLeave={() => setActiveLayer(null)}
-                  className={`group p-5 border rounded-xl transition duration-300 cursor-pointer ${
+                  className={`group p-4 border rounded-xl transition duration-300 cursor-pointer ${
                     activeLayer === 2 
-                      ? `${t.accentBorderActive} shadow-sm shadow-[#10B981]/5 bg-[#10B981]/5` 
+                      ? `${t.accentBorderActive} bg-emerald-500/5` 
                       : `${t.cardBorder} ${t.cardBg} ${t.cardBorderHover}`
                   }`}
                 >
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 02 // ORCHESTRATION</span>
-                    <span className={`w-2 h-2 rounded-full ${t.dotColor}`}></span>
+                  <div className="flex justify-between items-center mb-1.5">
+                    <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 02 // ORCHESTRATION</span>
+                    <span className={`w-1.5 h-1.5 rounded-full ${t.dotColor}`}></span>
                   </div>
-                  <h4 className="text-sm font-mono font-bold tracking-tight">LangGraph Intent Classifier (~20ms)</h4>
-                  <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
+                  <h4 className="text-xs font-mono font-bold tracking-tight">LangGraph Intent Classifier (~20ms)</h4>
+                  <p className="text-[11px] text-zinc-400 mt-1 leading-normal font-sans">
                     Evaluates user intent (classification accuracy 71%) and routes traffic across a 5-node autonomous graph.
                   </p>
-                </div>
-
-                <div className="flex justify-center my-1">
-                  <div className="h-4 w-[1px] border-l border-dashed border-zinc-700"></div>
                 </div>
 
                 <div 
                   onMouseEnter={() => setActiveLayer(3)}
                   onMouseLeave={() => setActiveLayer(null)}
-                  className={`group p-5 border rounded-xl transition duration-300 cursor-pointer ${
+                  className={`group p-4 border rounded-xl transition duration-300 cursor-pointer ${
                     activeLayer === 3 
-                      ? `${t.accentBorderActive} shadow-sm shadow-[#10B981]/5 bg-[#10B981]/5` 
+                      ? `${t.accentBorderActive} bg-emerald-500/5` 
                       : `${t.cardBorder} ${t.cardBg} ${t.cardBorderHover}`
                   }`}
                 >
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 03 // INTELLIGENT AGENTS</span>
-                    <span className={`w-2 h-2 rounded-full ${t.dotColor}`}></span>
+                  <div className="flex justify-between items-center mb-1.5">
+                    <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 03 // INTELLIGENT AGENTS</span>
+                    <span className={`w-1.5 h-1.5 rounded-full ${t.dotColor}`}></span>
                   </div>
-                  <h4 className="text-sm font-mono font-bold tracking-tight">Specialized Agent Cluster</h4>
-                  <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
+                  <h4 className="text-xs font-mono font-bold tracking-tight">Specialized Agent Cluster</h4>
+                  <p className="text-[11px] text-zinc-400 mt-1 leading-normal font-sans">
                     Delegates tasks to domain experts: StatsQA, NarrativeQA, Matchup, Prediction, or TeamVsTeam agents.
                   </p>
-                </div>
-
-                <div className="flex justify-center my-1">
-                  <div className="h-4 w-[1px] border-l border-dashed border-zinc-700"></div>
                 </div>
 
                 <div 
                   onMouseEnter={() => setActiveLayer(4)}
                   onMouseLeave={() => setActiveLayer(null)}
-                  className={`group p-5 border rounded-xl transition duration-300 cursor-pointer ${
+                  className={`group p-4 border rounded-xl transition duration-300 cursor-pointer ${
                     activeLayer === 4 
-                      ? `${t.accentBorderActive} shadow-sm shadow-[#10B981]/5 bg-[#10B981]/5` 
+                      ? `${t.accentBorderActive} bg-emerald-500/5` 
                       : `${t.cardBorder} ${t.cardBg} ${t.cardBorderHover}`
                   }`}
                 >
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 04 // DATA & KNOWLEDGE RETRIEVAL</span>
-                    <span className={`w-2 h-2 rounded-full ${t.dotColor}`}></span>
+                  <div className="flex justify-between items-center mb-1.5">
+                    <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 04 // DATA & KNOWLEDGE RETRIEVAL</span>
+                    <span className={`w-1.5 h-1.5 rounded-full ${t.dotColor}`}></span>
                   </div>
-                  <h4 className="text-sm font-mono font-bold tracking-tight">Hybrid RAG & Statistical Models</h4>
-                  <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
+                  <h4 className="text-xs font-mono font-bold tracking-tight">Hybrid RAG & Statistical Models</h4>
+                  <p className="text-[11px] text-zinc-400 mt-1 leading-normal font-sans">
                     Performs BGE-M3 dense search (Qdrant) + BM25 sparse queries with RRF fusion. Runs XGBoost (AUC 0.72) win predictions with SHAP local explanations.
                   </p>
-                </div>
-
-                <div className="flex justify-center my-1">
-                  <div className="h-4 w-[1px] border-l border-dashed border-zinc-700"></div>
                 </div>
 
                 <div 
                   onMouseEnter={() => setActiveLayer(5)}
                   onMouseLeave={() => setActiveLayer(null)}
-                  className={`group p-5 border rounded-xl transition duration-300 cursor-pointer ${
+                  className={`group p-4 border rounded-xl transition duration-300 cursor-pointer ${
                     activeLayer === 5 
-                      ? `${t.accentBorderActive} shadow-sm shadow-[#10B981]/5 bg-[#10B981]/5` 
+                      ? `${t.accentBorderActive} bg-emerald-500/5` 
                       : `${t.cardBorder} ${t.cardBg} ${t.cardBorderHover}`
                   }`}
                 >
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 05 // DELIVERY LAYER</span>
-                    <span className={`w-2 h-2 rounded-full ${t.dotColor}`}></span>
+                  <div className="flex justify-between items-center mb-1.5">
+                    <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 05 // DELIVERY LAYER</span>
+                    <span className={`w-1.5 h-1.5 rounded-full ${t.dotColor}`}></span>
                   </div>
-                  <h4 className="text-sm font-mono font-bold tracking-tight">Real-time WebSocket Push (&lt;300ms)</h4>
-                  <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
+                  <h4 className="text-xs font-mono font-bold tracking-tight">Real-time WebSocket Push (&lt;300ms)</h4>
+                  <p className="text-[11px] text-zinc-400 mt-1 leading-normal font-sans">
                     Synthesizes GPT-4o-mini commentary with ML outcomes and pushes the structured updates to users with minimal delay.
                   </p>
                 </div>
               </>
             ) : (
-              // Financial RAG Layers
               <>
                 <div 
                   onMouseEnter={() => setActiveLayer(1)}
                   onMouseLeave={() => setActiveLayer(null)}
-                  className={`group p-5 border rounded-xl transition duration-300 cursor-pointer ${
+                  className={`group p-4 border rounded-xl transition duration-300 cursor-pointer ${
                     activeLayer === 1 
-                      ? `${t.accentBorderActive} shadow-sm shadow-[#10B981]/5 bg-[#10B981]/5` 
+                      ? `${t.accentBorderActive} bg-emerald-500/5` 
                       : `${t.cardBorder} ${t.cardBg} ${t.cardBorderHover}`
                   }`}
                 >
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 01 // QUERY ANALYSIS</span>
-                    <span className={`w-2 h-2 rounded-full ${t.dotColor}`}></span>
+                  <div className="flex justify-between items-center mb-1.5">
+                    <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 01 // QUERY ANALYSIS</span>
+                    <span className={`w-1.5 h-1.5 rounded-full ${t.dotColor}`}></span>
                   </div>
-                  <h4 className="text-sm font-mono font-bold tracking-tight">Multi-Hop Query Decomposer</h4>
-                  <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
+                  <h4 className="text-xs font-mono font-bold tracking-tight">Multi-Hop Query Decomposer</h4>
+                  <p className="text-[11px] text-zinc-400 mt-1 leading-normal font-sans">
                     Breaks down complex compliance questions into parallel sub-queries to retrieve from distinct financial documents.
                   </p>
-                </div>
-
-                <div className="flex justify-center my-1">
-                  <div className="h-4 w-[1px] border-l border-dashed border-zinc-700"></div>
                 </div>
 
                 <div 
                   onMouseEnter={() => setActiveLayer(2)}
                   onMouseLeave={() => setActiveLayer(null)}
-                  className={`group p-5 border rounded-xl transition duration-300 cursor-pointer ${
+                  className={`group p-4 border rounded-xl transition duration-300 cursor-pointer ${
                     activeLayer === 2 
-                      ? `${t.accentBorderActive} shadow-sm shadow-[#10B981]/5 bg-[#10B981]/5` 
+                      ? `${t.accentBorderActive} bg-emerald-500/5` 
                       : `${t.cardBorder} ${t.cardBg} ${t.cardBorderHover}`
                   }`}
                 >
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 02 // SEARCH RETRIEVAL</span>
-                    <span className={`w-2 h-2 rounded-full ${t.dotColor}`}></span>
+                  <div className="flex justify-between items-center mb-1.5">
+                    <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 02 // SEARCH RETRIEVAL</span>
+                    <span className={`w-1.5 h-1.5 rounded-full ${t.dotColor}`}></span>
                   </div>
-                  <h4 className="text-sm font-mono font-bold tracking-tight">Hybrid FAISS & BM25 Retrieval</h4>
-                  <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
+                  <h4 className="text-xs font-mono font-bold tracking-tight">Hybrid FAISS & BM25 Retrieval</h4>
+                  <p className="text-[11px] text-zinc-400 mt-1 leading-normal font-sans">
                     Queries FAISS dense vectors and Rank-BM25 indexes. Merges score ranks using Reciprocal Rank Fusion.
                   </p>
-                </div>
-
-                <div className="flex justify-center my-1">
-                  <div className="h-4 w-[1px] border-l border-dashed border-zinc-700"></div>
                 </div>
 
                 <div 
                   onMouseEnter={() => setActiveLayer(3)}
                   onMouseLeave={() => setActiveLayer(null)}
-                  className={`group p-5 border rounded-xl transition duration-300 cursor-pointer ${
+                  className={`group p-4 border rounded-xl transition duration-300 cursor-pointer ${
                     activeLayer === 3 
-                      ? `${t.accentBorderActive} shadow-sm shadow-[#10B981]/5 bg-[#10B981]/5` 
+                      ? `${t.accentBorderActive} bg-emerald-500/5` 
                       : `${t.cardBorder} ${t.cardBg} ${t.cardBorderHover}`
                   }`}
                 >
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 03 // EXTRACTION & RERANK</span>
-                    <span className={`w-2 h-2 rounded-full ${t.dotColor}`}></span>
+                  <div className="flex justify-between items-center mb-1.5">
+                    <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 03 // EXTRACTION & RERANK</span>
+                    <span className={`w-1.5 h-1.5 rounded-full ${t.dotColor}`}></span>
                   </div>
-                  <h4 className="text-sm font-mono font-bold tracking-tight">MiniLM Cross-Encoder & Hierarchical Chunking</h4>
-                  <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
+                  <h4 className="text-xs font-mono font-bold tracking-tight">MiniLM Cross-Encoder & Hierarchical Chunking</h4>
+                  <p className="text-[11px] text-zinc-400 mt-1 leading-normal font-sans">
                     Applies parent-child aggregators to retain global document contexts. Reranks retrieved blocks using a cross-encoder model.
                   </p>
-                </div>
-
-                <div className="flex justify-center my-1">
-                  <div className="h-4 w-[1px] border-l border-dashed border-zinc-700"></div>
                 </div>
 
                 <div 
                   onMouseEnter={() => setActiveLayer(4)}
                   onMouseLeave={() => setActiveLayer(null)}
-                  className={`group p-5 border rounded-xl transition duration-300 cursor-pointer ${
+                  className={`group p-4 border rounded-xl transition duration-300 cursor-pointer ${
                     activeLayer === 4 
-                      ? `${t.accentBorderActive} shadow-sm shadow-[#10B981]/5 bg-[#10B981]/5` 
+                      ? `${t.accentBorderActive} bg-emerald-500/5` 
                       : `${t.cardBorder} ${t.cardBg} ${t.cardBorderHover}`
                   }`}
                 >
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 04 // SYNTHESIS & SAFEGUARD</span>
-                    <span className={`w-2 h-2 rounded-full ${t.dotColor}`}></span>
+                  <div className="flex justify-between items-center mb-1.5">
+                    <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 04 // SYNTHESIS & SAFEGUARD</span>
+                    <span className={`w-1.5 h-1.5 rounded-full ${t.dotColor}`}></span>
                   </div>
-                  <h4 className="text-sm font-mono font-bold tracking-tight">Self-Consistency Fact Validation</h4>
-                  <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
+                  <h4 className="text-xs font-mono font-bold tracking-tight">Self-Consistency Fact Validation</h4>
+                  <p className="text-[11px] text-zinc-400 mt-1 leading-normal font-sans">
                     Evaluates answer accuracy through 3 parallel generation chains, flagging factual anomalies before formatting output.
                   </p>
-                </div>
-
-                <div className="flex justify-center my-1">
-                  <div className="h-4 w-[1px] border-l border-dashed border-zinc-700"></div>
                 </div>
 
                 <div 
                   onMouseEnter={() => setActiveLayer(5)}
                   onMouseLeave={() => setActiveLayer(null)}
-                  className={`group p-5 border rounded-xl transition duration-300 cursor-pointer ${
+                  className={`group p-4 border rounded-xl transition duration-300 cursor-pointer ${
                     activeLayer === 5 
-                      ? `${t.accentBorderActive} shadow-sm shadow-[#10B981]/5 bg-[#10B981]/5` 
+                      ? `${t.accentBorderActive} bg-emerald-500/5` 
                       : `${t.cardBorder} ${t.cardBg} ${t.cardBorderHover}`
                   }`}
                 >
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 05 // DELIVERY GATEWAY</span>
-                    <span className={`w-2 h-2 rounded-full ${t.dotColor}`}></span>
+                  <div className="flex justify-between items-center mb-1.5">
+                    <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">LAYER 05 // DELIVERY GATEWAY</span>
+                    <span className={`w-1.5 h-1.5 rounded-full ${t.dotColor}`}></span>
                   </div>
-                  <h4 className="text-sm font-mono font-bold tracking-tight">RAGAS-Gated GitHub Actions CI/CD</h4>
-                  <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
+                  <h4 className="text-xs font-mono font-bold tracking-tight">RAGAS-Gated GitHub Actions CI/CD</h4>
+                  <p className="text-[11px] text-zinc-400 mt-1 leading-normal font-sans">
                     Triggers automated validation scores. Halts deployment if RAGAS Faithfulness drops below 0.75.
                   </p>
                 </div>
@@ -1020,412 +1126,327 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
             )}
           </div>
 
-          {/* Right Column: Decisions, stats & stacks */}
-          <div className={`lg:col-span-5 p-6 border ${t.cardBorder} ${t.cardBg} rounded-xl space-y-6`}>
+          {/* Right flowchart canvas */}
+          <div className="lg:col-span-5 space-y-6">
             <div>
-              <span className={`text-[10px] font-mono uppercase tracking-widest ${t.accent}`}>
-                [system.metadata]
-              </span>
-              <h3 className="text-xl font-mono font-bold mt-1">
-                {activeArchTab === 'ipl' ? 'IPL Commentary Platform' : 'Financial Statement RAG'}
-              </h3>
+              <h4 className="text-[8px] font-mono uppercase tracking-widest text-zinc-500 mb-2">Live System Blueprint</h4>
+              <div className={`relative border border-dashed ${t.cardBorder} rounded-xl p-4 overflow-hidden bg-black/10 backdrop-blur-sm min-h-[360px] flex flex-col justify-between`}>
+                <div className="absolute top-2 left-2 text-[7px] font-mono text-zinc-500 uppercase tracking-widest flex items-center gap-1">
+                  <Activity size={8} className="animate-pulse text-[#10B981]" /> LIVE_SYSTEM_BLUEPRINT
+                </div>
+                
+                {activeArchTab === 'ipl' ? (
+                  <div className="relative flex-grow flex flex-col justify-between py-6">
+                    {/* Connection Line */}
+                    <div className="absolute left-1/2 top-0 bottom-0 w-[1px] border-l border-dashed border-zinc-700/80 -translate-x-1/2 z-0">
+                      <div className={`absolute w-1.5 h-1.5 rounded-full ${t.dotColor} left-[-3px] top-0 animate-bounce`}></div>
+                    </div>
+
+                    {/* Node 1 */}
+                    <div 
+                      onMouseEnter={() => setActiveLayer(1)}
+                      onMouseLeave={() => setActiveLayer(null)}
+                      className={`relative z-10 mx-auto px-4 py-1.5 border rounded-md text-[10px] font-mono transition duration-300 cursor-pointer ${
+                        activeLayer === 1 
+                          ? `${t.accentBg} ${t.buttonText} scale-105 shadow-md` 
+                          : `${t.cardBg} ${t.cardBorder} ${t.text} hover:border-[#10B981]/50`
+                      }`}
+                    >
+                      WebSocket Router
+                    </div>
+
+                    {/* Node 2 */}
+                    <div 
+                      onMouseEnter={() => setActiveLayer(2)}
+                      onMouseLeave={() => setActiveLayer(null)}
+                      className={`relative z-10 mx-auto px-4 py-1.5 border rounded-md text-[10px] font-mono transition duration-300 cursor-pointer ${
+                        activeLayer === 2 
+                          ? `${t.accentBg} ${t.buttonText} scale-105 shadow-md` 
+                          : `${t.cardBg} ${t.cardBorder} ${t.text} hover:border-[#10B981]/50`
+                      }`}
+                    >
+                      LangGraph intent Router
+                    </div>
+
+                    {/* Node 3 */}
+                    <div className="relative z-10 flex justify-center gap-2">
+                      <div className="absolute top-1/2 -translate-y-1/2 w-4/5 h-[1px] border-t border-dashed border-zinc-700/80 z-0"></div>
+                      {['StatsQA', 'Prediction'].map((agent, i) => (
+                        <div 
+                          key={i}
+                          onMouseEnter={() => setActiveLayer(3)}
+                          onMouseLeave={() => setActiveLayer(null)}
+                          className={`relative z-10 px-2 py-1 border rounded-full text-[8px] font-mono transition duration-300 cursor-pointer ${
+                            activeLayer === 3 
+                              ? `${t.accentBg} ${t.buttonText} scale-105 shadow-md` 
+                              : `${t.cardBg} ${t.cardBorder} ${t.text} hover:border-[#10B981]/50`
+                          }`}
+                        >
+                          {agent}
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Node 4 */}
+                    <div 
+                      onMouseEnter={() => setActiveLayer(4)}
+                      onMouseLeave={() => setActiveLayer(null)}
+                      className={`relative z-10 mx-auto px-4 py-1.5 border rounded-md text-[10px] font-mono transition duration-300 cursor-pointer ${
+                        activeLayer === 4 
+                          ? `${t.accentBg} ${t.buttonText} scale-105 shadow-md` 
+                          : `${t.cardBg} ${t.cardBorder} ${t.text} hover:border-[#10B981]/50`
+                      }`}
+                    >
+                      Qdrant HNSW Fusion
+                    </div>
+
+                    {/* Node 5 */}
+                    <div 
+                      onMouseEnter={() => setActiveLayer(5)}
+                      onMouseLeave={() => setActiveLayer(null)}
+                      className={`relative z-10 mx-auto px-4 py-1.5 border rounded-md text-[10px] font-mono transition duration-300 cursor-pointer ${
+                        activeLayer === 5 
+                          ? `${t.accentBg} ${t.buttonText} scale-105 shadow-md` 
+                          : `${t.cardBg} ${t.cardBorder} ${t.text} hover:border-[#10B981]/50`
+                      }`}
+                    >
+                      WS Push &lt;300ms
+                    </div>
+                  </div>
+                ) : (
+                  <div className="relative flex-grow flex flex-col justify-between py-6">
+                    {/* Connection Line */}
+                    <div className="absolute left-1/2 top-0 bottom-0 w-[1px] border-l border-dashed border-zinc-700/80 -translate-x-1/2 z-0">
+                      <div className={`absolute w-1.5 h-1.5 rounded-full ${t.dotColor} left-[-3px] top-0 animate-bounce`}></div>
+                    </div>
+
+                    {/* Node 1 */}
+                    <div 
+                      onMouseEnter={() => setActiveLayer(1)}
+                      onMouseLeave={() => setActiveLayer(null)}
+                      className={`relative z-10 mx-auto px-4 py-1.5 border rounded-md text-[10px] font-mono transition duration-300 cursor-pointer ${
+                        activeLayer === 1 
+                          ? `${t.accentBg} ${t.buttonText} scale-105 shadow-md` 
+                          : `${t.cardBg} ${t.cardBorder} ${t.text} hover:border-[#10B981]/50`
+                      }`}
+                    >
+                      Query Decomposer
+                    </div>
+
+                    {/* Node 2 */}
+                    <div 
+                      onMouseEnter={() => setActiveLayer(2)}
+                      onMouseLeave={() => setActiveLayer(null)}
+                      className={`relative z-10 mx-auto px-4 py-1.5 border rounded-md text-[10px] font-mono transition duration-300 cursor-pointer ${
+                        activeLayer === 2 
+                          ? `${t.accentBg} ${t.buttonText} scale-105 shadow-md` 
+                          : `${t.cardBg} ${t.cardBorder} ${t.text} hover:border-[#10B981]/50`
+                      }`}
+                    >
+                      FAISS & BM25 index
+                    </div>
+
+                    {/* Node 3 */}
+                    <div 
+                      onMouseEnter={() => setActiveLayer(3)}
+                      onMouseLeave={() => setActiveLayer(null)}
+                      className={`relative z-10 mx-auto px-4 py-1.5 border rounded-md text-[10px] font-mono transition duration-300 cursor-pointer ${
+                        activeLayer === 3 
+                          ? `${t.accentBg} ${t.buttonText} scale-105 shadow-md` 
+                          : `${t.cardBg} ${t.cardBorder} ${t.text} hover:border-[#10B981]/50`
+                      }`}
+                    >
+                      MiniLM Cross-Encoder
+                    </div>
+
+                    {/* Node 4 */}
+                    <div 
+                      onMouseEnter={() => setActiveLayer(4)}
+                      onMouseLeave={() => setActiveLayer(null)}
+                      className={`relative z-10 mx-auto px-4 py-1.5 border rounded-md text-[10px] font-mono transition duration-300 cursor-pointer ${
+                        activeLayer === 4 
+                          ? `${t.accentBg} ${t.buttonText} scale-105 shadow-md` 
+                          : `${t.cardBg} ${t.cardBorder} ${t.text} hover:border-[#10B981]/50`
+                      }`}
+                    >
+                      3x Self-Consistency check
+                    </div>
+
+                    {/* Node 5 */}
+                    <div 
+                      onMouseEnter={() => setActiveLayer(5)}
+                      onMouseLeave={() => setActiveLayer(null)}
+                      className={`relative z-10 mx-auto px-4 py-1.5 border rounded-md text-[10px] font-mono transition duration-300 cursor-pointer ${
+                        activeLayer === 5 
+                          ? `${t.accentBg} ${t.buttonText} scale-105 shadow-md` 
+                          : `${t.cardBg} ${t.cardBorder} ${t.text} hover:border-[#10B981]/50`
+                      }`}
+                    >
+                      RAGAS CI/CD Gate
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
 
-            <div className="space-y-4">
-              <div>
-                <h4 className="text-[9px] font-mono uppercase tracking-widest text-zinc-500 mb-2">Design Decisions</h4>
-                <ul className="text-xs text-zinc-400 mt-2 space-y-2.5">
-                  {activeArchTab === 'ipl' ? (
-                    <>
-                      <li className="flex items-start gap-2">
-                        <span className="text-zinc-500">→</span>
-                        <span>Routing logic built using a 5-agent intent classifier rather than forcing all requests through a single LLM layer.</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="text-zinc-500">→</span>
-                        <span>WebSocket stream pipeline processing XGBoost prediction updates in &lt;20ms for fast UI delivery.</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="text-zinc-500">→</span>
-                        <span>Deployments locked behind RAGAS verification tests, verifying accuracy targets.</span>
-                      </li>
-                    </>
-                  ) : (
-                    <>
-                      <li className="flex items-start gap-2">
-                        <span className="text-zinc-500">→</span>
-                        <span>Parent-child hierarchical indexing selected to retain deep contextual layout structure of financial charts.</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="text-zinc-500">→</span>
-                        <span>Structured output validation utilizing 3 parallel temperature-controlled LLM synthesis passes.</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="text-zinc-500">→</span>
-                        <span>Reranking step (MiniLM) filtering search outcomes down to key target segments, optimizing tokens.</span>
-                      </li>
-                    </>
-                  )}
-                </ul>
-              </div>
-
-              {/* Interactive System Blueprint Flowchart */}
-              <div>
-                <h4 className="text-[9px] font-mono uppercase tracking-widest text-zinc-500 mb-2">System Blueprint Flow</h4>
-                <div className={`relative border border-dashed ${t.cardBorder} rounded-xl p-4 overflow-hidden bg-black/10 backdrop-blur-sm min-h-[360px] flex flex-col justify-between`}>
-                  <div className="absolute top-2 left-2 text-[7px] font-mono text-zinc-500 uppercase tracking-widest flex items-center gap-1">
-                    <Activity size={8} className="animate-pulse text-[#10B981]" /> LIVE_SYSTEM_BLUEPRINT
-                  </div>
-                  
-                  {activeArchTab === 'ipl' ? (
-                    // IPL Flowchart Diagram
-                    <div className="relative flex-grow flex flex-col justify-between py-6">
-                      {/* Connection Line */}
-                      <div className="absolute left-1/2 top-0 bottom-0 w-[1px] border-l border-dashed border-zinc-700/80 -translate-x-1/2 z-0">
-                        {/* Animating Data pulse */}
-                        <div className={`absolute w-1.5 h-1.5 rounded-full ${t.dotColor} left-[-3px] top-0 animate-bounce`}></div>
-                      </div>
-
-                      {/* Node 1: Ingress */}
-                      <div 
-                        onMouseEnter={() => setActiveLayer(1)}
-                        onMouseLeave={() => setActiveLayer(null)}
-                        className={`relative z-10 mx-auto px-4 py-2 border rounded-md text-[10px] font-mono transition duration-300 cursor-pointer ${
-                          activeLayer === 1 
-                            ? `${t.accentBg} ${t.buttonText} scale-105 shadow-md` 
-                            : `${t.cardBg} ${t.cardBorder} ${t.text} hover:border-[#10B981]/50`
-                        }`}
-                      >
-                        <div className="text-[7px] text-zinc-500 mb-0.5">LAYER 01 // INGRESS</div>
-                        WebSocket Stream Router
-                      </div>
-
-                      {/* Node 2: LangGraph Classify */}
-                      <div 
-                        onMouseEnter={() => setActiveLayer(2)}
-                        onMouseLeave={() => setActiveLayer(null)}
-                        className={`relative z-10 mx-auto px-4 py-2 border rounded-md text-[10px] font-mono transition duration-300 cursor-pointer ${
-                          activeLayer === 2 
-                            ? `${t.accentBg} ${t.buttonText} scale-105 shadow-md` 
-                            : `${t.cardBg} ${t.cardBorder} ${t.text} hover:border-[#10B981]/50`
-                        }`}
-                      >
-                        <div className="text-[7px] text-zinc-500 mb-0.5">LAYER 02 // ORCHESTRATION</div>
-                        LangGraph Router <span className="text-[8px] opacity-75">(~20ms)</span>
-                      </div>
-
-                      {/* Node 3: Specialized Agent cluster */}
-                      <div 
-                        onMouseEnter={() => setActiveLayer(3)}
-                        onMouseLeave={() => setActiveLayer(null)}
-                        className="relative z-10 flex justify-center gap-2"
-                      >
-                        {/* Connection branches */}
-                        <div className="absolute top-1/2 -translate-y-1/2 w-4/5 h-[1px] border-t border-dashed border-zinc-700/80 z-0"></div>
-                        
-                        {['StatsQA', 'Matchup', 'Predict'].map((agent, i) => (
-                          <div 
-                            key={i}
-                            className={`relative z-10 px-2.5 py-1.5 border rounded-full text-[8px] font-mono transition duration-300 ${
-                              activeLayer === 3 
-                                ? `${t.accentBg} ${t.buttonText} scale-105 shadow-md` 
-                                : `${t.cardBg} ${t.cardBorder} ${t.text} hover:border-[#10B981]/50`
-                            }`}
-                          >
-                            {agent}
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* Node 4: Knowledge / Hybrid Retrieval */}
-                      <div 
-                        onMouseEnter={() => setActiveLayer(4)}
-                        onMouseLeave={() => setActiveLayer(null)}
-                        className={`relative z-10 mx-auto px-4 py-2 border rounded-md text-[10px] font-mono transition duration-300 cursor-pointer ${
-                          activeLayer === 4 
-                            ? `${t.accentBg} ${t.buttonText} scale-105 shadow-md` 
-                            : `${t.cardBg} ${t.cardBorder} ${t.text} hover:border-[#10B981]/50`
-                        }`}
-                      >
-                        <div className="text-[7px] text-zinc-500 mb-0.5">LAYER 04 // KNOWLEDGE</div>
-                        Qdrant + BM25 Fusion
-                      </div>
-
-                      {/* Node 5: Output Stream */}
-                      <div 
-                        onMouseEnter={() => setActiveLayer(5)}
-                        onMouseLeave={() => setActiveLayer(null)}
-                        className={`relative z-10 mx-auto px-4 py-2 border rounded-md text-[10px] font-mono transition duration-300 cursor-pointer ${
-                          activeLayer === 5 
-                            ? `${t.accentBg} ${t.buttonText} scale-105 shadow-md` 
-                            : `${t.cardBg} ${t.cardBorder} ${t.text} hover:border-[#10B981]/50`
-                        }`}
-                      >
-                        <div className="text-[7px] text-zinc-500 mb-0.5">LAYER 05 // DELIVERY</div>
-                        WebSocket Broadcast &lt;300ms
-                      </div>
+            <div>
+              <h4 className="text-[8px] font-mono uppercase tracking-widest text-zinc-500 mb-2">Core Metrics</h4>
+              <div className="grid grid-cols-2 gap-2 text-[10px] font-mono">
+                {activeArchTab === 'ipl' ? (
+                  <>
+                    <div className={`p-2 border ${t.cardBorder} ${t.cardBg} rounded-lg`}>
+                      <div className="text-zinc-500 text-[8px] uppercase">Latency</div>
+                      <div className={`text-xs font-bold ${t.text} mt-0.5`}>&lt;300ms</div>
                     </div>
-                  ) : (
-                    // RAG Flowchart Diagram
-                    <div className="relative flex-grow flex flex-col justify-between py-6">
-                      {/* Connection Line */}
-                      <div className="absolute left-1/2 top-0 bottom-0 w-[1px] border-l border-dashed border-zinc-700/80 -translate-x-1/2 z-0">
-                        <div className={`absolute w-1.5 h-1.5 rounded-full ${t.dotColor} left-[-3px] top-0 animate-bounce`}></div>
-                      </div>
-
-                      {/* Node 1: Decomposer */}
-                      <div 
-                        onMouseEnter={() => setActiveLayer(1)}
-                        onMouseLeave={() => setActiveLayer(null)}
-                        className={`relative z-10 mx-auto px-4 py-2 border rounded-md text-[10px] font-mono transition duration-300 cursor-pointer ${
-                          activeLayer === 1 
-                            ? `${t.accentBg} ${t.buttonText} scale-105 shadow-md` 
-                            : `${t.cardBg} ${t.cardBorder} ${t.text} hover:border-[#10B981]/50`
-                        }`}
-                      >
-                        <div className="text-[7px] text-zinc-500 mb-0.5">LAYER 01 // QUERY</div>
-                        Multi-Hop Query Decomposer
-                      </div>
-
-                      {/* Node 2: Hybrid Search */}
-                      <div 
-                        onMouseEnter={() => setActiveLayer(2)}
-                        onMouseLeave={() => setActiveLayer(null)}
-                        className={`relative z-10 mx-auto px-4 py-2 border rounded-md text-[10px] font-mono transition duration-300 cursor-pointer ${
-                          activeLayer === 2 
-                            ? `${t.accentBg} ${t.buttonText} scale-105 shadow-md` 
-                            : `${t.cardBg} ${t.cardBorder} ${t.text} hover:border-[#10B981]/50`
-                        }`}
-                      >
-                        <div className="text-[7px] text-zinc-500 mb-0.5">LAYER 02 // SEARCH</div>
-                        FAISS (Dense) & BM25 (Sparse)
-                      </div>
-
-                      {/* Node 3: Cross Encoder Rerank */}
-                      <div 
-                        onMouseEnter={() => setActiveLayer(3)}
-                        onMouseLeave={() => setActiveLayer(null)}
-                        className={`relative z-10 mx-auto px-4 py-2 border rounded-md text-[10px] font-mono transition duration-300 cursor-pointer ${
-                          activeLayer === 3 
-                            ? `${t.accentBg} ${t.buttonText} scale-105 shadow-md` 
-                            : `${t.cardBg} ${t.cardBorder} ${t.text} hover:border-[#10B981]/50`
-                        }`}
-                      >
-                        <div className="text-[7px] text-zinc-500 mb-0.5">LAYER 03 // RERANK</div>
-                        MiniLM Cross-Encoder
-                      </div>
-
-                      {/* Node 4: Self-Consistency */}
-                      <div 
-                        onMouseEnter={() => setActiveLayer(4)}
-                        onMouseLeave={() => setActiveLayer(null)}
-                        className={`relative z-10 mx-auto px-4 py-2 border rounded-md text-[10px] font-mono transition duration-300 cursor-pointer ${
-                          activeLayer === 4 
-                            ? `${t.accentBg} ${t.buttonText} scale-105 shadow-md` 
-                            : `${t.cardBg} ${t.cardBorder} ${t.text} hover:border-[#10B981]/50`
-                        }`}
-                      >
-                        <div className="text-[7px] text-zinc-500 mb-0.5">LAYER 04 // VALIDATION</div>
-                        3x Self-Consistency Check
-                      </div>
-
-                      {/* Node 5: Gate */}
-                      <div 
-                        onMouseEnter={() => setActiveLayer(5)}
-                        onMouseLeave={() => setActiveLayer(null)}
-                        className={`relative z-10 mx-auto px-4 py-2 border rounded-md text-[10px] font-mono transition duration-300 cursor-pointer ${
-                          activeLayer === 5 
-                            ? `${t.accentBg} ${t.buttonText} scale-105 shadow-md` 
-                            : `${t.cardBg} ${t.cardBorder} ${t.text} hover:border-[#10B981]/50`
-                        }`}
-                      >
-                        <div className="text-[7px] text-zinc-500 mb-0.5">LAYER 05 // CI GATE</div>
-                        RAGAS-Gated Deployment
-                      </div>
+                    <div className={`p-2 border ${t.cardBorder} ${t.cardBg} rounded-lg`}>
+                      <div className="text-zinc-500 text-[8px] uppercase">Faithfulness</div>
+                      <div className={`text-xs font-bold ${t.text} mt-0.5`}>0.88 / 0.98</div>
                     </div>
-                  )}
-                </div>
+                  </>
+                ) : (
+                  <>
+                    <div className={`p-2 border ${t.cardBorder} ${t.cardBg} rounded-lg`}>
+                      <div className="text-zinc-500 text-[8px] uppercase">Retrieval Gain</div>
+                      <div className={`text-xs font-bold ${t.text} mt-0.5`}>+40% vs Naive</div>
+                    </div>
+                    <div className={`p-2 border ${t.cardBorder} ${t.cardBg} rounded-lg`}>
+                      <div className="text-zinc-500 text-[8px] uppercase">CI threshold</div>
+                      <div className={`text-xs font-bold ${t.text} mt-0.5`}>0.75 score</div>
+                    </div>
+                  </>
+                )}
               </div>
+            </div>
 
-              <div>
-                <h4 className="text-[9px] font-mono uppercase tracking-widest text-zinc-500">Core Metrics</h4>
-                <div className="grid grid-cols-2 gap-3 mt-2 text-xs font-mono">
-                  {activeArchTab === 'ipl' ? (
-                    <>
-                      <div className={`p-3 border ${t.cardBorder} ${t.cardBg} rounded-lg`}>
-                        <div className="text-zinc-500 text-[9px] uppercase tracking-wider">End-to-End Latency</div>
-                        <div className={`text-sm font-bold ${t.text} mt-1`}>&lt;300ms</div>
-                      </div>
-                      <div className={`p-3 border ${t.cardBorder} ${t.cardBg} rounded-lg`}>
-                        <div className="text-zinc-500 text-[9px] uppercase tracking-wider">RAGAS Faithfulness</div>
-                        <div className={`text-sm font-bold ${t.text} mt-1`}>0.88 / 0.98</div>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className={`p-3 border ${t.cardBorder} ${t.cardBg} rounded-lg`}>
-                        <div className="text-zinc-500 text-[9px] uppercase tracking-wider">Retrieval Gain</div>
-                        <div className={`text-sm font-bold ${t.text} mt-1`}>+40% vs Naive</div>
-                      </div>
-                      <div className={`p-3 border ${t.cardBorder} ${t.cardBg} rounded-lg`}>
-                        <div className="text-zinc-500 text-[9px] uppercase tracking-wider">CI Gate Threshold</div>
-                        <div className={`text-sm font-bold ${t.text} mt-1`}>0.75 Score</div>
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
-
-              <div>
-                <h4 className="text-[9px] font-mono uppercase tracking-widest text-zinc-500">Target Tech Stack</h4>
-                <div className="flex flex-wrap gap-1.5 mt-2">
-                  {activeArchTab === 'ipl' ? (
-                    ["LangGraph", "Qdrant", "XGBoost", "FastAPI", "Redis", "WebSockets"].map((item, idx) => (
-                      <span 
-                        key={idx} 
-                        onMouseEnter={() => setActiveTag(item)}
-                        onMouseLeave={() => setActiveTag(null)}
-                        className={`text-[9px] font-mono uppercase px-2 py-0.5 border rounded transition duration-200 cursor-pointer ${
-                          activeTag === item 
-                            ? `${t.accentBg} ${t.buttonText} scale-105` 
-                            : `${t.cardBorder} text-zinc-400 ${t.cardBg}`
-                        }`}
-                      >
-                        {item}
-                      </span>
-                    ))
-                  ) : (
-                    ["FAISS", "LangChain", "RAGAS", "Cross-encoders", "Python", "CI/CD"].map((item, idx) => (
-                      <span 
-                        key={idx} 
-                        onMouseEnter={() => setActiveTag(item)}
-                        onMouseLeave={() => setActiveTag(null)}
-                        className={`text-[9px] font-mono uppercase px-2 py-0.5 border rounded transition duration-200 cursor-pointer ${
-                          activeTag === item 
-                            ? `${t.accentBg} ${t.buttonText} scale-105` 
-                            : `${t.cardBorder} text-zinc-400 ${t.cardBg}`
-                        }`}
-                      >
-                        {item}
-                      </span>
-                    ))
-                  )}
-                </div>
+            <div>
+              <h4 className="text-[8px] font-mono uppercase tracking-widest text-zinc-500 mb-2">Target Stack</h4>
+              <div className="flex flex-wrap gap-1">
+                {(activeArchTab === 'ipl' 
+                  ? ["LangGraph", "Qdrant", "XGBoost", "FastAPI", "Redis"] 
+                  : ["FAISS", "LangChain", "RAGAS", "Cross-encoders", "Python"]
+                ).map((item, idx) => (
+                  <span 
+                    key={idx} 
+                    onMouseEnter={() => setActiveTag(item)}
+                    onMouseLeave={() => setActiveTag(null)}
+                    className={`text-[8px] font-mono uppercase px-2 py-0.5 border rounded cursor-pointer transition ${
+                      activeTag === item 
+                        ? `${t.accentBg} ${t.buttonText} scale-105` 
+                        : `${t.cardBorder} text-zinc-400 ${t.cardBg}`
+                    }`}
+                  >
+                    {item}
+                  </span>
+                ))}
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Projects Section (Restructured layout) */}
-      <section id="projects" className={`py-24 px-6 max-w-6xl mx-auto relative z-10 border-t border-dashed ${t.divider}`}>
-        <div className="mb-16">
-          <div className={`text-[10px] font-mono uppercase tracking-widest mb-2 ${t.accent}`}>
-            02 // REPOSITORIES & SYSTEMS
+      {/* 03 REPOSITORIES & SYSTEMS */}
+      <section id="projects" className={`p-6 md:p-8 border ${t.cardBorder} ${t.cardBg} rounded-2xl relative z-10`}>
+        <div className="mb-8 pb-4 border-b border-dashed border-zinc-800/80 flex flex-col sm:flex-row justify-between sm:items-end gap-4">
+          <div>
+            <div className={`text-[10px] font-mono uppercase tracking-widest mb-1.5 ${t.accent}`}>
+              02 // REPOSITORIES & SYSTEMS
+            </div>
+            <h2 className="text-2xl md:text-3xl font-serif font-bold">Featured Projects</h2>
           </div>
-          <h2 className="text-3xl md:text-5xl font-serif font-bold">
-            Projects
-          </h2>
-          <p className="text-zinc-400 text-sm mt-2 max-w-xl">
-            Production systems designed to bridge traditional software architectures with advanced cognitive logic.
-          </p>
+          
+          <div className={`flex gap-1.5 p-1 border ${t.cardBorder} ${t.cardBg} rounded-lg`}>
+            <button
+              onClick={() => setActiveProjectTab('ipl')}
+              className={`px-2.5 py-1 text-[8px] font-mono uppercase tracking-widest rounded transition ${
+                activeProjectTab === 'ipl' 
+                  ? `${t.buttonBg} font-semibold` 
+                  : 'text-zinc-400 hover:text-white'
+              }`}
+            >
+              ipl-ai-commentary
+            </button>
+            <button
+              onClick={() => setActiveProjectTab('rag')}
+              className={`px-2.5 py-1 text-[8px] font-mono uppercase tracking-widest rounded transition ${
+                activeProjectTab === 'rag' 
+                  ? `${t.buttonBg} font-semibold` 
+                  : 'text-zinc-400 hover:text-white'
+              }`}
+            >
+              financial-qa-rag
+            </button>
+          </div>
         </div>
 
-        {/* Project Navigation Switcher */}
-        <div className={`flex gap-2 p-1 border ${t.cardBorder} ${t.cardBg} rounded-lg max-w-max mb-8`}>
-          <button
-            onClick={() => setActiveProjectTab('ipl')}
-            className={`px-3 py-1.5 text-[9px] font-mono uppercase tracking-widest rounded-md transition-all ${
-              activeProjectTab === 'ipl' 
-                ? `${t.buttonBg} font-semibold` 
-                : 'text-zinc-400 hover:text-white'
-            }`}
-          >
-            ipl-ai-commentary
-          </button>
-          <button
-            onClick={() => setActiveProjectTab('rag')}
-            className={`px-3 py-1.5 text-[9px] font-mono uppercase tracking-widest rounded-md transition-all ${
-              activeProjectTab === 'rag' 
-                ? `${t.buttonBg} font-semibold` 
-                : 'text-zinc-400 hover:text-white'
-            }`}
-          >
-            financial-qa-rag
-          </button>
-        </div>
-
-        {/* Selected Project Content Panel */}
         {(() => {
           const proj = projects[activeProjectTab];
           return (
-            <div className={`border ${t.cardBorder} ${t.cardBg} rounded-2xl overflow-hidden p-6 md:p-10 transition-all duration-500`}>
-              <div className={`flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 border-b ${t.divider} pb-6`}>
+            <div className="space-y-6">
+              <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
                 <div>
-                  <span className={`text-[9px] font-mono uppercase tracking-widest px-2 py-0.5 border ${t.accentBorder} ${t.accentText} ${t.cardBg} rounded`}>
+                  <span className={`text-[8px] font-mono uppercase px-2 py-0.5 border ${t.accentBorder} ${t.accentText} ${t.cardBg} rounded`}>
                     system.id // 0{proj.id}
                   </span>
-                  <h3 className="text-2xl md:text-4xl font-serif font-bold mt-2">{proj.title}</h3>
-                  <p className="text-xs text-zinc-400 font-mono mt-1">{proj.tagline}</p>
+                  <h3 className="text-xl font-serif font-bold mt-2">{proj.title}</h3>
+                  <p className="text-xs text-zinc-400 font-mono mt-0.5">{proj.tagline}</p>
                 </div>
-                
-                <div className="flex gap-3">
+
+                <div className="flex gap-2">
                   <a
                     href={proj.githubLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`flex items-center gap-1.5 px-3 py-1.5 border ${t.cardBorder} ${t.accentHover} rounded text-[9px] font-mono uppercase tracking-widest transition`}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 border ${t.cardBorder} ${t.accentHover} rounded text-[8px] font-mono uppercase tracking-widest transition`}
                   >
-                    <Github size={12} /> GitHub
+                    <Github size={11} /> GitHub
                   </a>
                   <a
                     href={proj.demoLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`flex items-center gap-1.5 px-3 py-1.5 ${t.buttonBg} text-[9px] font-mono uppercase tracking-widest rounded hover:opacity-90 transition`}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 ${t.buttonBg} ${t.buttonText} text-[8px] font-mono uppercase tracking-widest rounded hover:opacity-90 transition`}
                   >
-                    <ExternalLink size={12} /> Live Demo
+                    <ExternalLink size={11} /> Live Demo
                   </a>
                 </div>
               </div>
 
-              {/* Grid block detailed layout */}
-              <div className="grid md:grid-cols-2 gap-8 text-sm">
-                <div className="space-y-6">
+              <div className="grid md:grid-cols-2 gap-6 text-xs">
+                <div className="space-y-4">
                   <div>
-                    <h4 className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 mb-1.5">01 // Problem Statement</h4>
+                    <h4 className="text-[9px] font-mono uppercase tracking-widest text-zinc-500 mb-1">01 // Problem</h4>
                     <p className={`${t.textBody} leading-relaxed font-sans`}>{proj.problem}</p>
                   </div>
                   <div>
-                    <h4 className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 mb-1.5">02 // Core Architecture</h4>
+                    <h4 className="text-[9px] font-mono uppercase tracking-widest text-zinc-500 mb-1">02 // Architecture</h4>
                     <p className={`${t.textBody} leading-relaxed font-sans`}>{proj.architecture}</p>
                   </div>
                   <div>
-                    <h4 className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 mb-1.5">03 // System Design Details</h4>
+                    <h4 className="text-[9px] font-mono uppercase tracking-widest text-zinc-500 mb-1">03 // Details</h4>
                     <p className={`${t.textBody} leading-relaxed font-sans`}>{proj.systemDesign}</p>
                   </div>
                 </div>
 
-                <div className={`space-y-6 md:border-l md:border-dashed ${t.divider} md:pl-8`}>
+                <div className={`space-y-4 md:border-l md:border-dashed ${t.divider} md:pl-6`}>
                   <div>
-                    <h4 className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 mb-3">04 // Challenges & Tradeoffs (△)</h4>
-                    <ul className="space-y-3">
+                    <h4 className="text-[9px] font-mono uppercase tracking-widest text-zinc-500 mb-2">04 // Challenges (△)</h4>
+                    <ul className="space-y-2 font-sans">
                       {proj.challenges.map((c, i) => (
-                        <li key={i} className="flex items-start gap-2.5">
-                          <span className="text-orange-500 text-xs mt-0.5">△</span>
-                          <span className={`${t.textBody} leading-relaxed font-sans text-xs`}>{c}</span>
+                        <li key={i} className="flex items-start gap-2">
+                          <span className="text-orange-500 mt-0.5 flex-shrink-0">△</span>
+                          <span className={`${t.textBody} leading-normal text-[11px]`}>{c}</span>
                         </li>
                       ))}
                     </ul>
                   </div>
 
                   <div>
-                    <h4 className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 mb-3">05 // Quantitative Results (✓)</h4>
-                    <ul className="space-y-3">
+                    <h4 className="text-[9px] font-mono uppercase tracking-widest text-zinc-500 mb-2">05 // Quantitative (✓)</h4>
+                    <ul className="space-y-2 font-sans">
                       {proj.results.map((r, i) => (
-                        <li key={i} className="flex items-start gap-2.5">
-                          <span className={`text-emerald-500 text-xs mt-0.5`}>✓</span>
-                          <span className={`${t.textBody} leading-relaxed font-sans text-xs`}>{r}</span>
+                        <li key={i} className="flex items-start gap-2">
+                          <span className="text-emerald-500 mt-0.5 flex-shrink-0">✓</span>
+                          <span className={`${t.textBody} leading-normal text-[11px]`}>{r}</span>
                         </li>
                       ))}
                     </ul>
@@ -1433,16 +1454,16 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
                 </div>
               </div>
 
-              <div className={`flex flex-wrap gap-2 mt-8 pt-6 border-t ${t.divider}`}>
-                <span className="text-[9px] font-mono uppercase text-zinc-500 py-1.5 pr-2">Technologies used:</span>
+              <div className={`flex flex-wrap gap-1.5 mt-6 pt-4 border-t ${t.divider}`}>
+                <span className="text-[8px] font-mono uppercase text-zinc-500 py-1">Tech Stack:</span>
                 {proj.tech.map((tech, idx) => (
                   <span 
                     key={idx} 
                     onMouseEnter={() => setActiveTag(tech)}
                     onMouseLeave={() => setActiveTag(null)}
-                    className={`text-[9px] font-mono uppercase px-2.5 py-1 border rounded transition duration-200 cursor-pointer ${
+                    className={`text-[8px] font-mono uppercase px-2 py-0.5 border rounded cursor-pointer transition duration-150 ${
                       activeTag === tech 
-                        ? `${t.accentBg} ${t.buttonText} scale-105 shadow-sm` 
+                        ? `${t.accentBg} ${t.buttonText} scale-105` 
                         : `${t.cardBorder} text-zinc-400 ${t.cardBg}`
                     }`}
                   >
@@ -1578,74 +1599,70 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
         </div>
       </section>
 
-      {/* Education & Certifications (Double Column Layout) */}
-      <section id="education" className={`py-24 px-6 max-w-6xl mx-auto relative z-10 border-t border-dashed ${t.divider}`}>
-        <div className="grid lg:grid-cols-2 gap-12">
+      {/* 06 EDUCATION & CERTIFICATIONS */}
+      <section id="education" className={`p-6 md:p-8 border ${t.cardBorder} ${t.cardBg} rounded-2xl relative z-10`}>
+        <div className="grid md:grid-cols-2 gap-8">
           
-          {/* Education column */}
-          <div>
-            <div className="mb-10">
-              <div className={`text-[10px] font-mono uppercase tracking-widest mb-2 ${t.accent}`}>
+          {/* Academics */}
+          <div className="space-y-4">
+            <div className="mb-6">
+              <div className={`text-[10px] font-mono uppercase tracking-widest mb-1 ${t.accent}`}>
                 05.A // ACADEMICS
               </div>
-              <h2 className="text-3xl font-serif font-bold">Education</h2>
+              <h3 className="text-xl font-serif font-bold">Education</h3>
             </div>
 
-            <div className="space-y-4">
-              {education.map((edu, idx) => (
-                <div key={idx} className={`p-5 border ${t.cardBorder} ${t.cardBg} rounded-xl`}>
-                  <div className="flex justify-between items-start gap-4 mb-2">
-                    <div>
-                      <h3 className="text-base font-serif font-bold">{edu.institution}</h3>
-                      <p className={`text-[10px] font-mono uppercase tracking-widest ${t.accentText} mt-0.5`}>
-                        {edu.degree}
-                      </p>
-                    </div>
-                    <span className={`text-[9px] font-mono text-zinc-500 px-2 py-0.5 border ${t.cardBorder} ${t.cardBg} rounded`}>
-                      {edu.period}
-                    </span>
+            {education.map((edu, idx) => (
+              <div key={idx} className={`p-4 border ${t.cardBorder} ${t.cardBg} rounded-xl`}>
+                <div className="flex justify-between items-start gap-3 mb-2">
+                  <div>
+                    <h4 className="text-xs font-serif font-bold">{edu.institution}</h4>
+                    <p className={`text-[9px] font-mono uppercase tracking-widest ${t.accentText} mt-0.5`}>
+                      {edu.degree}
+                    </p>
                   </div>
-                  <p className="text-xs text-zinc-400 font-sans leading-relaxed mt-3">{edu.details}</p>
+                  <span className={`text-[8px] font-mono text-zinc-500 px-2 py-0.5 border ${t.cardBorder} ${t.cardBg} rounded`}>
+                    {edu.period}
+                  </span>
                 </div>
-              ))}
-            </div>
+                <p className="text-[10px] text-zinc-400 font-sans leading-normal mt-2">{edu.details}</p>
+              </div>
+            ))}
           </div>
 
-          {/* Certifications column */}
-          <div>
-            <div className="mb-10">
-              <div className={`text-[10px] font-mono uppercase tracking-widest mb-2 ${t.accent}`}>
+          {/* Certifications */}
+          <div className="space-y-4">
+            <div className="mb-6">
+              <div className={`text-[10px] font-mono uppercase tracking-widest mb-1 ${t.accent}`}>
                 05.B // VERIFICATIONS
               </div>
-              <h2 className="text-3xl font-serif font-bold">Certifications</h2>
+              <h3 className="text-xl font-serif font-bold">Certifications</h3>
             </div>
 
-            <div className="grid sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-3">
               {certifications.map((cert, idx) => {
                 const isInProgress = cert.status === 'In Progress';
                 return (
                   <div 
                     key={idx} 
-                    className={`p-4 border ${t.cardBg} rounded-xl flex flex-col justify-between ${
-                      isInProgress ? `${t.accentBorder} bg-opacity-35` : t.cardBorder
+                    className={`p-3 border ${t.cardBg} rounded-xl flex flex-col justify-between ${
+                      isInProgress ? `${t.accentBorder} bg-opacity-25` : t.cardBorder
                     }`}
                   >
                     <div>
-                      <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">
+                      <span className="text-[7px] font-mono text-zinc-500 uppercase tracking-widest">
                         {cert.badge}
                       </span>
-                      <h3 className="text-xs font-mono font-bold text-white mt-1 leading-snug">
+                      <h4 className="text-[10px] font-mono font-bold text-white mt-0.5 leading-snug">
                         {cert.title}
-                      </h3>
-                      <p className="text-[9px] font-sans text-zinc-500 mt-1">{cert.issuer}</p>
+                      </h4>
+                      <p className="text-[8px] font-sans text-zinc-500 mt-0.5">{cert.issuer}</p>
                     </div>
-                    <div className={`mt-4 pt-3 border-t ${t.divider} flex justify-between items-center`}>
-                      <span className={`text-[8px] font-mono uppercase tracking-widest ${
-                        isInProgress ? 'text-amber-500' : 'text-emerald-500'
-                      }`}>
+                    <div className={`mt-3 pt-2 border-t ${t.divider} flex justify-between items-center text-[7px] font-mono`}>
+                      <span className={isInProgress ? 'text-amber-500' : 'text-emerald-500'}>
                         {cert.status}
                       </span>
-                      {isInProgress && <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>}
+                      {isInProgress && <span className="w-1 h-1 rounded-full bg-amber-500 animate-pulse"></span>}
                     </div>
                   </div>
                 );
@@ -1655,367 +1672,215 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
         </div>
       </section>
 
-      {/* Philosophy Section */}
-      <section className={`py-24 px-6 max-w-6xl mx-auto relative z-10 border-t border-dashed ${t.divider}`}>
-        <div className="mb-16 text-center max-w-2xl mx-auto">
-          <div className={`text-[10px] font-mono uppercase tracking-widest mb-2 ${t.accent}`}>
+      {/* 07 ENGINEERING PHILOSOPHY */}
+      <section className={`p-6 md:p-8 border ${t.cardBorder} ${t.cardBg} rounded-2xl relative z-10`}>
+        <div className="mb-10 text-center max-w-lg mx-auto">
+          <div className={`text-[10px] font-mono uppercase tracking-widest mb-1 ${t.accent}`}>
             06 // ENGINEERING BELIEFS
           </div>
-          <h2 className="text-3xl md:text-5xl font-serif font-bold">
-            Development Philosophy
-          </h2>
-          <p className="text-zinc-400 text-xs font-mono mt-2 uppercase tracking-wide">
+          <h2 className="text-xl md:text-2xl font-serif font-bold">Development Philosophy</h2>
+          <p className="text-zinc-500 text-[8px] font-mono uppercase mt-1">
             [principles.config : values guiding implementation]
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className={`p-5 border ${t.cardBorder} ${t.cardBg} rounded-xl ${t.cardBorderHover} transition`}>
-            <span className={`text-xs font-mono ${t.accentText}`}>01 / DESIGN FIRST</span>
-            <h3 className="text-base font-serif font-bold mt-2 text-white">System blueprints</h3>
-            <p className="text-[11px] text-zinc-400 mt-2 leading-relaxed">
-              Every implementation begins with schema models, data diagrams, and latencies. Code ships only after pipelines are established.
-            </p>
-          </div>
-
-          <div className={`p-5 border ${t.cardBorder} ${t.cardBg} rounded-xl ${t.cardBorderHover} transition`}>
-            <span className={`text-xs font-mono ${t.accentText}`}>02 / SPECIALIZATION</span>
-            <h3 className="text-base font-serif font-bold mt-2 text-white">Agents with purpose</h3>
-            <p className="text-[11px] text-zinc-400 mt-2 leading-relaxed">
-              Multi-agent systems demand clear scopes—routing, predicting, and formatting. Naive chains yield unpredictable outcomes.
-            </p>
-          </div>
-
-          <div className={`p-5 border ${t.cardBorder} ${t.cardBg} rounded-xl ${t.cardBorderHover} transition`}>
-            <span className={`text-xs font-mono ${t.accentText}`}>03 / RETRIEVAL QUALITY</span>
-            <h3 className="text-base font-serif font-bold mt-2 text-white">Asserting context</h3>
-            <p className="text-[11px] text-zinc-400 mt-2 leading-relaxed">
-              In cognitive pipelines, context rules. Hybrid vector search, parent-child trees, and reranking are essential for production.
-            </p>
-          </div>
-
-          <div className={`p-5 border ${t.cardBorder} ${t.cardBg} rounded-xl ${t.cardBorderHover} transition`}>
-            <span className={`text-xs font-mono ${t.accentText}`}>04 / MEASURED DEPLOY</span>
-            <h3 className="text-base font-serif font-bold mt-2 text-white">Automated eval gates</h3>
-            <p className="text-[11px] text-zinc-400 mt-2 leading-relaxed">
-              Deployments require automated tests. RAGAS scores tied to CI gates block deviations before they reach production.
-            </p>
-          </div>
+        <div className="grid sm:grid-cols-2 gap-4 text-xs">
+          {[
+            { label: "01 / DESIGN FIRST", title: "System blueprints", desc: "Every implementation begins with schema models, data diagrams, and latencies. Code ships only after pipelines are established." },
+            { label: "02 / SPECIALIZATION", title: "Agents with purpose", desc: "Multi-agent systems demand clear scopes—routing, predicting, and formatting. Naive chains yield unpredictable outcomes." },
+            { label: "03 / RETRIEVAL QUALITY", title: "Asserting context", desc: "In cognitive pipelines, context rules. Hybrid vector search, parent-child trees, and reranking are essential for production." },
+            { label: "04 / MEASURED DEPLOY", title: "Automated eval gates", desc: "Deployments require automated tests. RAGAS scores tied to CI gates block deviations before they reach production." }
+          ].map((phi, i) => (
+            <div key={i} className={`p-4 border ${t.cardBorder} ${t.cardBg} rounded-xl hover:border-zinc-550 transition`}>
+              <span className={`text-[9px] font-mono ${t.accentText}`}>{phi.label}</span>
+              <h3 className="text-xs font-serif font-bold mt-1 text-white">{phi.title}</h3>
+              <p className="text-[10px] text-zinc-400 mt-2 leading-relaxed">{phi.desc}</p>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* Connect & Contact Form Section */}
-      <section id="contact" className={`py-24 px-6 max-w-6xl mx-auto relative z-10 border-t border-dashed ${t.divider}`}>
-        <div className="grid lg:grid-cols-2 gap-12 items-start">
-          
-          {/* Left Details */}
-          <div>
-            <div className={`text-[10px] font-mono uppercase tracking-widest mb-2 ${t.accent}`}>
-              07 // CONNECTION PORT
-            </div>
-            <h2 className="text-3xl md:text-5xl font-serif font-bold leading-tight mb-6">
-              Let's build something <span className={`italic ${t.accent}`}>scalable.</span>
-            </h2>
-            <p className="text-zinc-400 text-sm leading-relaxed mb-10 max-w-md font-sans">
-              Currently open to full-time roles in Bangalore and Riyadh, remote collaborations, and ML/RAG pipelines integration consultancies.
+      {/* 08 INTEGRATION PORT (CONTACT) */}
+      <section id="contact" className={`p-6 md:p-8 border ${t.cardBorder} ${t.cardBg} rounded-2xl relative z-10`}>
+        <div className="mb-8 pb-4 border-b border-dashed border-zinc-800/80">
+          <div className={`text-[10px] font-mono uppercase tracking-widest mb-1.5 ${t.accent}`}>
+            07 // INTEGRATION PORT
+          </div>
+          <h2 className="text-2xl md:text-3xl font-serif font-bold">Secure Connection</h2>
+        </div>
+
+        <div className="grid md:grid-cols-12 gap-8 items-start">
+          <div className="md:col-span-5 space-y-4">
+            <p className="text-zinc-400 text-xs leading-relaxed font-sans">
+              Open to full-time roles in Bangalore & Riyadh, remote collaborations, and ML/RAG pipelines integration consultancies.
             </p>
 
-            {/* Direct details grid */}
-            <div className="space-y-5">
-              <div className="flex gap-4 group">
-                <div className={`w-9 h-9 border ${t.cardBorder} rounded-lg flex items-center justify-center text-zinc-400 flex-shrink-0 group-hover:border-zinc-500 transition`}>
-                  <Mail size={15} />
+            {/* Handles list with click to copy icons */}
+            <div className="space-y-3.5 pt-3">
+              <div className="flex gap-3 group">
+                <div className={`w-7 h-7 border ${t.cardBorder} rounded flex items-center justify-center text-zinc-500`}>
+                  <Mail size={12} />
                 </div>
-                <div className="flex-grow flex items-center justify-between">
+                <div className="flex-grow flex justify-between items-center">
                   <div>
-                    <div className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">EMAIL</div>
-                    <a href="mailto:jagadeepreddy3638@gmail.com" className={`text-xs font-mono ${t.textBody} ${t.hoverText} transition`}>
-                      jagadeepreddy3638@gmail.com
+                    <div className="text-[7px] font-mono text-zinc-500 uppercase">EMAIL</div>
+                    <a href="mailto:jagadeepreddy3638@gmail.com" className={`text-[10px] font-mono ${t.textBody} ${t.hoverText} transition`}>
+                      jagadeepreddy.email
                     </a>
                   </div>
                   <button 
                     onClick={() => handleCopyToClipboard('jagadeepreddy3638@gmail.com', 'email')}
-                    className="p-1.5 opacity-0 group-hover:opacity-100 transition rounded-md hover:bg-zinc-500/10 text-zinc-500 hover:text-zinc-300"
-                    title="Copy Email"
+                    className="p-1 opacity-0 group-hover:opacity-100 transition rounded hover:bg-zinc-500/10 text-zinc-500 hover:text-zinc-300 cursor-pointer"
                   >
-                    {copiedField === 'email' ? <Check size={12} className="text-emerald-500" /> : <Copy size={12} />}
+                    {copiedField === 'email' ? <Check size={10} className="text-emerald-500" /> : <Copy size={10} />}
                   </button>
                 </div>
               </div>
 
-              <div className="flex gap-4 group">
-                <div className={`w-9 h-9 border ${t.cardBorder} rounded-lg flex items-center justify-center text-zinc-400 flex-shrink-0 group-hover:border-zinc-500 transition`}>
-                  <MapPin size={15} />
+              <div className="flex gap-3 group">
+                <div className={`w-7 h-7 border ${t.cardBorder} rounded flex items-center justify-center text-zinc-500`}>
+                  <Linkedin size={12} />
                 </div>
-                <div className="flex-grow flex items-center justify-between">
+                <div className="flex-grow flex justify-between items-center">
                   <div>
-                    <div className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">LOCATION</div>
-                    <div className={`text-xs font-mono ${t.textBody}`}>{`Bengaluru, Karnataka, India`}</div>
-                  </div>
-                  <button 
-                    onClick={() => handleCopyToClipboard('Bengaluru, Karnataka, India', 'location')}
-                    className="p-1.5 opacity-0 group-hover:opacity-100 transition rounded-md hover:bg-zinc-500/10 text-zinc-500 hover:text-zinc-300"
-                    title="Copy Location"
-                  >
-                    {copiedField === 'location' ? <Check size={12} className="text-emerald-500" /> : <Copy size={12} />}
-                  </button>
-                </div>
-              </div>
-
-              <div className="flex gap-4 group">
-                <div className={`w-9 h-9 border ${t.cardBorder} rounded-lg flex items-center justify-center text-zinc-400 flex-shrink-0 group-hover:border-zinc-500 transition`}>
-                  <Linkedin size={15} />
-                </div>
-                <div className="flex-grow flex items-center justify-between">
-                  <div>
-                    <div className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">LINKEDIN</div>
-                    <a 
-                      href="https://www.linkedin.com/in/buthuru-jagadeep-reddy-a522961a1/" 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      className={`text-xs font-mono ${t.textBody} ${t.hoverText} flex items-center gap-1 transition`}
-                    >
-                      linkedin/buthuru-jagadeep-reddy <ArrowUpRight size={10} />
+                    <div className="text-[7px] font-mono text-zinc-500 uppercase">LINKEDIN</div>
+                    <a href="https://www.linkedin.com/in/buthuru-jagadeep-reddy-a522961a1/" target="_blank" rel="noopener noreferrer" className={`text-[10px] font-mono ${t.textBody} ${t.hoverText} transition`}>
+                      jagadeepreddy.linkedin
                     </a>
                   </div>
                   <button 
                     onClick={() => handleCopyToClipboard('https://www.linkedin.com/in/buthuru-jagadeep-reddy-a522961a1/', 'linkedin')}
-                    className="p-1.5 opacity-0 group-hover:opacity-100 transition rounded-md hover:bg-zinc-500/10 text-zinc-500 hover:text-zinc-300"
-                    title="Copy LinkedIn Link"
+                    className="p-1 opacity-0 group-hover:opacity-100 transition rounded hover:bg-zinc-500/10 text-zinc-500 hover:text-zinc-300 cursor-pointer"
                   >
-                    {copiedField === 'linkedin' ? <Check size={12} className="text-emerald-500" /> : <Copy size={12} />}
+                    {copiedField === 'linkedin' ? <Check size={10} className="text-emerald-500" /> : <Copy size={10} />}
                   </button>
                 </div>
               </div>
 
-              <div className="flex gap-4 group">
-                <div className={`w-9 h-9 border ${t.cardBorder} rounded-lg flex items-center justify-center text-zinc-400 flex-shrink-0 group-hover:border-zinc-500 transition`}>
-                  <Github size={15} />
+              <div className="flex gap-3 group">
+                <div className={`w-7 h-7 border ${t.cardBorder} rounded flex items-center justify-center text-zinc-500`}>
+                  <Github size={12} />
                 </div>
-                <div className="flex-grow flex items-center justify-between">
+                <div className="flex-grow flex justify-between items-center">
                   <div>
-                    <div className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">GITHUB</div>
-                    <a 
-                      href="https://github.com/Jagadeep-Reddy" 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      className={`text-xs font-mono ${t.textBody} ${t.hoverText} flex items-center gap-1 transition`}
-                    >
-                      github/Jagadeep-Reddy <ArrowUpRight size={10} />
+                    <div className="text-[7px] font-mono text-zinc-500 uppercase">GITHUB</div>
+                    <a href="https://github.com/Jagadeep-Reddy" target="_blank" rel="noopener noreferrer" className={`text-[10px] font-mono ${t.textBody} ${t.hoverText} transition`}>
+                      jagadeepreddy.github
                     </a>
                   </div>
                   <button 
                     onClick={() => handleCopyToClipboard('https://github.com/Jagadeep-Reddy', 'github')}
-                    className="p-1.5 opacity-0 group-hover:opacity-100 transition rounded-md hover:bg-zinc-500/10 text-zinc-500 hover:text-zinc-300"
-                    title="Copy GitHub Link"
+                    className="p-1 opacity-0 group-hover:opacity-100 transition rounded hover:bg-zinc-500/10 text-zinc-500 hover:text-zinc-300 cursor-pointer"
                   >
-                    {copiedField === 'github' ? <Check size={12} className="text-emerald-500" /> : <Copy size={12} />}
+                    {copiedField === 'github' ? <Check size={10} className="text-emerald-500" /> : <Copy size={10} />}
                   </button>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Contact Form card (Modified layout) */}
-          <div className={`p-6 md:p-8 border ${t.cardBorder} ${t.cardBg} rounded-2xl`}>
-            <form onSubmit={handleFormSubmit} className="space-y-5">
-              
-              <div>
-                <label className="block text-[8px] font-mono text-zinc-500 uppercase tracking-widest mb-1.5">
-                  [client.email]
-                </label>
-                <input
-                  type="email"
-                  required
-                  placeholder="name@organization.com"
-                  value={formEmail}
-                  onChange={(e) => setFormEmail(e.target.value)}
-                  className={`w-full px-4 py-2.5 rounded ${t.inputBg} border ${t.inputBorder} ${t.text} text-xs focus:outline-none ${t.inputFocus} transition font-mono`}
-                />
-              </div>
-
-              <div>
-                <label className="block text-[8px] font-mono text-zinc-500 uppercase tracking-widest mb-1.5">
-                  [message.subject]
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="Integration, recruitment, or consulting"
-                  value={formSubject}
-                  onChange={(e) => setFormSubject(e.target.value)}
-                  className={`w-full px-4 py-2.5 rounded ${t.inputBg} border ${t.inputBorder} ${t.text} text-xs focus:outline-none ${t.inputFocus} transition font-mono`}
-                />
-              </div>
-
-              <div>
-                <label className="block text-[8px] font-mono text-zinc-500 uppercase tracking-widest mb-1.5">
-                  [message.payload]
-                </label>
-                <textarea
-                  required
-                  rows={4}
-                  placeholder="Outline project specs, salary budgets, or pipeline goals..."
-                  value={formMessage}
-                  onChange={(e) => setFormMessage(e.target.value)}
-                  className={`w-full px-4 py-2.5 rounded ${t.inputBg} border ${t.inputBorder} ${t.text} text-xs focus:outline-none ${t.inputFocus} transition resize-none font-mono`}
-                />
-              </div>
-
-              {/* Status notifications */}
-              {formStatus === 'success' && (
-                <div className="p-3 text-[11px] font-mono bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 rounded">
-                  [status: success] // Message submitted. Response expected within 24 hrs.
+          {/* Form Input fields */}
+          <div className="md:col-span-7">
+            {contactPayloadActive ? (
+              <div className="p-4 border border-zinc-800 rounded-xl bg-zinc-950/90 text-[10px] font-mono text-zinc-400 space-y-2 min-h-[220px] flex flex-col justify-center">
+                <div className="text-zinc-500 text-[8px] tracking-widest border-b border-zinc-900 pb-2 flex items-center gap-1.5">
+                  <Activity size={10} className="animate-spin text-[#10B981]" /> PAYLOAD_TRANSMISSION_LOG
                 </div>
-              )}
-              {formStatus === 'error' && (
-                <div className="p-3 text-[11px] font-mono bg-red-500/10 border border-red-500/20 text-red-400 rounded">
-                  [status: failed] // Connection failure. Re-route to: jagadeepreddy3638@gmail.com
+                {contactLogs.map((log, idx) => (
+                  <div key={idx} className="flex gap-1.5">
+                    <span className="text-[#10B981]">&gt;&gt;</span>
+                    <span>{log}</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <form onSubmit={handleFormSubmit} className="space-y-4">
+                <div>
+                  <label className="block text-[7px] font-mono text-zinc-500 uppercase tracking-widest mb-1">
+                    [client.email]
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    placeholder="name@organization.com"
+                    value={formEmail}
+                    onChange={(e) => setFormEmail(e.target.value)}
+                    className={`w-full px-3 py-2 rounded ${t.inputBg} border ${t.inputBorder} ${t.text} text-[11px] focus:outline-none ${t.inputFocus} transition font-mono`}
+                  />
                 </div>
-              )}
-
-              <button
-                type="submit"
-                disabled={formStatus === 'sending'}
-                className={`w-full py-3.5 ${t.buttonBg} text-xs font-mono uppercase tracking-widest font-semibold flex items-center justify-center gap-1.5 cursor-pointer hover:opacity-90 transition`}
-              >
-                {formStatus === 'sending' ? 'TRANSMITTING...' : 'INITIATE_CONTACT_COMMAND →'}
-              </button>
-
-            </form>
+                <div>
+                  <label className="block text-[7px] font-mono text-zinc-500 uppercase tracking-widest mb-1">
+                    [message.subject]
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Project recruitment, or ML pipelines"
+                    value={formSubject}
+                    onChange={(e) => setFormSubject(e.target.value)}
+                    className={`w-full px-3 py-2 rounded ${t.inputBg} border ${t.inputBorder} ${t.text} text-[11px] focus:outline-none ${t.inputFocus} transition font-mono`}
+                  />
+                </div>
+                <div>
+                  <label className="block text-[7px] font-mono text-zinc-500 uppercase tracking-widest mb-1">
+                    [message.payload]
+                  </label>
+                  <textarea
+                    required
+                    rows={3}
+                    placeholder="Include scope details or job specifications..."
+                    value={formMessage}
+                    onChange={(e) => setFormMessage(e.target.value)}
+                    className={`w-full px-3 py-2 rounded ${t.inputBg} border ${t.inputBorder} ${t.text} text-[11px] focus:outline-none ${t.inputFocus} transition font-mono`}
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className={`w-full py-2.5 ${t.buttonBg} ${t.buttonText} text-[10px] font-mono uppercase tracking-widest rounded flex items-center justify-center gap-1.5 hover:opacity-90 active:scale-95 transition cursor-pointer`}
+                >
+                  <Send size={11} /> Deliver Message Payload
+                </button>
+              </form>
+            )}
           </div>
         </div>
       </section>
 
-      {/* Footer (Replicated Terminal Dashboard metadata style) */}
-      <footer className={`${t.footerBg} py-16 px-6 relative z-10 border-t border-dashed ${t.divider}`}>
-        <div className="max-w-6xl mx-auto">
-          
-          <div className="grid md:grid-cols-3 gap-12 mb-12">
-            
-            {/* Column 1: identity */}
-            <div>
-              <h3 className="text-xl font-mono font-bold tracking-tight text-white mb-2">
-                JAGADEEP REDDY
-              </h3>
-              <p className="text-[10px] font-mono text-zinc-500 uppercase tracking-wide mb-4">
-                [role] ai_engineer // backend_architect
-              </p>
-              <p className="text-xs text-zinc-400 leading-relaxed max-w-xs font-sans">
-                Focused on deploying verifiable cognitive pipelines, LangGraph graph architectures, and hybrid retrieval networks.
-              </p>
-            </div>
-
-            {/* Column 2: Navigation Links */}
-            <div>
-              <div className="text-[8px] font-mono uppercase tracking-widest text-zinc-600 mb-4">
-                // SYSTEM_MAP
-              </div>
-              <ul className="grid grid-cols-2 gap-2 text-[10px] font-mono uppercase">
-                <li><button onClick={() => scrollToSection('hero')} className="text-zinc-400 hover:text-white text-left transition">Hero</button></li>
-                <li><button onClick={() => scrollToSection('architecture')} className="text-zinc-400 hover:text-white text-left transition">Architecture</button></li>
-                <li><button onClick={() => scrollToSection('projects')} className="text-zinc-400 hover:text-white text-left transition">Projects</button></li>
-                <li><button onClick={() => scrollToSection('skills')} className="text-zinc-400 hover:text-white text-left transition">Skills</button></li>
-                <li><button onClick={() => scrollToSection('experience')} className="text-zinc-400 hover:text-white text-left transition">Experience</button></li>
-                <li><button onClick={() => scrollToSection('education')} className="text-zinc-400 hover:text-white text-left transition">Education</button></li>
-              </ul>
-            </div>
-
-            {/* Column 3: Contact */}
-            <div>
-              <div className="text-[8px] font-mono uppercase tracking-widest text-zinc-600 mb-4">
-                // ACTIVE_PINGS
-              </div>
-              <ul className="space-y-1.5 text-[10px] font-mono text-zinc-400">
-                <li>location: bangalore_india</li>
-                <li>email: jagadeepreddy3638@gmail.com</li>
-                <li>github: github/Jagadeep-Reddy</li>
-              </ul>
-            </div>
+      {/* 09 INTEGRATED RECRUITER SHELL TERMINAL CHATBOT */}
+      <section id="chatbot-console" className={`p-6 md:p-8 border ${t.cardBorder} ${t.cardBg} rounded-2xl relative z-10`}>
+        <div className="mb-6 pb-4 border-b border-dashed border-zinc-800/80">
+          <div className={`text-[10px] font-mono uppercase tracking-widest mb-1.5 ${t.accent}`}>
+            08 // RECRUITER SHELL TERMINAL
           </div>
-
-          <hr className={`my-8 ${t.divider}`} />
-
-          {/* Terminal Dashboard bottom line */}
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-[9px] font-mono uppercase tracking-widest text-zinc-500">
-            <span>© 2026 JAGADEEP REDDY // ALL RIGHTS RESERVED</span>
-            <div className="flex gap-4">
-              <span>system.version: 4.2.1</span>
-              <span>theme: {theme}</span>
-              <span>built.via: tailwind.vite.react</span>
-            </div>
-          </div>
-
+          <h2 className="text-2xl md:text-3xl font-serif font-bold">Query AI assistant</h2>
         </div>
-      </footer>
 
-      {/* Floating Action Elements (Scroll Top & Chat Button) */}
-      <div className="fixed bottom-6 right-6 flex flex-col gap-3 z-50">
-        
-        {/* Scroll Top Button */}
-        {showScrollTop && (
-          <button
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className={`w-10 h-10 rounded-lg border ${t.cardBorder} flex items-center justify-center ${t.cardBg} text-zinc-400 hover:text-white ${t.cardBorderHover} transition cursor-pointer`}
-            aria-label="Scroll to top"
-          >
-            <ChevronUp size={16} />
-          </button>
-        )}
-
-        {/* Pulsing AI Agent Button */}
-        <button
-          onClick={() => setChatOpen(!chatOpen)}
-          className={`w-12 h-12 rounded-lg flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition cursor-pointer relative ${t.chatBtn}`}
-          aria-label="Ask my AI Assistant"
-        >
-          {chatOpen ? <X size={18} /> : <MessageSquare size={18} />}
-          
-          {!chatOpen && (
-            <span className="absolute -inset-1 rounded-lg border border-zinc-550 animate-pulse opacity-25"></span>
-          )}
-        </button>
-      </div>
-
-      {/* AI Agent Chat Drawer Panel */}
-      {chatOpen && (
-        <div className={`fixed bottom-22 right-6 w-[360px] md:w-[390px] h-[500px] border ${t.cardBorder} rounded-xl shadow-2xl flex flex-col overflow-hidden z-50 transition-all duration-300 ${t.cardBg} backdrop-blur-xl ${t.text}`}>
-          
-          {/* Header */}
-          <div className={`p-4 border-b ${t.cardBorder} flex justify-between items-center ${t.cardBg}`}>
-            <div className="flex items-center gap-2.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping absolute"></span>
-              <span className="w-2 h-2 rounded-full bg-emerald-500 relative"></span>
-              <div>
-                <h4 className="text-xs font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
-                  <Terminal size={12} /> RECRUITER_SHELL
-                </h4>
-                <p className="text-[9px] text-zinc-500 font-mono">portfolio.query.engine : v1.0.0</p>
-              </div>
+        <div className={`border ${t.cardBorder} rounded-xl overflow-hidden shadow-2xl flex flex-col min-h-[380px] bg-zinc-950`}>
+          {/* Terminal header */}
+          <div className="p-3 bg-zinc-900 border-b border-zinc-800 flex justify-between items-center text-zinc-400">
+            <div className="flex items-center gap-2 text-xs font-mono">
+              <Terminal size={12} className="text-[#10B981]" />
+              <span>guest@jagadeepreddy.sh</span>
             </div>
-            <button 
-              onClick={() => setChatOpen(false)}
-              className="p-1 text-zinc-500 hover:text-white transition"
-            >
-              <X size={16} />
-            </button>
+            <div className="flex gap-1.5">
+              <span className="w-2.5 h-2.5 rounded-full bg-zinc-850"></span>
+              <span className="w-2.5 h-2.5 rounded-full bg-zinc-850"></span>
+              <span className="w-2.5 h-2.5 rounded-full bg-zinc-850"></span>
+            </div>
           </div>
 
-          {/* Conversation Area */}
-          <div className={`flex-grow p-4 overflow-y-auto space-y-4 ${t.cardBg} scrollbar-thin`}>
+          {/* Chat conversations */}
+          <div className="flex-grow p-4 space-y-4 overflow-y-auto h-[260px] scrollbar-thin text-xs text-zinc-300">
             {messages.map((msg, idx) => (
-              <div 
-                key={idx} 
-                className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-              >
+              <div key={idx} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
                 {msg.sender === 'user' ? (
-                  <div className="w-full text-right font-mono text-[11px] leading-relaxed text-zinc-300">
+                  <div className="font-mono text-[11px] leading-relaxed text-zinc-300">
                     <span className="text-zinc-500">guest@portfolio:~$</span> {msg.text}
                   </div>
                 ) : (
-                  <div className={`max-w-[95%] rounded-lg px-3.5 py-2 text-[11px] leading-relaxed font-mono ${t.agentChatBg} ${t.agentChatText} border ${t.cardBorder} rounded-tl-none`}>
-                    <div className="text-[7px] text-zinc-500 uppercase tracking-widest mb-1.5 flex items-center gap-1">
-                      <Sparkles size={8} className="text-[#10B981]" /> // RESPONSE FROM ENGINE
+                  <div className="w-full text-left font-mono text-[11px] leading-relaxed bg-[#0a0f1d]/60 border border-zinc-900 p-3 rounded-lg">
+                    <div className="text-[7px] text-zinc-600 uppercase tracking-wider mb-1 flex items-center gap-1">
+                      <Sparkles size={8} className="text-[#10B981] animate-pulse" /> // OUTPUT FROM PORTFOLIO_DB
                     </div>
                     {msg.text}
                   </div>
@@ -2023,53 +1888,30 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
               </div>
             ))}
             
-            {/* Typing simulator */}
             {isTyping && (
               <div className="flex justify-start">
-                <div className={`rounded-lg px-3.5 py-2 border ${t.cardBorder} ${t.agentChatBg} flex items-center gap-1.5`}>
+                <div className="p-2 border border-zinc-800 rounded bg-[#0a0f1d]/60 flex items-center gap-1 font-mono text-[10px] text-zinc-500">
                   <span className="w-1.5 h-1.5 bg-zinc-500 rounded-full animate-bounce"></span>
                   <span className="w-1.5 h-1.5 bg-zinc-500 rounded-full animate-bounce delay-150"></span>
                   <span className="w-1.5 h-1.5 bg-zinc-500 rounded-full animate-bounce delay-300"></span>
+                  <span>running query...</span>
                 </div>
               </div>
             )}
-            
             <div ref={chatEndRef} />
           </div>
 
-          {/* Quick recommendations */}
-          <div className={`px-4 py-2.5 border-t border-dashed ${t.divider} ${t.cardBg}`}>
-            <p className="text-[8px] font-mono uppercase tracking-wider text-zinc-500 mb-1.5">Suggested Query Flags:</p>
-            <div className="flex flex-wrap gap-1">
-              <button 
-                onClick={() => handleQuickAction("Summarize Jagadeep's expertise")} 
-                className={`text-[9px] font-mono px-2 py-0.5 border ${t.cardBorder} text-zinc-400 hover:text-white ${t.cardBorderHover} ${t.cardBg} rounded`}
-              >
-                --expertise
-              </button>
-              <button 
-                onClick={() => handleQuickAction("About the IPL AI Platform")} 
-                className={`text-[9px] font-mono px-2 py-0.5 border ${t.cardBorder} text-zinc-400 hover:text-white ${t.cardBorderHover} ${t.cardBg} rounded`}
-              >
-                --ipl-platform
-              </button>
-              <button 
-                onClick={() => handleQuickAction("Tell me about his RAG experience")} 
-                className={`text-[9px] font-mono px-2 py-0.5 border ${t.cardBorder} text-zinc-400 hover:text-white ${t.cardBorderHover} ${t.cardBg} rounded`}
-              >
-                --rag-stack
-              </button>
-              <button 
-                onClick={() => handleQuickAction("Is he open to full-time remote roles?")} 
-                className={`text-[9px] font-mono px-2 py-0.5 border ${t.cardBorder} text-zinc-400 hover:text-white ${t.cardBorderHover} ${t.cardBg} rounded`}
-              >
-                --remote
-              </button>
-            </div>
+          {/* Suggestions row */}
+          <div className="px-4 py-2 border-t border-zinc-900 bg-zinc-900/40 text-[9px] font-mono flex flex-wrap gap-1.5 items-center">
+            <span className="text-zinc-600 uppercase">Suggested Flags:</span>
+            <button onClick={() => handleQuickAction("Summarize Jagadeep's expertise")} className="px-2 py-0.5 border border-zinc-850 rounded hover:border-zinc-550 text-zinc-400 hover:text-white transition cursor-pointer">--expertise</button>
+            <button onClick={() => handleQuickAction("About the IPL AI Platform")} className="px-2 py-0.5 border border-zinc-850 rounded hover:border-zinc-550 text-zinc-400 hover:text-white transition cursor-pointer">--ipl-platform</button>
+            <button onClick={() => handleQuickAction("Tell me about his RAG experience")} className="px-2 py-0.5 border border-zinc-850 rounded hover:border-zinc-550 text-zinc-400 hover:text-white transition cursor-pointer">--rag-stack</button>
+            <button onClick={() => handleQuickAction("Is he open to full-time remote roles?")} className="px-2 py-0.5 border border-zinc-850 rounded hover:border-zinc-550 text-zinc-400 hover:text-white transition cursor-pointer">--remote</button>
           </div>
 
-          {/* Text Input Row */}
-          <div className={`p-3 border-t ${t.cardBorder} flex items-center gap-1.5 ${t.cardBg}`}>
+          {/* Chat input line */}
+          <div className="p-3 bg-zinc-950 border-t border-zinc-900 flex items-center gap-1.5">
             <span className="text-[10px] font-mono text-zinc-500 flex-shrink-0">guest@portfolio:~$</span>
             <input
               type="text"
@@ -2077,26 +1919,70 @@ Keep answers concise (2-4 sentences). Be professional. Do not make up anything n
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-              className={`flex-grow px-1 py-1 rounded bg-transparent border-none ${t.text} text-[11px] font-mono focus:outline-none`}
+              className="flex-grow px-1 py-1 rounded bg-transparent border-none text-zinc-300 text-xs font-mono focus:outline-none"
             />
             <button
               onClick={handleSendMessage}
               className={`px-3 py-1.5 rounded flex items-center justify-center cursor-pointer transition ${t.chatBtn}`}
               aria-label="Send"
             >
-              <Send size={12} />
+              <Send size={11} />
             </button>
           </div>
         </div>
+      </section>
+
+        </main>
+      </div>
+
+      {/* Footer */}
+      <footer className={`py-12 border-t border-dashed ${t.divider} mt-24 relative z-10 ${t.cardBg}`}>
+        <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-8">
+          <div>
+            <h3 className="text-lg font-mono font-bold tracking-tight text-white mb-2">JAGADEEP REDDY</h3>
+            <p className="text-[8px] font-mono text-zinc-500 uppercase tracking-wide mb-4">[role] ai_engineer // backend_architect</p>
+            <p className="text-xs text-zinc-400 leading-relaxed max-w-xs font-sans">
+              Focused on deploying verifiable cognitive pipelines, LangGraph graph architectures, and hybrid retrieval networks.
+            </p>
+          </div>
+          <div>
+            <div className="text-[8px] font-mono uppercase tracking-widest text-zinc-650 mb-4">// SYSTEM_MAP</div>
+            <ul className="grid grid-cols-2 gap-2 text-[9px] font-mono uppercase">
+              <li><button onClick={() => scrollToSection('hero')} className="text-zinc-400 hover:text-white text-left transition">Hero</button></li>
+              <li><button onClick={() => scrollToSection('architecture')} className="text-zinc-400 hover:text-white text-left transition">Architecture</button></li>
+              <li><button onClick={() => scrollToSection('projects')} className="text-zinc-400 hover:text-white text-left transition">Projects</button></li>
+              <li><button onClick={() => scrollToSection('skills')} className="text-zinc-400 hover:text-white text-left transition">Skills</button></li>
+              <li><button onClick={() => scrollToSection('experience')} className="text-zinc-400 hover:text-white text-left transition">Experience</button></li>
+              <li><button onClick={() => scrollToSection('education')} className="text-zinc-400 hover:text-white text-left transition">Education</button></li>
+            </ul>
+          </div>
+          <div>
+            <div className="text-[8px] font-mono uppercase tracking-widest text-zinc-650 mb-4">// ENGINE_LOG</div>
+            <p className="text-[10px] font-mono text-zinc-500 leading-normal">
+              Compiled using Vite & React.<br />
+              Vercel Deployment: production_ready.<br />
+              Status Code: 200 OK.
+            </p>
+          </div>
+        </div>
+      </footer>
+
+      {/* Floating Scroll Top Trigger */}
+      {showScrollTop && (
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className={`fixed bottom-6 right-6 w-9 h-9 rounded-lg border ${t.cardBorder} flex items-center justify-center ${t.cardBg} text-zinc-400 hover:text-white ${t.cardBorderHover} transition cursor-pointer z-50`}
+          aria-label="Scroll to top"
+        >
+          <ChevronUp size={15} />
+        </button>
       )}
 
       {/* Global CSS Styles */}
       <style>{`
         .delay-150 { animation-delay: 150ms; }
         .delay-300 { animation-delay: 300ms; }
-        .rotate-185 { transform: rotate(180deg); }
       `}</style>
-
     </div>
   );
 }
