@@ -120,7 +120,7 @@ const EDUCATION = [
   {
     degree: 'PGP in Data Science',
     institution: 'University of Texas at Austin',
-    period: '2024 — 2025',
+    period: '2025 — 2026',
     detail: 'Specialized in machine learning systems, statistical modeling, and production ML engineering. Capstone focus on RAG architectures and evaluation frameworks.',
     icon: '🎓',
   },
